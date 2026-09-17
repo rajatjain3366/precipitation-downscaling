@@ -1,0 +1,171 @@
+{
+  "specialists": [
+    {
+      "specialist_id": 0,
+      "quantile_interval": [
+        0.0,
+        0.03972602739726028
+      ],
+      "sample_count": 30,
+      "initial_train_loss": 5.57858943939209,
+      "initial_val_loss": 5.803277969360352,
+      "final_train_loss": 2.6665165424346924,
+      "best_val_loss": 2.771174907684326,
+      "epochs_completed": 30,
+      "best_epoch": 26,
+      "seed": 42
+    },
+    {
+      "specialist_id": 1,
+      "quantile_interval": [
+        0.03972602739726028,
+        0.15342465753424658
+      ],
+      "sample_count": 84,
+      "initial_train_loss": 7.4898247718811035,
+      "initial_val_loss": 7.696708679199219,
+      "final_train_loss": 2.7114951610565186,
+      "best_val_loss": 2.7470157146453857,
+      "epochs_completed": 30,
+      "best_epoch": 25,
+      "seed": 42
+    },
+    {
+      "specialist_id": 2,
+      "quantile_interval": [
+        0.15342465753424658,
+        0.31917808219178084
+      ],
+      "sample_count": 123,
+      "initial_train_loss": 6.266005516052246,
+      "initial_val_loss": 6.357753276824951,
+      "final_train_loss": 2.725904941558838,
+      "best_val_loss": 2.7413766384124756,
+      "epochs_completed": 20,
+      "best_epoch": 15,
+      "seed": 42
+    },
+    {
+      "specialist_id": 3,
+      "quantile_interval": [
+        0.31917808219178084,
+        0.5561643835616439
+      ],
+      "sample_count": 174,
+      "initial_train_loss": 5.721302032470703,
+      "initial_val_loss": 5.742871284484863,
+      "final_train_loss": 2.738879680633545,
+      "best_val_loss": 2.738492012023926,
+      "epochs_completed": 14,
+      "best_epoch": 9,
+      "seed": 42
+    },
+    {
+      "specialist_id": 4,
+      "quantile_interval": [
+        0.5561643835616439,
+        0.8068493150684931
+      ],
+      "sample_count": 184,
+      "initial_train_loss": 5.861725330352783,
+      "initial_val_loss": 5.8173136711120605,
+      "final_train_loss": 2.7499799728393555,
+      "best_val_loss": 2.7370781898498535,
+      "epochs_completed": 13,
+      "best_epoch": 8,
+      "seed": 42
+    },
+    {
+      "specialist_id": 5,
+      "quantile_interval": [
+        0.8068493150684931,
+        1.0
+      ],
+      "sample_count": 141,
+      "initial_train_loss": 6.061021327972412,
+      "initial_val_loss": 5.918221950531006,
+      "final_train_loss": 2.767582893371582,
+      "best_val_loss": 2.739487886428833,
+      "epochs_completed": 19,
+      "best_epoch": 14,
+      "seed": 42
+    }
+  ],
+  "omega": {
+    "initial_train_loss": 0.2522262930870056,
+    "initial_val_loss": 0.2273223102092743,
+    "final_train_loss": 0.032812200486660004,
+    "best_val_loss": 0.17351602017879486,
+    "epochs_completed": 4,
+    "best_epoch": 1,
+    "seed": 42
+  },
+  "gmm_diagnostics": {
+    "means": [
+      11631.828125,
+      11834.36328125,
+      11975.66796875,
+      12116.986328125,
+      12310.4462890625,
+      12528.7060546875
+    ],
+    "weights": [
+      0.25917670130729675,
+      0.14638210833072662,
+      0.08573944866657257,
+      0.19165877997875214,
+      0.23789548873901367,
+      0.07914749532938004
+    ],
+    "covariances": [
+      3148.28857421875,
+      3967.393798828125,
+      16445.001953125,
+      3106.265869140625,
+      6415.486328125,
+      6900.24560546875
+    ],
+    "counts": [
+      29.0,
+      112.0,
+      233.0,
+      406.0,
+      589.0,
+      701.0
+    ],
+    "intervals": [
+      [
+        0.0,
+        0.03972602739726028
+      ],
+      [
+        0.03972602739726028,
+        0.15342465753424658
+      ],
+      [
+        0.15342465753424658,
+        0.31917808219178084
+      ],
+      [
+        0.31917808219178084,
+        0.5561643835616439
+      ],
+      [
+        0.5561643835616439,
+        0.8068493150684931
+      ],
+      [
+        0.8068493150684931,
+        1.0
+      ]
+    ],
+    "sample_counts": [
+      30,
+      84,
+      123,
+      174,
+      184,
+      141
+    ]
+  }
+}

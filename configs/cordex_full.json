@@ -1,0 +1,50 @@
+{
+  "mode": "faithful_full",
+  "data_dir": "data/CORDEX_NZ_sample",
+  "dataset_name": "CORDEX-ML-Bench",
+  "domain": "New Zealand",
+  "gcm_train": "ACCESS-CM2",
+  "gcm_test": "ACCESS-CM2",
+  "predictor_config": "config_A",
+  "target_mode": "land_masked",
+  "n_specialists": 6,
+  "repeats": 40,
+  "train_period": {
+    "start": "1961-01-01",
+    "end": "1976-12-31",
+    "years": 16
+  },
+  "validation_period": {
+    "start": "1977-01-01",
+    "end": "1980-12-31",
+    "years": 4
+  },
+  "test_period": {
+    "start": "1981-01-01",
+    "end": "2000-12-31",
+    "years": 20
+  },
+  "batch_size": 32,
+  "specialist_learning_rate": 0.0001,
+  "omega_learning_rate": 0.00005,
+  "decay_rate": 0.7,
+  "decay_steps": 6000,
+  "bg_patience": 15,
+  "omega_patience": 4,
+  "max_epochs_specialist": 400,
+  "max_epochs_omega": 100,
+  "base_seed": 42,
+  "save_dir": "results/cordex_qre_full",
+  "scientific_classification": {
+    "n_specialists": "PAPER_FAITHFUL (N=6)",
+    "repeats": "PAPER_FAITHFUL (40 repetitions)",
+    "temporal_split_structure": "PAPER_FAITHFUL (Train/Val/Test separation)",
+    "learning_rate_schedule": "PAPER_FAITHFUL (Exponential decay)",
+    "loss_formulations": "PAPER_FAITHFUL (GammaLoss + OmegaLoss)",
+    "ensemble_aggregation": "PAPER_FAITHFUL (ynetwork Softmax)",
+    "batch_size": "IMPLEMENTATION_CHOICE (batch_size=32)",
+    "dataset": "ALTERNATIVE_DATA (CORDEX-ML-Bench)",
+    "predictors": "ALTERNATIVE_DATA (q850, t850, u850, v850; w850 omitted)",
+    "target_resolution": "ALTERNATIVE_DATA (128x128 -> D_land=2418)"
+  }
+}

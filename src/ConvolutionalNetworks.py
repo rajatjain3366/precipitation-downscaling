@@ -1,10 +1,10 @@
 import tensorflow as tf
 #import tensorflow_probability as tfp 
 
-from useful_functions import * 
-from Modules import *
-from GammaLoss import *
-from quantiles import * 
+from src.useful_functions import * 
+from src.Modules import *
+from src.GammaLoss import *
+from src.quantiles import * 
 
 def unpack_bgout(y_pred):
     # unpacks network output 
@@ -147,6 +147,8 @@ class BGCallWrapper:
         if len(params.shape) == 3:
             p, alpha, beta = unpack_bgout(params)
             mean = BG_mean(p, alpha, beta)
+            if len(mean.shape) == 3 and mean.shape[-1] == 1:
+                mean = tf.squeeze(mean, axis=-1)
         else:
             mean = params 
         
