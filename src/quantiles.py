@@ -3,8 +3,8 @@ import numpy as np
 import tensorflow as tf 
 import os 
 
-from useful_functions import * 
-from Modules import * 
+from src.useful_functions import * 
+from src.Modules import * 
 
 
 # discretise the dataset, taking y sample to bin index  
@@ -124,17 +124,23 @@ class ynetwork:
         if weight_model is not None:
             self.weights = weight_model
         elif fixed_weights is not None:
-            self.weights = lambda x: fixed_weights 
-        
+            self.weights = lambda x: fixed_weights
+
     def __call__(self, x):
         pred = None
         for CNN_list in self.CNN_dict.values():
-            mem = tf.expand_dims(evaluate_models(CNN_list, x, take_mean=True), axis=1)
+            mem = evaluate_models(CNN_list, x, take_mean=True)
+            # Ensure specialist prediction has shape (batch, output_dim)
+            if len(mem.shape) == 3 and mem.shape[-1] == 1:
+                mem = tf.squeeze(mem, axis=-1)
+            mem = tf.expand_dims(mem, axis=1)
             if pred is None:
                 pred = mem
             else:
                 pred = tf.concat((pred, mem), axis=1)
         
+        # weights: (batch, num_specialists, 1)
+        # pred:    (batch, num_specialists, output_dim)
         weights = tf.expand_dims(self.weights(x), axis=-1)
         weights = tf.cast(weights, dtype=tf.float32)
         x = tf.reduce_sum(weights * pred, axis=1)

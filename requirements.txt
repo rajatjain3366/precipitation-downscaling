@@ -1,0 +1,20 @@
+# ==============================================================================
+# Quantile-Regression-Ensemble (QRE) - Validated Environment Requirements
+# Python Version: 3.10.11 (64-bit)
+# ==============================================================================
+
+# Core Deep Learning Framework
+tensorflow==2.10.1
+
+# Numerical, Array, & Scientific Computing
+numpy==1.23.5
+scipy==1.15.3
+scikit-learn==1.7.2
+pandas==2.3.3
+
+# Climate Data & NetCDF Handling
+xarray==2025.6.1
+h5py==3.16.0
+
+# Visualization & Plotting (Optional Reference Analysis)
+matplotlib==3.10.9

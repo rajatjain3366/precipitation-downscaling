@@ -1,0 +1,365 @@
+{
+  "experiment_name": "CORDEX_QRE_CPU_Validation_Run",
+  "dataset": "CORDEX-ML-Bench",
+  "data_type": "alternative_data",
+  "original_dataset_available": false,
+  "n_specialists": 6,
+  "repeats": 3,
+  "seeds": [
+    42,
+    1042,
+    2042
+  ],
+  "base_seed": 42,
+  "predictor_configuration": "q850,t850,u850,v850",
+  "w850_available": false,
+  "target_resolution": "128x128",
+  "land_points": 2418,
+  "actual_train_dates": "1961-01-01 to 1962-12-31",
+  "actual_val_dates": "1963-01-01 to 1963-12-31",
+  "actual_test_dates": "1981-01-01 to 1981-12-31",
+  "gmm_parameters_per_repeat": {
+    "rep_0": {
+      "means": [
+        11631.828125,
+        11834.36328125,
+        11975.66796875,
+        12116.986328125,
+        12310.4462890625,
+        12528.7060546875
+      ],
+      "weights": [
+        0.25917670130729675,
+        0.14638210833072662,
+        0.08573944866657257,
+        0.19165877997875214,
+        0.23789548873901367,
+        0.07914749532938004
+      ],
+      "covariances": [
+        3148.28857421875,
+        3967.393798828125,
+        16445.001953125,
+        3106.265869140625,
+        6415.486328125,
+        6900.24560546875
+      ],
+      "counts": [
+        29.0,
+        112.0,
+        233.0,
+        406.0,
+        589.0,
+        701.0
+      ],
+      "intervals": [
+        [
+          0.0,
+          0.03972602739726028
+        ],
+        [
+          0.03972602739726028,
+          0.15342465753424658
+        ],
+        [
+          0.15342465753424658,
+          0.31917808219178084
+        ],
+        [
+          0.31917808219178084,
+          0.5561643835616439
+        ],
+        [
+          0.5561643835616439,
+          0.8068493150684931
+        ],
+        [
+          0.8068493150684931,
+          1.0
+        ]
+      ],
+      "sample_counts": [
+        30,
+        84,
+        123,
+        174,
+        184,
+        141
+      ]
+    },
+    "rep_1": {
+      "means": [
+        11631.83203125,
+        11834.3642578125,
+        11975.6689453125,
+        12117.0234375,
+        12310.09765625,
+        12526.6318359375
+      ],
+      "weights": [
+        0.2363228052854538,
+        0.14639028906822205,
+        0.19167056679725647,
+        0.08710996806621552,
+        0.07914823293685913,
+        0.25935807824134827
+      ],
+      "covariances": [
+        6343.4609375,
+        3967.400146484375,
+        3106.023681640625,
+        16580.830078125,
+        6900.35302734375,
+        3147.0908203125
+      ],
+      "counts": [
+        29.0,
+        112.0,
+        233.0,
+        406.0,
+        589.0,
+        700.0
+      ],
+      "intervals": [
+        [
+          0.0,
+          0.03972602739726028
+        ],
+        [
+          0.03972602739726028,
+          0.15342465753424658
+        ],
+        [
+          0.15342465753424658,
+          0.31917808219178084
+        ],
+        [
+          0.31917808219178084,
+          0.5561643835616439
+        ],
+        [
+          0.5561643835616439,
+          0.8068493150684931
+        ],
+        [
+          0.8068493150684931,
+          1.0
+        ]
+      ],
+      "sample_counts": [
+        30,
+        84,
+        123,
+        174,
+        184,
+        141
+      ]
+    },
+    "rep_2": {
+      "means": [
+        11631.8388671875,
+        11834.369140625,
+        11975.669921875,
+        12116.9814453125,
+        12310.44921875,
+        12528.7177734375
+      ],
+      "weights": [
+        0.23790594935417175,
+        0.1916443109512329,
+        0.07915106415748596,
+        0.08573473989963531,
+        0.2591770589351654,
+        0.14638687670230865
+      ],
+      "covariances": [
+        6415.7333984375,
+        3106.1259765625,
+        6900.8486328125,
+        16443.890625,
+        3148.413330078125,
+        3967.41162109375
+      ],
+      "counts": [
+        29.0,
+        112.0,
+        233.0,
+        406.0,
+        589.0,
+        701.0
+      ],
+      "intervals": [
+        [
+          0.0,
+          0.03972602739726028
+        ],
+        [
+          0.03972602739726028,
+          0.15342465753424658
+        ],
+        [
+          0.15342465753424658,
+          0.31917808219178084
+        ],
+        [
+          0.31917808219178084,
+          0.5561643835616439
+        ],
+        [
+          0.5561643835616439,
+          0.8068493150684931
+        ],
+        [
+          0.8068493150684931,
+          1.0
+        ]
+      ],
+      "sample_counts": [
+        30,
+        84,
+        123,
+        174,
+        184,
+        141
+      ]
+    }
+  },
+  "derived_q_ranges_per_repeat": {
+    "rep_0": [
+      [
+        0.0,
+        0.03972602739726028
+      ],
+      [
+        0.03972602739726028,
+        0.15342465753424658
+      ],
+      [
+        0.15342465753424658,
+        0.31917808219178084
+      ],
+      [
+        0.31917808219178084,
+        0.5561643835616439
+      ],
+      [
+        0.5561643835616439,
+        0.8068493150684931
+      ],
+      [
+        0.8068493150684931,
+        1.0
+      ]
+    ],
+    "rep_1": [
+      [
+        0.0,
+        0.03972602739726028
+      ],
+      [
+        0.03972602739726028,
+        0.15342465753424658
+      ],
+      [
+        0.15342465753424658,
+        0.31917808219178084
+      ],
+      [
+        0.31917808219178084,
+        0.5561643835616439
+      ],
+      [
+        0.5561643835616439,
+        0.8068493150684931
+      ],
+      [
+        0.8068493150684931,
+        1.0
+      ]
+    ],
+    "rep_2": [
+      [
+        0.0,
+        0.03972602739726028
+      ],
+      [
+        0.03972602739726028,
+        0.15342465753424658
+      ],
+      [
+        0.15342465753424658,
+        0.31917808219178084
+      ],
+      [
+        0.31917808219178084,
+        0.5561643835616439
+      ],
+      [
+        0.5561643835616439,
+        0.8068493150684931
+      ],
+      [
+        0.8068493150684931,
+        1.0
+      ]
+    ]
+  },
+  "per_repetition_runtimes_seconds": [
+    169.45957565307617,
+    203.49501299858093,
+    219.61906790733337
+  ],
+  "total_runtime_seconds": 593.0507969856262,
+  "config": {
+    "mode": "cpu_feasible",
+    "data_dir": "data/CORDEX_NZ_sample",
+    "dataset_name": "CORDEX-ML-Bench",
+    "domain": "New Zealand",
+    "gcm_train": "ACCESS-CM2",
+    "gcm_test": "ACCESS-CM2",
+    "predictor_config": "config_A",
+    "target_mode": "land_masked",
+    "n_specialists": 6,
+    "repeats": 3,
+    "train_years": 2,
+    "validation_years": 1,
+    "test_years": 1,
+    "batch_size": 16,
+    "specialist_learning_rate": 0.001,
+    "omega_learning_rate": 0.001,
+    "decay_rate": null,
+    "decay_steps": null,
+    "bg_patience": 5,
+    "omega_patience": 3,
+    "max_epochs_specialist": 30,
+    "max_epochs_omega": 25,
+    "base_seed": 42,
+    "save_dir": "results/final_cordex_qre",
+    "scientific_classification": {
+      "n_specialists": "PAPER_FAITHFUL (N=6)",
+      "repeats": "COMPUTATIONAL_REDUCTION (3 repetitions)",
+      "train_years": "COMPUTATIONAL_REDUCTION (1961-1962)",
+      "validation_years": "COMPUTATIONAL_REDUCTION (1963)",
+      "test_years": "COMPUTATIONAL_REDUCTION (1981)",
+      "batch_size": "IMPLEMENTATION_CHOICE (batch_size=16)",
+      "dataset": "ALTERNATIVE_DATA (CORDEX-ML-Bench)",
+      "predictors": "ALTERNATIVE_DATA (q850, t850, u850, v850; w850 omitted)",
+      "loss_formulation": "PAPER_FAITHFUL (GammaLoss + OmegaLoss EMD)",
+      "ensemble_formulation": "PAPER_FAITHFUL (Dynamic Softmax Aggregation)"
+    }
+  },
+  "scientific_classification": {
+    "experiment_type": "alternative_data_computational_reduction",
+    "dataset": "ALTERNATIVE_DATA (CORDEX-ML-Bench)",
+    "predictors": "ALTERNATIVE_DATA (q850, t850, u850, v850; w850 omitted)",
+    "n_specialists": "COMPUTATIONAL_REDUCTION (N=6)",
+    "repeats": "COMPUTATIONAL_REDUCTION (3 repetitions)",
+    "train_period": "1961-01-01 to 1962-12-31",
+    "validation_period": "1963-01-01 to 1963-12-31",
+    "test_period": "1981-01-01 to 1981-12-31",
+    "batch_size": "IMPLEMENTATION_CHOICE (batch_size=16)",
+    "loss_functions": "PAPER_FAITHFUL (GammaLoss + OmegaLoss EMD)",
+    "qre_aggregation": "PAPER_FAITHFUL (ynetwork Softmax)",
+    "evaluation_intervals": "PAPER_FAITHFUL ([0,1], [0,0.2], [0.9,1])"
+  }
+}

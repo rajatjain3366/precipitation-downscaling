@@ -1,8 +1,8 @@
 import tensorflow as tf 
 #import tensorflow_probability as tfp 
 
-from useful_functions import * 
-from Modules import *
+from src.useful_functions import * 
+from src.Modules import *
 
 
 # tracks the progess of the model over epochs 
