@@ -149,9 +149,9 @@ def load_cordex_dataset(
         raise FileNotFoundError(f"CORDEX data directory not found at: {os.path.abspath(data_dir)}")
 
     # 1. Resolve File Paths
-    train_pred_path = os.path.join(data_dir, "train", "ESD_pseudo-reality", "predictors", f"{train_gcm}_1961-1980.nc")
-    train_targ_path = os.path.join(data_dir, "train", "ESD_pseudo-reality", "target", f"pr_tasmax_{train_gcm}_1961-1980.nc")
-    static_path = os.path.join(data_dir, "train", "ESD_pseudo-reality", "static.nc")
+    train_pred_path = os.path.join(data_dir, "train", "ESD_pseudo_reality", "predictors", f"{train_gcm}_1961-1980.nc")
+    train_targ_path = os.path.join(data_dir, "train", "ESD_pseudo_reality", "target", f"pr_tasmax_{train_gcm}_1961-1980.nc")
+    static_path = os.path.join(data_dir, "train", "ESD_pseudo_reality", "predictors", "Static_fields.nc")
     test_pred_path = os.path.join(data_dir, "test", "historical", "predictors", "perfect", f"{test_gcm}_1981-2000.nc")
     test_targ_path = os.path.join(data_dir, "test", "historical", "target", f"pr_tasmax_{test_gcm}_1981-2000.nc")
 

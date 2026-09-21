@@ -54,14 +54,14 @@ class OmegaLoss(tf.keras.losses.Loss):
         return tf.transpose(matrix)
 
     def call(self, y_true, y_pred):
-        y_pred = tf.squeeze(y_pred)
-        y_true = tf.squeeze(y_true)
-                
+        y_true = tf.cast(y_true, tf.float32)
+        y_pred = tf.cast(y_pred, tf.float32)
+
         col_indices = tf.argmax(y_true, axis=1)
         weight_cols = tf.pow(tf.gather(self.weight_matrix, col_indices), self.p)
-        
+
         emd = tf.reduce_mean(weight_cols * y_pred, axis=1)
-        
+
         return emd
     
 

@@ -235,8 +235,9 @@ def format_date_str(val):
 def prepare_explicit_temporal_splits(data_dict, mode="cpu_feasible"):
     """
     Constructs explicit train, validation, and test datasets with actual time coordinates.
-    Preserves strict temporal independence without using generic percentage inference.
+    Uses a chronological 15-year train / 5-year validation / 20-year test split.
     """
+
     X_train_full = data_dict['x_train']
     Y_train_full = data_dict['y_train']
     X_test = data_dict['x_test']
@@ -248,38 +249,40 @@ def prepare_explicit_temporal_splits(data_dict, mode="cpu_feasible"):
     test_time = data_dict['coords'].get('test_time')
 
     if train_time is not None and len(train_time) == T_full:
-        time_strs = [format_date_str(t) for t in train_time]
-        val_indices = [i for i, s in enumerate(time_strs) if s.startswith("1963")]
-        if val_indices and val_indices[0] > 0:
-            T_train = val_indices[0]
-            T_val = T_full - T_train
-        else:
-            T_val = max(1, int(T_full * 0.20))
-            T_train = T_full - T_val
 
-        train_start_date = format_date_str(train_time[0])
-        train_end_date = format_date_str(train_time[T_train - 1])
-        val_start_date = format_date_str(train_time[T_train])
-        val_end_date = format_date_str(train_time[-1])
+        train_time = np.array(train_time)
+
+        # 1961-1975 -> Training
+        # 1976-1980 -> Validation
+        train_mask = train_time <= np.datetime64("1975-12-31")
+        val_mask = (
+            (train_time >= np.datetime64("1976-01-01")) &
+            (train_time <= np.datetime64("1980-12-31"))
+        )
+
+        X_train = X_train_full[train_mask]
+        Y_train = Y_train_full[train_mask]
+
+        X_val = X_train_full[val_mask]
+        Y_val = Y_train_full[val_mask]
+
+        train_start_date = format_date_str(train_time[train_mask][0])
+        train_end_date = format_date_str(train_time[train_mask][-1])
+
+        val_start_date = format_date_str(train_time[val_mask][0])
+        val_end_date = format_date_str(train_time[val_mask][-1])
+
+        T_train = X_train.shape[0]
+        T_val = X_val.shape[0]
+
     else:
-        T_val = max(1, int(T_full * 0.20))
-        T_train = T_full - T_val
-        train_start_date = "1961-01-01"
-        train_end_date = f"1961-01-{T_train:02d}"
-        val_start_date = f"1961-01-{T_train+1:02d}"
-        val_end_date = f"1961-01-{T_full:02d}"
+        raise ValueError("Training time coordinates are required for explicit temporal splitting.")
 
     if test_time is not None and len(test_time) > 0:
         test_start_date = format_date_str(test_time[0])
         test_end_date = format_date_str(test_time[-1])
     else:
-        test_start_date = "1981-01-01"
-        test_end_date = f"1981-01-{X_test.shape[0]:02d}"
-
-    X_train = X_train_full[:T_train]
-    Y_train = Y_train_full[:T_train]
-    X_val = X_train_full[T_train:]
-    Y_val = Y_train_full[T_train:]
+        raise ValueError("Test time coordinates are required for explicit temporal splitting.")
 
     dates_summary = {
         "train_start": train_start_date,
@@ -617,6 +620,9 @@ def execute_training_pipeline(config):
         print(f"\n>>> [4] Training Omega Weight Network with OmegaLoss (EMD)...")
         Y_omega_train = np.array(bin_y_var(Y_train, Q_ranges), dtype=np.float32)
         Y_omega_val = np.array(bin_y_var(Y_val, Q_ranges), dtype=np.float32)
+
+        print("Y_omega_train shape:", Y_omega_train.shape)
+        print("Y_omega_val shape:", Y_omega_val.shape)
 
         omega_net = Omega(
             output_dim=N_spec,
