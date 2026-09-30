@@ -93,7 +93,6 @@ spec_model = BGNet(
     ch_attn=True,
     avg_pool=True,
     max_pool=True,
-    sp_attn=False,
     kernel_sizes=[3, 3, 3],
     num_channels=[32, 64, 128],
     num_dense=[128],

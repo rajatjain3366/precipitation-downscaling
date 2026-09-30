@@ -44,7 +44,6 @@ class BGNet(tf.keras.Model):
                         avg_pool=True,                    # determines which pooling types to use  
                         max_pool=False,
                         ch_attn=True,                     # 
-                        sp_attn=False,
                         num_dense=[256],                  # dense layers in the first dense layer 
                         kernel_sizes=[3, 3, 3],           # kernel sizes of each convolutional block 
                         num_channels=[64, 128, 256],      # channel sizes of convolutional block 
@@ -67,7 +66,6 @@ class BGNet(tf.keras.Model):
         self.avg_pool = avg_pool
         self.max_pool = max_pool
         self.ch_attn = ch_attn
-        self.sp_attn = sp_attn
         self.num_dense = num_dense
         self.kernel_sizes = kernel_sizes
         self.num_channels = num_channels
@@ -82,7 +80,6 @@ class BGNet(tf.keras.Model):
                                                 self.avg_pool, 
                                                 self.max_pool,
                                                 self.ch_attn, 
-                                                self.sp_attn, 
                                                 self.num_channels, 
                                                 self.kernel_sizes,
                                                 self.reduction_rate,
@@ -173,19 +170,3 @@ class BGStatWrapper(tf.keras.metrics.Metric):
     
     def result(self):
         return self.stat
-    
-    
-class MSENet(BGNet):
-    # The network trained on only MSE loss, with one dense layer at the end 
-    def __init__(self, output_dim, coords):
-        super(MSENet, self).__init__(output_dim, coords)
-        
-        self.output_layer = tf.keras.layers.Dense(self.output_dim, activation='gelu')
-        
-    def call(self, x):
-        x = self.init_conv(x)
-        x = self.ds_module(x)
-        x = self.dense_module(x)
-        x = self.output_layer(x)
-        
-        return x

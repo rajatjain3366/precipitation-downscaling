@@ -54,7 +54,6 @@ class DownScaleModule(tf.keras.Model):
                          avg_pool, 
                          max_pool, 
                          ch_attn, 
-                         sp_attn,
                          num_channels,
                          kernel_sizes,
                          reduction_rate=1,
@@ -71,7 +70,6 @@ class DownScaleModule(tf.keras.Model):
         self.reduction_rate = reduction_rate
         self.avg_pool = avg_pool
         self.max_pool = max_pool
-        self.sp_attn = sp_attn
         self.ch_attn = ch_attn
         self.aux_data = aux_data
         
@@ -160,69 +158,6 @@ class ChannelAttentionModule(tf.keras.Model):
 
         return s * x
 
-
-# Spatial attention module, concatenates a choice of global pooling functions
-class SpatialAttentionModule(tf.keras.Model):
-    def __init__(self,  avg_pool=True,
-                        max_pool=False):
-
-        super(SpatialAttentionModule, self).__init__()
-        self.avg_pool = tf.keras.layers.Lambda(lambda im: tf.reduce_mean(im, axis=-1, keepdims=True)) if avg_pool else None
-        self.max_pool = tf.keras.layers.Lambda(lambda im: tf.reduce_max(im, axis=-1, keepdims=True)) if max_pool else None
-
-        self.pools = [pool for pool in (self.avg_pool, self.max_pool) if pool is not None]
-        self.conv = tf.keras.layers.Conv2D(1, 7, padding='same', activation='sigmoid')
-
-    def call(self, x, **kwargs):
-        output = None
-        for pool in self.pools:
-            if output is None:
-                output = pool(x)
-            else:
-                output = tf.concat([output, pool(x)], axis=-1)
-                
-        m = self.conv(output)
-        
-        return m * x
-
-    
-# combines spatial and channel attention if nessacary 
-class AttentionModule(tf.keras.Model):
-    def __init__(self, 
-                         avg_pool, 
-                         max_pool, 
-                         ch_attn, 
-                         sp_attn, 
-                         num_channel, 
-                         reduction_rate
-                ):
-        
-        super(AttentionModule, self).__init__()
-        
-        self.avg_pool = avg_pool
-        self.max_pool = max_pool
-        self.ch_attn = ch_attn
-        self.sp_attn = sp_attn
-        self.num_channels = num_channel
-        self.reduction_rate = reduction_rate
-        
-        self.module = self.attention_module()
-        
-    def attention_module(self):
-        attn_module = tf.keras.Sequential([])
-
-        if self.ch_attn:
-            attn_module.add(ChannelAttentionModule(self.num_channels, self.reduction_rate, self.avg_pool, self.max_pool))
-
-        if self.sp_attn:
-            attn_module.add(SpatialAttentionModule(self.avg_pool, self.max_pool))
-
-        return attn_module
-    
-    def call(self, x):
-        x = self.module(x)
-        
-        return x
        
         
         

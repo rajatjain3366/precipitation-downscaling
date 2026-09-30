@@ -48,7 +48,6 @@ try:
         ch_attn=True,
         avg_pool=True,
         max_pool=True,
-        sp_attn=False,
         num_dense=[64],
         kernel_sizes=[3, 3, 3],
         num_channels=[64, 128, 256],

@@ -11,7 +11,7 @@ Supported Modes:
 Usage:
   python run_cordex_experiment.py --mode cpu_feasible --dry-run
   python run_cordex_experiment.py --mode cpu_feasible
-  python run_cordex_experiment.py --config configs/cordex_cpu.json
+  python run_cordex_experiment.py --config configs/cordex_final.json
 """
 
 import os
@@ -414,7 +414,6 @@ def run_dry_run_audit(config):
         ch_attn=True,
         avg_pool=True,
         max_pool=True,
-        sp_attn=False,
         kernel_sizes=[3, 3, 3] if config.get('mode') == 'cpu_feasible' else [6, 6, 6],
         num_channels=[32, 64, 128] if config.get('mode') == 'cpu_feasible' else [64, 128, 256],
         num_dense=[128] if config.get('mode') == 'cpu_feasible' else [256],
@@ -558,7 +557,6 @@ def execute_training_pipeline(config):
                 ch_attn=True,
                 avg_pool=True,
                 max_pool=True,
-                sp_attn=False,
                 kernel_sizes=[3, 3, 3] if config.get('mode') == 'cpu_feasible' else [6, 6, 6],
                 num_channels=[32, 64, 128] if config.get('mode') == 'cpu_feasible' else [64, 128, 256],
                 num_dense=[128] if config.get('mode') == 'cpu_feasible' else [256],
