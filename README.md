@@ -1,152 +1,195 @@
 # Quantile-Regression-Ensemble (QRE) for Precipitation Downscaling
 
-> **Bachelor Thesis Project (BTP)**  
-> **Based on AAAI 2024 Research Paper**: *"Quantile-Regression-Ensemble: A Deep Learning Algorithm for Downscaling Extreme Precipitation"* (Bailie, Rampal, Gibson, & Robinson)  
-> **Repository Implementation**: Alternative-Data Reproduction on CORDEX-ML-Bench  
+> **Bachelor Thesis Project (BTP)**
+> **Based on the AAAI-24 paper**: *"Quantile-Regression-Ensemble: A Deep Learning Algorithm for Downscaling Extreme Precipitation"* (Bailie, Koh, Rampal & Gibson)
+> **This repository**: a reproduction on alternative data (CORDEX-ML-Bench, New Zealand)
 
 ---
 
-## 1. Project Overview & Research Context
+## 1. Overview
 
-Statistical downscaling of Global Climate Model (GCM) projections to local surface precipitation is critical for regional climate impact assessments and disaster preparedness. Standard convolutional neural networks trained with Mean Squared Error (MSE) loss suffer from severe underprediction of extreme precipitation events due to the heavily right-skewed, zero-inflated nature of rainfall distributions ("regression to the mean").
+Deep-learning downscaling models trained over the whole record tend to regress to the mean and underestimate extreme precipitation. QRE addresses this by:
 
-The **Quantile-Regression-Ensemble (QRE)** framework (AAAI 2024) addresses this limitation by:
-1. **Regime Partitioning**: Decomposing precipitation intensity into $N$ distinct regimes via **Gaussian Mixture Model (GMM)** clustering of daily spatial cumulative precipitation sums.
-2. **Specialist Networks**: Training $N$ independent **Bernoulli-Gamma specialist CNNs (`BGNet`)** on the partitioned subsets using zero-inflated Gamma likelihood loss (`GammaLoss`).
-3. **Dynamic Gating Network**: Training a **Weight Network ($\Omega$)** using **Earth Mover's Distance (`OmegaLoss`)** to assign dynamic, continuous Softmax weights $\omega_i(X)$ based on large-scale atmospheric predictors.
-4. **Dynamic Convex Synthesis**: Synthesizing local precipitation fields via dynamic weighted aggregation:
-   $$\hat{Y}_{\text{QRE}}(X) = \sum_{i=1}^N \omega_i(X) \cdot \hat{Y}_i(X)$$
+1. **Segmentation**: splitting training days into $N$ intensity intervals by their domain-total precipitation $\mathbf{1}\cdot y$, with interval boundaries from a Bayesian Gaussian Mixture Model (averaged over 100 runs).
+2. **Members**: training one Bernoulli-Gamma network (`BGNet`) per interval.
+3. **Weight Network**: training a classifier $\omega_\theta$ with the Earth Mover's Distance loss to say which interval a day belongs to.
+4. **Ensemble**: $g(x) = \sum_{i=1}^N \omega_i(x)\, f_i(x)$ (paper Eq. 7).
 
 ---
 
-## 2. Dataset Scope & Provenance
+## 2. Data
 
-### Original Dataset Context
-The original research paper utilized proprietary ERA5 atmospheric reanalysis as predictors and the New Zealand Virtual Climate Station Network (VCSN) rain-gauge observational analysis as target. Because these proprietary datasets are no longer publicly hosted, this reproduction was implemented on the author-recommended benchmark.
+The paper used ERA5 predictors and VCSN observations, which were not available to us. Following advice from co-author Neelesh Rampal, we use **CORDEX-ML-Bench** (New Zealand domain):
 
-### Author-Recommended Benchmark (CORDEX-ML-Bench)
-In accordance with direct guidance from paper co-author Neelesh Rampal, this implementation uses **CORDEX-ML-Bench** ([Zenodo Record 17957264](https://zenodo.org/records/17957264)):
-- **Predictors ($X$)**: 4 atmospheric channels at 850 hPa: specific humidity (`q850`), temperature (`t850`), zonal wind (`u850`), and meridional wind (`v850`) on a $16 \times 16$ grid ($\sim 100 - 200\text{ km}$ nominal GCM scale).
-- **Target ($Y$)**: Daily precipitation (`pr`) over New Zealand on a $128 \times 128$ grid ($\sim 12\text{ km}$ regional downscaled grid), represented as a 1D vector of $D_{\text{land}} = 2,418$ valid land points.
-- **Topography**: Surface elevation (`orog`) and land-sea mask (`sftlf`) from `Static_fields.nc`.
+| Item | Description |
+|---|---|
+| Predictors $X$ | q850, t850, u850, v850 on a 16 × 16 grid (ACCESS-CM2 "perfect" predictors). w850 is not in the benchmark. |
+| Target $Y$ | Daily precipitation `pr` (regional climate model output) on a 128 × 128 grid, flattened to the **2,804** land cells (`sftlf > 0.5`) |
+| Static input | Surface elevation `orog` from `Static_fields.nc` |
+| Period | 1961–2000 (two files: 1961–1980 and 1981–2000), 365-day calendar |
 
----
+Sources:
 
-## 3. Core Architecture & Mathematics
+- [Zenodo record 17957264](https://zenodo.org/records/17957264) (v4, `NZ_domain.zip`, md5 `a3f586f28d78b3a4c53b7b8324db4e62`) for all files except the 1981–2000 target. v4 does not contain any test targets.
+- `test/historical/target/pr_tasmax_ACCESS-CM2_1981-2000.nc` from [Zenodo record 20985924](https://zenodo.org/records/20985924) (v7), md5 `15b0007f910b0c72c632cc37409d17f1`. Every file that exists in v4 is byte-identical in v7 (same CRC32 and size).
+- Check: the v4 1961–1975 data reproduces the GMM intervals of our first run exactly ([results/baseline_rerun/data_match_check.json](results/baseline_rerun/data_match_check.json)).
 
-```
-                                  [ Atmospheric Predictors: X (16x16x4) ]
-                                             │
-                      ┌──────────────────────┼──────────────────────┐
-                      │                      │                      │
-                      ▼                      ▼                      ▼
-             ┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
-             │  Specialist 0   │    │  Specialist 1   │    │  Specialist N-1 │
-             │     (BGNet)     │    │     (BGNet)     │    │     (BGNet)     │
-             └────────┬────────┘    └────────┬────────┘    └────────┬────────┘
-                      │                      │                      │
-                      │ ŷ_0(X)               │ ŷ_1(X)               │ ŷ_{N-1}(X)
-                      │                      │                      │
-                      │     ┌────────────────┴────────────────┐     │
-                      │     │  Weight Network: Ω (OmegaLoss)  │     │
-                      │     │    Dynamic Softmax: ω_i(X)      │     │
-                      │     └────────────────┬────────────────┘     │
-                      │                      │                      │
-                      ▼                      ▼                      ▼
-               [ Weighted Convex Synthesis: Ŷ_QRE = Σ ω_i(X) · ŷ_i(X) ]
-                                             │
-                                             ▼
-                             [ Downscaled Precipitation Field ]
+Expected layout under `data/CORDEX_NZ/`:
+
+```text
+train/ESD_pseudo_reality/predictors/ACCESS-CM2_1961-1980.nc
+train/ESD_pseudo_reality/predictors/Static_fields.nc
+train/ESD_pseudo_reality/target/pr_tasmax_ACCESS-CM2_1961-1980.nc
+test/historical/predictors/perfect/ACCESS-CM2_1981-2000.nc
+test/historical/target/pr_tasmax_ACCESS-CM2_1981-2000.nc
 ```
 
-### A. BGNet Architecture & GammaLoss
-Each specialist employs a Squeeze-and-Excitation channel-attention CNN (`BGNet`) to predict 3 physical Bernoulli-Gamma parameters per grid cell: shape ($\alpha$), scale ($\beta$), and probability of zero precipitation ($p_0$). The network is optimized via:
-$$\mathcal{L}_{\text{Gamma}}(y; \alpha, \beta, p_0) = -\sum_{j} \left[ \mathbb{I}_{y_j = 0} \ln(p_{0,j}) + \mathbb{I}_{y_j > 0} \left( \ln(1 - p_{0,j}) + \alpha_j \ln \beta_j - \ln \Gamma(\alpha_j) + (\alpha_j - 1)\ln y_j - \beta_j y_j \right) \right]$$
-
-The expected precipitation prediction per grid cell is calculated as:
-$$\mathbb{E}[y] = p_0 \cdot \exp(\alpha) \cdot \exp(\beta)$$
-
-### B. Omega Weight Network & Earth Mover's Distance
-The gating network ($\Omega$) outputs continuous Softmax probabilities over the $N$ specialists ($\sum_i \omega_i = 1$, $\omega_i \ge 0$). It is trained using 1D Wasserstein / Earth Mover's Distance (`OmegaLoss`) to preserve the physical ordering of precipitation intensity:
-$$\mathcal{L}_{\text{EMD}}(\omega, y_{\text{bin}}) = \frac{1}{N-1} \sum_{k=1}^{N-1} \left| \sum_{j=1}^k \omega_j - \sum_{j=1}^k y_{\text{bin}, j} \right|$$
+**Split (v2):** train 1961–1988 (10,220 days), validation 1989–1993 (1,825), test 1994–2000 (2,555), i.e. 70 / 12.5 / 17.5 %, the same proportions as the paper's 32 / 6 / 8 years. All statistics (predictor normalization, GMM intervals, thresholds, empirical means) are fitted on the training split only.
 
 ---
 
-## 4. Final Experimental Results ($N=6$, 3 Repetitions)
+## 3. Model
 
-Evaluated on the full 20-year multi-decadal CORDEX test set (7,300 test days across seeds `42`, `1042`, `2042`):
+### BGNet (member and baseline)
 
-| Model | Overall MSE $[0.0, 1.0]$ | Low Rain MSE $[0.0, 0.2]$ | Extreme Rain MSE $[0.9, 1.0]$ | Overall MAE $[0.0, 1.0]$ |
-| :--- | :---: | :---: | :---: | :---: |
-| **QRE ($N=6$, Ours)** | $112.47 \pm 9.45$ | $27.86 \pm 15.06$ | $579.69 \pm 80.66$ | $4.56 \pm 0.27$ |
-| **Single BGNet** | $62.03 \pm 0.22$ | $4.28 \pm 0.35$ | $251.72 \pm 3.78$ | $3.47 \pm 0.03$ |
-| **Bagging (`cqre`)** | $106.96 \pm 5.82$ | $43.22 \pm 8.84$ | $494.99 \pm 19.88$ | $5.83 \pm 0.51$ |
-| **Probability (`pqre`)** | $105.48 \pm 4.08$ | $24.67 \pm 2.85$ | $550.61 \pm 19.50$ | $4.88 \pm 0.22$ |
-| **Empirical Mean** | $155.40 \pm 0.00$ | $42.81 \pm 0.00$ | $751.48 \pm 0.00$ | $6.46 \pm 0.00$ |
+- 3×3 init conv, then 3 blocks of [conv → **channel attention (CBAM-style: average and max pooling, shared MLP, r = 1)** → conv], with 64 / 128 / 256 channels.
+- Dense 512 (ReLU, dropout 0.2), then three heads with one unit per land cell:
+  - $p$ = **P(rain)**, through a sigmoid;
+  - $\log\alpha$ (Gamma shape) and $\log\beta$ (Gamma scale), through a modified tanh $3.5\tanh(x/2.5)$.
+- Elevation enters as an extra input channel through a small conv embedding (as in the original code).
 
-*Note: In accordance with rigorous scientific reporting, results are stated factually without ranking models.*
+Loss (paper Eq. 1–2) with rain threshold $c$:
+
+$$\mathcal{L}_{BG} = -\Big[\mathbb{1}_{y \le c}\ln(1-p) + \mathbb{1}_{y > c}\big(\ln p + (\alpha-1)\ln y - \alpha\ln\beta - \ln\Gamma(\alpha) - y/\beta\big)\Big]$$
+
+Prediction (Eq. 3): $\mathbb{E}[y] = p\cdot\alpha\cdot\beta$.
+
+QRE members and the single-BGNet baseline are built by the same function (`src/builders.py:build_bgnet`), so they always share the same architecture.
+
+### Weight Network
+
+The same conv backbone, then 2 × Dense 100 (dropout 0.2) and an $N$-way softmax. It is trained with the EMD loss (Eq. 5–6, $p = 1$): $\mathcal{L}_\omega = \sum_{k} |k - k'|\,\omega_k$, where $k'$ is the true interval.
 
 ---
 
-## 5. How to Run & Reproduce
+## 4. Deviations from the paper
 
-### Environment Setup
-Activate the virtual environment and install dependencies:
+| Item | Paper | Ours | Reason |
+|---|---|---|---|
+| Data | ERA5 → VCSN observations, 5 km, 11,491 points | CORDEX-ML-Bench GCM predictors → regional-model precipitation, 128 × 128, **2,804 land cells** | ERA5/VCSN not available to us; CORDEX recommended by a co-author. Absolute MSE is not comparable with the paper. |
+| Predictors | T, Q, U, V, **W** at 850 hPa, (5, 36, 41) | T, Q, U, V at 850 hPa, (4, 16, 16) | W850 is not in the benchmark |
+| Split | 32 / 6 / 8 years | **1961–1988 / 1989–1993 / 1994–2000** (28 / 5 / 7 years) | Same 70 / 12.5 / 17.5 % proportions over the 40 years with targets |
+| Rain threshold in the loss | $y > 0$ | **$y > 0.1$ mm/day** | 94.3 % of CORDEX training values are $> 0$ (only 5.7 % are exactly 0, with positive values down to $6\times10^{-13}$). $y > 0$ would make almost every cell "wet" and force the Gamma part to fit numerical drizzle. 0.1 mm is the usual trace threshold. Configurable: `loss.rain_threshold`. |
+| Conv kernel | 6 | **3, "same" padding** | Six valid 6 × 6 convolutions need at least 31 × 31 pixels; the CORDEX grid is 16 × 16 |
+| Segment bounds | $l_i < \mathbf{1}\cdot y < h_i$ (strict on both sides) | $t_i \le \mathbf{1}\cdot y < t_{i+1}$ | Strict bounds on both sides would drop boundary days. Ours puts every day in exactly one interval. |
+| Batch size | not stated | 91 (about one season) | Value used in the original code |
+| Learning-rate decay | 0.7 every 6,000 steps | same; with batch 91 that is about every 53 epochs for the full training set | — |
+| Max epochs | not stated | 100, extended in blocks of 50 (up to 300) while the validation loss still improves | Early stopping decides in practice |
+| Member early stopping | not stated | on validation days of the member's own interval | A member is only used for its interval |
+| Repetitions | 40 | NZ: 1 sanity repetition only (the NZ study was reduced to "show the fixes work") | Compute |
+
+---
+
+## 5. Results
+
+### First run (before fixes), `results/final_cordex_qre/`
+
+Old split (train 1961–1975, val 1976–1980, test 1981–2000), 3 repetitions, produced by `experiments/run_cordex_experiment.py` with `configs/cordex_final.json`. These numbers come from the pipeline **before** the fixes. Its known problems:
+- the Weight Network collapsed onto one class;
+- the predictors were not normalized;
+- the BGNet baseline had a different architecture from the members;
+- predictions used a $p > 0.5$ threshold instead of $p\cdot\alpha\beta$.
+
+| Model | MSE [0, 1] | MSE [0, 0.2] | MSE [0.9, 1] |
+|---|---|---|---|
+| QRE | 112.47 ± 9.45 | 27.86 ± 15.06 | 579.69 ± 80.66 |
+| Single BGNet | 62.03 ± 0.22 | 4.28 ± 0.35 | 251.72 ± 3.78 |
+| Bagging | 106.96 ± 5.82 | 43.22 ± 8.84 | 494.99 ± 19.88 |
+| Probability | 105.48 ± 4.08 | 24.67 ± 2.85 | 550.61 ± 19.50 |
+
+### After fixes (v2), `results/fixes_v2/`
+
+NZ sanity run ([results/fixes_v2/nz/sanity/](results/fixes_v2/nz/sanity/)): 1 repetition, new split, all fixes. Epochs were cut to 10 for the members and both BGNets and 30 for the Weight Network, so **every model is undertrained** (all stopped at their epoch cap while still improving). Test set is 1994–2000, so the numbers are not comparable with the first run's 1981–2000 test set.
+
+| Model (test, 1994–2000) | MSE [0, 1] | MSE [0, 0.2] | MSE [0.9, 1] |
+|---|---|---|---|
+| QRE | 124.13 | 15.23 | 627.19 |
+| Single BGNet | 60.60 | 2.85 | 231.79 |
+| BGNet(-) | 67.31 | 2.45 | 261.29 |
+| Bagging | 134.36 | 17.35 | 674.44 |
+| Probability | 133.96 | 14.47 | 682.15 |
+
+**The Weight Network still collapses** even with the paper's training settings (LR 5e-5, decay 0.7/6000, patience 15, EMD as a sum): 100 % of validation days go to interval 3 and the mean max weight is 1.000, from epoch 1 on. At initialization its output is uniform (mean max weight 0.167), so this is not an initialization problem. The likely cause is the EMD loss of Eq. 6 itself, $\sum_k |k-k'|\,\omega_k$. It is linear in $\omega$, so its minimum is a one-hot vector, and its gradient through the softmax, $\omega_k(c_k - \mathcal{L})$, goes to zero once $\omega$ is one-hot. QRE therefore equals member 3 for every day. Fixing this is open (see `results/fixes_v2/nz/sanity/repetition_0.json` for the diagnostics).
+
+Members vs single BGNet on each member's own validation interval: the members win on the two lowest intervals (MSE ratio 0.90, 0.82) and lose on the others (1.06 to 2.49). With a fixed epoch cap the small high-intensity members get far fewer optimizer steps than BGNet (e.g. 14 vs 112 steps per epoch), so this comparison is biased against them.
+
+---
+
+## 6. How to run
+
 ```powershell
+python -m venv .venv
 .\.venv\Scripts\Activate.ps1
-pip install -r requirements.txt
+pip install -r requirements.txt netCDF4 pytest
+
+# All smoke / unit tests (synthetic data, a few minutes on CPU)
+python tests/run_smoke_tests.py
+
+# v2 pipeline: data report + GMM intervals only
+python experiments/run_cordex_v2.py --dry-run
+# 1 repetition with reduced epochs (sanity.* in the config)
+python experiments/run_cordex_v2.py --sanity
+# Full run
+python experiments/run_cordex_v2.py --repeats 3
+# Any config value can be overridden, e.g. to restore an old behaviour:
+python experiments/run_cordex_v2.py --sanity --set prediction.mode='"threshold"' --save-dir results/fixes_v2/ablation_threshold
 ```
 
-### Dry-Run Verification (0 Compute Cost)
-Audit dataset shapes, coordinates, GMM partitioning, and parameter counts:
-```powershell
-python experiments/run_cordex_experiment.py --config configs/cordex_final.json --dry-run
-```
+The legacy runner `experiments/run_cordex_experiment.py` (with `configs/cordex_final.json`) is kept unchanged in behaviour, for reproducing the first run.
 
-### Execute Final Experiment ($N=6$, 3 Repetitions)
-Run the complete multi-specialist training, baseline evaluation, and metric export pipeline:
-```powershell
-python experiments/run_cordex_experiment.py --config configs/cordex_final.json
-```
+### Config flags that restore old behaviour (`configs/cordex_v2.json`)
 
-All empirical results, metadata, logs, and tables are saved automatically to `results/final_cordex_qre/`.
+| Flag | v2 value | Old behaviour |
+|---|---|---|
+| `data.train_years` / `val_years` / `test_years` | 1961–1988 / 1989–1993 / 1994–2000 | 1961–1975 / 1976–1980 / 1981–2000 |
+| `data.standardize_predictors` | `true` | `false` |
+| `data.use_elevation` | `true` | `false` |
+| `loss.rain_threshold` | `0.1` | `0.5` |
+| `prediction.mode` | `"expected"` ($p\alpha\beta$) | `"threshold"` |
+| `segmentation.method` | `"bayesian_gmm"` | `"legacy"` |
+| `members.validate_on_own_segment` | `true` | `false` |
+| `weight_network.emd_reduction` | `"sum"` | `"mean"` |
+| `architecture.*`, learning rates, decay, patience | paper values where possible | see `configs/cordex_final.json` |
 
-### Inspect Dataset Samples
-Run the dataset inspection script to print NetCDF summaries, variable shapes, and sample values:
-```powershell
-python test.py
+---
+
+## 7. Repository layout
+
+```text
+configs/
+  cordex_v2.json               v2 configuration (all fixes)
+  cordex_final.json            configuration of the first run
+experiments/
+  run_cordex_v2.py             v2 pipeline (train-only statistics, flags for every fix)
+  run_cordex_experiment.py     legacy runner (first run)
+src/
+  data_adapter_cordex.py       NetCDF loading, land mask, elevation, 1961-2000 loader
+  preprocessing.py             year split, training-split standardization
+  segmentation.py              Bayesian-GMM intervals, thresholds, partition
+  builders.py                  shared model builders (members = baseline)
+  ConvolutionalNetworks.py     BGNet, BG_mean (p*alpha*beta or threshold)
+  Modules.py                   conv backbone, CBAM-style channel attention, elevation embedding
+  GammaLoss.py                 Bernoulli-Gamma loss
+  quantiles.py                 Weight Network (Omega), EMD loss, bin_y_var, ensemble
+tests/                         unit + smoke tests (tests/run_smoke_tests.py runs all)
+results/
+  final_cordex_qre/            first run (before fixes)
+  baseline_rerun/              data-match check against the first run
+  fixes_v2/                    v2 outputs
 ```
 
 ---
 
-## 6. Project Directory Structure
+## 8. Scope
 
-```
-precipitation-downscaling/
-├── configs/
-│   └── cordex_final.json         # Active BTP experiment configuration (N=6, 3 seeds)
-├── data/
-│   └── CORDEX_NZ/                # CORDEX-ML-Bench NetCDF climate files
-│       ├── train/                # 1961–1980 predictors, static fields, and targets
-│       └── test/                 # 1981–2000 multi-decadal evaluation files
-├── experiments/
-│   └── run_cordex_experiment.py  # Complete end-to-end training and evaluation runner
-├── results/
-│   └── final_cordex_qre/         # Benchmark results (metrics_table.csv, JSONs, logs)
-├── src/
-│   ├── ConvolutionalNetworks.py  # BGNet architecture and parameter unpacking
-│   ├── GammaLoss.py              # Zero-inflated Bernoulli-Gamma loss function
-│   ├── Modules.py                # Squeeze-and-Excitation channel attention layers
-│   ├── quantiles.py              # GMM binning, Omega weight network & EMD loss
-│   └── data_adapter_cordex.py    # NetCDF loader, normalization & land-masking
-├── tests/                        # Automated unit and integration test suite
-├── requirements.txt              # Validated environment dependencies
-└── test.py                       # Dataset viewing and sample inspection script
-```
-
----
-
-## 7. Reproduction & Scope Disclaimer
-
-> [!IMPORTANT]
-> This study implements the QRE algorithm on an **author-recommended alternative dataset (CORDEX-ML-Bench)** with necessary computational adjustments for feasibility. It does not represent an exact numerical reproduction of the original ERA5 $\to$ VCSN experiment.
+This is QRE implemented on an alternative dataset with documented adjustments. It is not a numerical reproduction of the paper's ERA5 → VCSN experiment, and absolute MSE values are not comparable with the paper's tables.
