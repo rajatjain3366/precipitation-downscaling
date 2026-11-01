@@ -58,12 +58,20 @@ class OmegaLoss(tf.keras.losses.Loss):
         weight_func=weight,
         loss_weights=tf.constant([0.0, 0.0, 1.0]),
         class_reduction="mean",  # "sum" = paper Eq. 6; "mean" (original code) divides by N
+        kind="emd",              # see call(); "emd" is the paper's loss
+        ce_weight=1.0,
+        emd_weight=1.0,
     ):
         super(OmegaLoss, self).__init__()
 
         if class_reduction not in ("sum", "mean"):
             raise ValueError(f"class_reduction must be 'sum' or 'mean', got {class_reduction!r}")
+        if kind not in ("emd", "emd_squared_cdf", "cross_entropy", "ce_plus_emd"):
+            raise ValueError(f"unknown Weight Network loss kind {kind!r}")
         self.class_reduction = class_reduction
+        self.kind = kind
+        self.ce_weight = ce_weight
+        self.emd_weight = emd_weight
         self.num_classes = num_classes
         self.p = p
         self.weight_func = weight_func
@@ -80,10 +88,30 @@ class OmegaLoss(tf.keras.losses.Loss):
         matrix = tf.constant(matrix, dtype=tf.float32)
         return tf.transpose(matrix)
 
+    # kind="emd":             paper Eq. 6, sum_k |k - k'|^p * w_k. Linear in w, so its
+    #                          minimum is one-hot and its softmax gradient w_k (c_k - L)
+    #                          vanishes there (observed: Weight Network collapse).
+    # kind="emd_squared_cdf":  squared EMD of Hou et al. (2016), sum_k (CDF_w(k) - CDF_y(k))^2
+    # kind="cross_entropy":    -sum_k y_k log w_k
+    # kind="ce_plus_emd":      ce_weight * cross-entropy + emd_weight * Eq. 6
     def call(self, y_true, y_pred):
         y_true = tf.cast(y_true, tf.float32)
         y_pred = tf.cast(y_pred, tf.float32)
 
+        if self.kind == "emd_squared_cdf":
+            diff = tf.cumsum(y_pred, axis=1) - tf.cumsum(y_true, axis=1)
+            return tf.reduce_sum(tf.square(diff), axis=1)
+        if self.kind == "cross_entropy":
+            return self.cross_entropy(y_true, y_pred)
+        if self.kind == "ce_plus_emd":
+            return self.ce_weight * self.cross_entropy(y_true, y_pred) + self.emd_weight * self.emd(y_true, y_pred)
+        return self.emd(y_true, y_pred)
+
+    @staticmethod
+    def cross_entropy(y_true, y_pred):
+        return -tf.reduce_sum(y_true * tf.math.log(tf.clip_by_value(y_pred, 1e-7, 1.0)), axis=1)
+
+    def emd(self, y_true, y_pred):
         col_indices = tf.argmax(y_true, axis=1)
         weight_cols = tf.pow(tf.gather(self.weight_matrix, col_indices), self.p)
 

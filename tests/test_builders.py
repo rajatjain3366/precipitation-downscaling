@@ -69,6 +69,21 @@ def test_emd_loss_sum_matches_eq6():
     assert np.isclose(OmegaLoss(4, class_reduction="mean")(y_true, w).numpy(), eq6 / 4)
 
 
+def test_weight_network_loss_variants():
+    from src.quantiles import OmegaLoss
+    y_true = tf.constant([[0.0, 0.0, 1.0, 0.0]])
+    w = tf.constant([[0.1, 0.2, 0.3, 0.4]])
+    ce = -np.log(0.3)
+    cdf = np.cumsum([0.1, 0.2, 0.3, 0.4]) - np.cumsum([0, 0, 1, 0])
+    eq6 = 2 * 0.1 + 1 * 0.2 + 1 * 0.4
+    loss = lambda **kw: float(OmegaLoss(4, class_reduction="sum", **kw)(y_true, w).numpy())
+    assert np.isclose(loss(kind="cross_entropy"), ce, atol=1e-6)
+    assert np.isclose(loss(kind="emd_squared_cdf"), np.sum(cdf ** 2), atol=1e-6)
+    assert np.isclose(loss(kind="ce_plus_emd", ce_weight=1.0, emd_weight=0.5), ce + 0.5 * eq6, atol=1e-6)
+    # a perfect one-hot prediction costs nothing for the EMD variants
+    assert np.isclose(float(OmegaLoss(4, kind="emd_squared_cdf")(y_true, y_true).numpy()), 0.0)
+
+
 def test_bg_mean_modes():
     p = tf.constant([[0.3], [0.8]])
     log_a = tf.math.log(tf.constant([[2.0], [2.0]]))

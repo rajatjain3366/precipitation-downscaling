@@ -41,6 +41,7 @@ from src.ConvolutionalNetworks import BGCallWrapper
 from src.GammaLoss import GammaLoss
 from src.quantiles import OmegaLoss, ynetwork, bin_y_var
 from src.builders import build_bgnet, build_bgnet_minus, build_omega, make_optimizer
+from src import checkpoints
 from src.useful_functions import data_between
 from src.segmentation import (assign_intervals, bounds_to_thresholds, daily_totals,
                               gmm_quantile_bounds, partition_indices)
@@ -99,6 +100,9 @@ def load_config(args):
             cfg[k] = os.path.normpath(os.path.join(WORKSPACE_ROOT, cfg[k]))
     if not os.path.isabs(cfg["data"]["data_dir"]):
         cfg["data"]["data_dir"] = os.path.normpath(os.path.join(WORKSPACE_ROOT, cfg["data"]["data_dir"]))
+    ck = cfg["checkpoints"]["dir"]
+    if ck is not None and not os.path.isabs(ck):
+        cfg["checkpoints"]["dir"] = os.path.normpath(os.path.join(WORKSPACE_ROOT, ck))
     return cfg
 
 
@@ -253,6 +257,29 @@ def fit(model, loss, x, y, xv, yv, tcfg):
             "history": hist}
 
 
+def train_or_load(cfg, name, sig, build_fn, x_build, train_fn):
+    """
+    Loads checkpoints.dir/<name> if it exists (its signature must match `sig`),
+    otherwise trains with train_fn(model) and saves. checkpoints.dir = null disables both.
+    """
+    ckdir = cfg["checkpoints"]["dir"]
+    model = build_fn()
+    if checkpoints.exists(ckdir, name):
+        info = checkpoints.load(model, ckdir, name, sig, x_build[:1])
+        print(f"  loaded {name} from checkpoint", flush=True)
+        return model, dict(info, loaded_from_checkpoint=True)
+    info = train_fn(model)
+    if ckdir is not None:
+        checkpoints.save(model, ckdir, name, sig, info)
+    return model, info
+
+
+def weight_network_loss(cfg):
+    w = cfg["weight_network"]
+    return OmegaLoss(num_classes=cfg["n_intervals"], class_reduction=w["emd_reduction"], kind=w["loss"],
+                     ce_weight=w["ce_weight"], emd_weight=w["emd_weight"])
+
+
 def weight_network_diagnostics(weights, labels, n, collapse_fraction):
     """Validation accuracy, confusion matrix (rows = true interval), argmax histogram, mean max weight."""
     pred = np.argmax(weights, axis=1)
@@ -334,8 +361,10 @@ def run_repetition(cfg, data, seg, k):
             Xv, Yv = Xva[val_parts[i]], Yva[val_parts[i]]
         else:
             Xv, Yv = Xva, Yva
-        m = build_bgnet(cfg, D, aux)
-        info = fit(m, loss_fn, Xs, Ys, Xv, Yv, cfg["members"])
+        sig = checkpoints.signature(cfg, f"member_{i}", seed,
+                                    {"interval": [ql, qh], "thresholds": seg.get("thresholds_daily_total_mm")})
+        m, info = train_or_load(cfg, f"rep{k}/member_{i}", sig, lambda: build_bgnet(cfg, D, aux), Xs,
+                                lambda model: fit(model, loss_fn, Xs, Ys, Xv, Yv, cfg["members"]))
         info.update({"interval": [ql, qh], "train_days": int(len(Ys)), "val_days": int(len(Yv))})
         log["members"].append(info)
         members.append(m)
@@ -344,9 +373,10 @@ def run_repetition(cfg, data, seg, k):
               f"{info['epochs']} ({info['seconds_per_epoch']:.1f}s/epoch)", flush=True)
 
     wcfg = cfg["weight_network"]
-    omega = build_omega(cfg, N)
-    log["omega"] = fit(omega, OmegaLoss(num_classes=N, class_reduction=wcfg["emd_reduction"]),
-                       Xtr, Ltr, Xva, Lva, wcfg)
+    sig = checkpoints.signature(cfg, "weight_network", seed, {"thresholds": seg.get("thresholds_daily_total_mm")})
+    omega, log["omega"] = train_or_load(cfg, f"rep{k}/weight_network_{wcfg['loss']}", sig,
+                                        lambda: build_omega(cfg, N), Xtr,
+                                        lambda model: fit(model, weight_network_loss(cfg), Xtr, Ltr, Xva, Lva, wcfg))
     print(f"  weight network best_epoch={log['omega']['best_epoch']}/{log['omega']['epochs']} "
           f"({log['omega']['seconds_per_epoch']:.1f}s/epoch)", flush=True)
     # H1 check on the validation set
@@ -357,13 +387,16 @@ def run_repetition(cfg, data, seg, k):
           f"collapsed={diag['collapsed']}", flush=True)
 
     # H3: the baseline is built by the same function as the members
-    bgnet = build_bgnet(cfg, D, aux)
-    log["bgnet"] = fit(bgnet, loss_fn, Xtr, Ytr, Xva, Yva, cfg["members"])
+    sig = checkpoints.signature(cfg, "bgnet", seed)
+    bgnet, log["bgnet"] = train_or_load(cfg, f"rep{k}/bgnet", sig, lambda: build_bgnet(cfg, D, aux), Xtr,
+                                        lambda model: fit(model, loss_fn, Xtr, Ytr, Xva, Yva, cfg["members"]))
     print(f"  bgnet best_epoch={log['bgnet']['best_epoch']}/{log['bgnet']['epochs']} "
           f"({log['bgnet']['seconds_per_epoch']:.1f}s/epoch)", flush=True)
     # M7: no try/except; if BGNet(-) fails the run fails
-    bgnet_minus = build_bgnet_minus(cfg, D)
-    log["bgnet_minus"] = fit(bgnet_minus, loss_fn, Xtr, Ytr, Xva, Yva, cfg["members"])
+    sig = checkpoints.signature(cfg, "bgnet_minus", seed)
+    bgnet_minus, log["bgnet_minus"] = train_or_load(
+        cfg, f"rep{k}/bgnet_minus", sig, lambda: build_bgnet_minus(cfg, D), Xtr,
+        lambda model: fit(model, loss_fn, Xtr, Ytr, Xva, Yva, cfg["members"]))
     print(f"  bgnet(-) best_epoch={log['bgnet_minus']['best_epoch']}/{log['bgnet_minus']['epochs']} "
           f"({log['bgnet_minus']['seconds_per_epoch']:.1f}s/epoch)", flush=True)
 

@@ -53,6 +53,9 @@
   "weight_network": {
     "dense": 100,
     "dropout": 0.2,
+    "loss": "emd",
+    "ce_weight": 1.0,
+    "emd_weight": 1.0,
     "emd_reduction": "sum",
     "learning_rate": 0.00005,
     "decay_rate": 0.7,
@@ -63,6 +66,9 @@
     "max_epochs_hard": 300,
     "batch_size": 91,
     "collapse_fraction": 0.7
+  },
+  "checkpoints": {
+    "dir": null
   },
   "sanity": {
     "members_max_epochs": 2,
