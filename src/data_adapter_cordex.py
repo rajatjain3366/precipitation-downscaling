@@ -167,8 +167,11 @@ def load_cordex_dataset(
     if not os.path.exists(test_targ_path):
         test_targ_path = os.path.join(data_dir, f"pr_tasmax_{test_gcm}_1981-2000_target.nc")
 
-    # Validate essential files exist
-    for p_name, p_val in [("Train Predictor", train_pred_path), ("Train Target", train_targ_path), ("Static", static_path)]:
+    # Validate essential files exist (the test files are required too: never
+    # substitute training data for missing test data)
+    for p_name, p_val in [("Train Predictor", train_pred_path), ("Train Target", train_targ_path),
+                          ("Static", static_path), ("Test Predictor", test_pred_path),
+                          ("Test Target", test_targ_path)]:
         if not os.path.exists(p_val):
             raise FileNotFoundError(f"Required {p_name} file missing: {os.path.abspath(p_val)}")
 
@@ -177,13 +180,9 @@ def load_cordex_dataset(
     ds_y_train = xr.open_dataset(train_targ_path)
     ds_static = xr.open_dataset(static_path)
 
-    has_test = os.path.exists(test_pred_path) and os.path.exists(test_targ_path)
-    if has_test:
-        ds_x_test = xr.open_dataset(test_pred_path)
-        ds_y_test = xr.open_dataset(test_targ_path)
-    else:
-        ds_x_test = None
-        ds_y_test = None
+    has_test = True
+    ds_x_test = xr.open_dataset(test_pred_path)
+    ds_y_test = xr.open_dataset(test_targ_path)
 
     # Slice temporal window if requested
     if sample_days is not None and sample_days > 0:
@@ -219,8 +218,9 @@ def load_cordex_dataset(
                         sub = ds.sel(channel=avail_alt)
                         x_arr = sub.to_array().values if isinstance(sub, xr.Dataset) else sub.values
                     else:
-                        # Fallback to first 4 channels
-                        x_arr = ds.values[..., :4]
+                        raise ValueError(
+                            f"config_A needs channels q/t/u/v at 850 hPa, found {all_channels}"
+                        )
             else:
                 x_arr = ds.values
         else:
@@ -253,9 +253,9 @@ def load_cordex_dataset(
                     # Stack along trailing channel dimension: (time, H, W, 4)
                     x_arr = np.stack(selected_arrays, axis=-1)
                 else:
-                    # Fallback to stacking all variables and taking first 4
-                    all_arrs = [ds[v].values for v in ds.data_vars]
-                    x_arr = np.stack(all_arrs, axis=-1)[..., :4]
+                    raise ValueError(
+                        f"config_A needs variables q/t/u/v at 850 hPa, found {list(ds.data_vars)}"
+                    )
             else:
                 all_arrs = [ds[v].values for v in ds.data_vars]
                 x_arr = np.stack(all_arrs, axis=-1)
@@ -271,7 +271,7 @@ def load_cordex_dataset(
         return x_arr.astype(np.float32)
 
     x_train = extract_predictors(ds_x_train, config)
-    x_test = extract_predictors(ds_x_test, config) if has_test else x_train[:min(10, x_train.shape[0])]
+    x_test = extract_predictors(ds_x_test, config)
 
     # 5. Extract and Structure Precipitation Target (Y)
     if 'pr' in ds_y_train:
@@ -286,18 +286,15 @@ def load_cordex_dataset(
     if len(y_train_raw.shape) == 2:
         y_train_raw = np.expand_dims(y_train_raw, axis=0)
 
-    if has_test:
-        if 'pr' in ds_y_test:
-            y_test_da = ds_y_test['pr']
-        elif 'Rain_bc' in ds_y_test:
-            y_test_da = ds_y_test['Rain_bc']
-        else:
-            y_test_da = ds_y_test[list(ds_y_test.data_vars)[0]]
-        y_test_raw = y_test_da.values.astype(np.float32)
-        if len(y_test_raw.shape) == 2:
-            y_test_raw = np.expand_dims(y_test_raw, axis=0)
+    if 'pr' in ds_y_test:
+        y_test_da = ds_y_test['pr']
+    elif 'Rain_bc' in ds_y_test:
+        y_test_da = ds_y_test['Rain_bc']
     else:
-        y_test_raw = y_train_raw[:min(10, y_train_raw.shape[0])]
+        y_test_da = ds_y_test[list(ds_y_test.data_vars)[0]]
+    y_test_raw = y_test_da.values.astype(np.float32)
+    if len(y_test_raw.shape) == 2:
+        y_test_raw = np.expand_dims(y_test_raw, axis=0)
 
     # Format target output according to target_mode
     T_tr, H_tg, W_tg = y_train_raw.shape

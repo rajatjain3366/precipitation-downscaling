@@ -11,7 +11,7 @@ for p in [SRC_DIR, WORKSPACE_ROOT]:
     if p not in sys.path:
         sys.path.insert(0, p)
 
-from src.ConvolutionalNetworks import BGNet, unpack_bgout, BG_mean, BG_variance, MSENet, BGCallWrapper
+from src.ConvolutionalNetworks import BGNet, unpack_bgout, BG_mean, BG_variance, BGCallWrapper
 from src.GammaLoss import GammaLoss
 from src.quantiles import bin_y_var, OmegaLoss, Omega, ynetwork
 from src.useful_functions import data_between

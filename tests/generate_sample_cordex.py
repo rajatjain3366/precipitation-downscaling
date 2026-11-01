@@ -6,8 +6,9 @@ import xarray as xr
 WORKSPACE_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 test_dir = os.path.join(WORKSPACE_ROOT, "data", "CORDEX_NZ_sample")
 
-os.makedirs(os.path.join(test_dir, "train", "ESD_pseudo-reality", "predictors"), exist_ok=True)
-os.makedirs(os.path.join(test_dir, "train", "ESD_pseudo-reality", "target"), exist_ok=True)
+# Same layout as load_cordex_dataset() expects (and as the Zenodo NZ_domain archive uses)
+os.makedirs(os.path.join(test_dir, "train", "ESD_pseudo_reality", "predictors"), exist_ok=True)
+os.makedirs(os.path.join(test_dir, "train", "ESD_pseudo_reality", "target"), exist_ok=True)
 os.makedirs(os.path.join(test_dir, "test", "historical", "predictors", "perfect"), exist_ok=True)
 os.makedirs(os.path.join(test_dir, "test", "historical", "target"), exist_ok=True)
 
@@ -90,9 +91,9 @@ ds_static = xr.Dataset(
 )
 
 print("Writing NetCDF files...")
-ds_pred_tr.to_netcdf(os.path.join(test_dir, "train", "ESD_pseudo-reality", "predictors", "ACCESS-CM2_1961-1980.nc"))
-ds_target_tr.to_netcdf(os.path.join(test_dir, "train", "ESD_pseudo-reality", "target", "pr_tasmax_ACCESS-CM2_1961-1980.nc"))
-ds_static.to_netcdf(os.path.join(test_dir, "train", "ESD_pseudo-reality", "static.nc"))
+ds_pred_tr.to_netcdf(os.path.join(test_dir, "train", "ESD_pseudo_reality", "predictors", "ACCESS-CM2_1961-1980.nc"))
+ds_target_tr.to_netcdf(os.path.join(test_dir, "train", "ESD_pseudo_reality", "target", "pr_tasmax_ACCESS-CM2_1961-1980.nc"))
+ds_static.to_netcdf(os.path.join(test_dir, "train", "ESD_pseudo_reality", "predictors", "Static_fields.nc"))
 ds_pred_te.to_netcdf(os.path.join(test_dir, "test", "historical", "predictors", "perfect", "ACCESS-CM2_1981-2000.nc"))
 ds_target_te.to_netcdf(os.path.join(test_dir, "test", "historical", "target", "pr_tasmax_ACCESS-CM2_1981-2000.nc"))
 
