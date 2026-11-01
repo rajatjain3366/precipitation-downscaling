@@ -1,0 +1,43 @@
+{
+  "experiment_name": "cordex_qre_fixes_v2",
+  "save_dir": "results/fixes_v2",
+  "repeats": 3,
+  "base_seed": 42,
+  "n_intervals": 6,
+  "data": {
+    "data_dir": "data/CORDEX_NZ",
+    "predictor_config": "config_A",
+    "gcm": "ACCESS-CM2",
+    "train_years": [1961, 1988],
+    "val_years": [1989, 1993],
+    "test_years": [1994, 2000],
+    "standardize_predictors": true,
+    "use_elevation": true,
+    "input_hw": [16, 16]
+  },
+  "loss": {
+    "rain_threshold": 0.1,
+    "epsilon": 0.0001
+  },
+  "architecture": {
+    "channels": [32, 64, 128],
+    "kernel": 3,
+    "dense": [128],
+    "dropout": 0.1
+  },
+  "members": {
+    "learning_rate": 0.001,
+    "patience": 5,
+    "max_epochs": 30,
+    "batch_size": 16
+  },
+  "weight_network": {
+    "learning_rate": 0.001,
+    "patience": 3,
+    "max_epochs": 25,
+    "batch_size": 16
+  },
+  "sanity": {
+    "max_epochs": 2
+  }
+}

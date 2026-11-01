@@ -320,9 +320,21 @@ def load_cordex_dataset(
         y_test = np.nan_to_num(y_test, nan=0.0)
 
     # 6. Build Metadata & Coordinates
+    lat_vals = ds_y_train['lat'].values if 'lat' in ds_y_train.coords else np.arange(H_tg)
+    lon_vals = ds_y_train['lon'].values if 'lon' in ds_y_train.coords else np.arange(W_tg)
+    if lat_vals.ndim == 1 and lon_vals.ndim == 1:
+        lat_2d, lon_2d = np.meshgrid(lat_vals, lon_vals, indexing='ij')
+    else:
+        lat_2d, lon_2d = lat_vals, lon_vals
+    raw_orog = ds_static['orog'].values.squeeze() if 'orog' in ds_static else None
+
     coords_dict = {
-        'lat': ds_y_train['lat'].values if 'lat' in ds_y_train.coords else np.arange(H_tg),
-        'lon': ds_y_train['lon'].values if 'lon' in ds_y_train.coords else np.arange(W_tg),
+        'lat': lat_vals,
+        'lon': lon_vals,
+        # per land cell, same order as the columns of y_train / y_test
+        'lat_land': lat_2d[land_mask] if lat_2d.shape == land_mask.shape else None,
+        'lon_land': lon_2d[land_mask] if lon_2d.shape == land_mask.shape else None,
+        'orog_land': raw_orog[land_mask] if raw_orog is not None else None,
         'train_time': ds_y_train['time'].values if 'time' in ds_y_train.coords else None,
         'test_time': ds_y_test['time'].values if has_test and 'time' in ds_y_test.coords else None,
         'target_shape': (H_tg, W_tg),
@@ -371,3 +383,32 @@ def load_cordex_dataset(
     }
 
     return data_dict
+
+
+def load_cordex_full_period(data_dir, config="config_A", target_mode="land_masked",
+                            train_gcm="ACCESS-CM2", test_gcm="ACCESS-CM2", verbose=False):
+    """
+    Loads both CORDEX files (1961-1980 and 1981-2000) as ONE continuous series,
+    so the train/val/test split can be chosen by year (see preprocessing.split_masks_by_years).
+
+    Returns dict with 'x' (T, H, W, C), 'y' (T, D), 'time' (T,), plus the
+    'auxiliary', 'coords', 'mask', 'metadata' entries of load_cordex_dataset().
+    """
+    d = load_cordex_dataset(data_dir, config=config, target_mode=target_mode,
+                            train_gcm=train_gcm, test_gcm=test_gcm, verbose=verbose)
+    t_first, t_second = d['coords']['train_time'], d['coords']['test_time']
+    if t_first is None or t_second is None:
+        raise ValueError("Both CORDEX files need a time coordinate to be concatenated")
+    if d['x_train'].shape[1:] != d['x_test'].shape[1:] or d['y_train'].shape[1:] != d['y_test'].shape[1:]:
+        raise ValueError(f"Grid mismatch between files: x {d['x_train'].shape} vs {d['x_test'].shape}, "
+                         f"y {d['y_train'].shape} vs {d['y_test'].shape}")
+
+    time = np.concatenate([np.asarray(t_first), np.asarray(t_second)])
+    if not all(time[i] < time[i + 1] for i in range(len(time) - 1)):
+        raise ValueError("Concatenated time axis is not strictly increasing (overlap or gap ordering)")
+
+    out = {k: d[k] for k in ('auxiliary', 'coords', 'mask', 'metadata')}
+    out['x'] = np.concatenate([d['x_train'], d['x_test']], axis=0)
+    out['y'] = np.concatenate([d['y_train'], d['y_test']], axis=0)
+    out['time'] = time
+    return out

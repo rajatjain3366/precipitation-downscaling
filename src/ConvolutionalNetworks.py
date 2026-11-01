@@ -1,5 +1,6 @@
+import numpy as np
 import tensorflow as tf
-#import tensorflow_probability as tfp 
+#import tensorflow_probability as tfp
 
 from src.useful_functions import * 
 from src.Modules import *
@@ -84,7 +85,8 @@ class BGNet(tf.keras.Model):
                                                 self.kernel_sizes,
                                                 self.reduction_rate,
                                                 aux_mode=aux_mode,
-                                                aux_data=None if aux_data is None else aux_data.values,
+                                                # accepts np.ndarray or xr.DataArray
+                                                aux_data=None if aux_data is None else np.asarray(getattr(aux_data, 'values', aux_data), dtype=np.float32),
                                                 n=n,
                                                 m=m
                                         )
