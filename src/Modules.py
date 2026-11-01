@@ -61,12 +61,14 @@ class DownScaleModule(tf.keras.Model):
         aux_mode="embed",
         n=1,
         m=1,
+        padding="valid",
     ):
 
         super(DownScaleModule, self).__init__()
 
         self.num_channels = num_channels
         self.kernel_sizes = kernel_sizes
+        self.padding = padding  # "valid" = original repo; "same" keeps 16x16 CORDEX grids from shrinking to zero
         self.reduction_rate = reduction_rate
         self.avg_pool = avg_pool
         self.max_pool = max_pool
@@ -92,21 +94,23 @@ class DownScaleModule(tf.keras.Model):
 
     def module(self, nc, ks):
         module = tf.keras.Sequential()
-        module.add(tf.keras.layers.Conv2D(nc, ks, activation="relu"))
+        module.add(tf.keras.layers.Conv2D(nc, ks, activation="relu", padding=self.padding))
         module.add(
             ChannelAttentionModule(
                 nc, self.reduction_rate, self.avg_pool, self.max_pool
             )
         )
-        module.add(tf.keras.layers.Conv2D(nc, ks, activation="relu"))
+        module.add(tf.keras.layers.Conv2D(nc, ks, activation="relu", padding=self.padding))
 
         return module
 
     def bmodule(self, nc, ks):
+        # BGNet(-): with padding="same" a 16x16 input goes 16 -> 8 -> 4 -> 2 over the three
+        # pooling stages; with "valid" (original) it collapses to zero size on 16x16
         base_ds = tf.keras.Sequential()
 
         base_ds.add(tf.keras.layers.BatchNormalization())
-        base_ds.add(tf.keras.layers.Conv2D(nc, ks, activation="relu"))
+        base_ds.add(tf.keras.layers.Conv2D(nc, ks, activation="relu", padding=self.padding))
         base_ds.add(tf.keras.layers.MaxPool2D(2))
 
         return base_ds

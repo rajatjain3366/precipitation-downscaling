@@ -84,6 +84,10 @@ class Omega(tf.keras.Model):
         output_dim,
         kernels=[6, 6, 6],
         channels=[64, 128, 256],
+        padding="valid",
+        init_conv=False,     # True = same backbone as BGNet, including its 3x3 init conv
+        dense_units=100,
+        dropout=0.2,
     ):
 
         super(Omega, self).__init__()
@@ -91,6 +95,10 @@ class Omega(tf.keras.Model):
         self.output_dim = output_dim
         self.kernels = kernels
         self.channels = channels
+        self.padding = padding
+        self.init_conv = init_conv
+        self.dense_units = dense_units
+        self.dropout = dropout
         self.post_process = False
 
         self._omega = self.omega()
@@ -106,17 +114,19 @@ class Omega(tf.keras.Model):
     def omega(self):
         omega = tf.keras.Sequential()
 
+        if self.init_conv:
+            omega.add(tf.keras.layers.Conv2D(self.channels[0], 3, activation="relu", padding="same"))
         for ks, nch in zip(self.kernels, self.channels):
-            omega.add(tf.keras.layers.Conv2D(nch, ks, activation="relu"))
+            omega.add(tf.keras.layers.Conv2D(nch, ks, activation="relu", padding=self.padding))
             omega.add(ChannelAttentionModule(nch, 1, True, True))
-            omega.add(tf.keras.layers.Conv2D(nch, ks, activation="relu"))
+            omega.add(tf.keras.layers.Conv2D(nch, ks, activation="relu", padding=self.padding))
             # omega.add(tf.keras.layers.MaxPool2D(2))
 
         omega.add(tf.keras.layers.Flatten())
-        omega.add(tf.keras.layers.Dense(100, activation="relu"))
-        omega.add(tf.keras.layers.Dropout(0.2))
-        omega.add(tf.keras.layers.Dense(100, activation="relu"))
-        omega.add(tf.keras.layers.Dropout(0.2))
+        omega.add(tf.keras.layers.Dense(self.dense_units, activation="relu"))
+        omega.add(tf.keras.layers.Dropout(self.dropout))
+        omega.add(tf.keras.layers.Dense(self.dense_units, activation="relu"))
+        omega.add(tf.keras.layers.Dropout(self.dropout))
         omega.add(tf.keras.layers.Dense(self.output_dim, activation="softmax"))
 
         return omega

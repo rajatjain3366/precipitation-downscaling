@@ -451,6 +451,9 @@ def run_dry_run_audit(config):
 def execute_training_pipeline(config):
     """
     Executes the multi-repetition QRE experiment pipeline on CORDEX-ML-Bench.
+
+    LEGACY runner that produced results/final_cordex_qre/. Its behaviour is kept
+    (prediction = 1[p > 0.5]*alpha*beta); the fixed pipeline is experiments/run_cordex_v2.py.
     """
     t_pipeline_start = time.time()
     os.makedirs(config['save_dir'], exist_ok=True)
@@ -610,7 +613,7 @@ def execute_training_pipeline(config):
                   f"Best Val Loss = {best_val_loss:.4f} (Epoch {best_epoch}/{epochs_run})")
 
             specialist_models.append(spec_model)
-            specialist_wrappers.append(BGCallWrapper(spec_model))
+            specialist_wrappers.append(BGCallWrapper(spec_model, mean_mode=config.get("prediction_mode", "threshold")))
 
         # ---------------------------------------------------------------------
         # 4. Train Omega Weight Network
@@ -719,7 +722,7 @@ def execute_training_pipeline(config):
         single_bgnet.compile(optimizer=tf.keras.optimizers.Adam(learning_rate=config['specialist_learning_rate']), loss=loss_fn)
         single_bgnet.fit(X_train, Y_train, validation_data=(X_val, Y_val), epochs=config.get('max_epochs_specialist', 30),
                          batch_size=config['batch_size'], callbacks=[early_stop], verbose=0)
-        pred_single = BGCallWrapper(single_bgnet)(X_test).numpy()
+        pred_single = BGCallWrapper(single_bgnet, mean_mode=config.get("prediction_mode", "threshold"))(X_test).numpy()
         all_repeat_metrics["single_bgnet"].append(evaluate_test_quantiles(Y_test, pred_single))
         print(f"        Single BGNet Test MSE Overall: {all_repeat_metrics['single_bgnet'][-1]['Q_[0.0_1.0]']['mse']:.4f}")
 
@@ -730,7 +733,7 @@ def execute_training_pipeline(config):
             bgnet_minus.compile(optimizer=tf.keras.optimizers.Adam(learning_rate=config['specialist_learning_rate']), loss=loss_fn)
             bgnet_minus.fit(X_train, Y_train, validation_data=(X_val, Y_val), epochs=config.get('max_epochs_specialist', 30),
                             batch_size=config['batch_size'], callbacks=[early_stop], verbose=0)
-            pred_minus = BGCallWrapper(bgnet_minus)(X_test).numpy()
+            pred_minus = BGCallWrapper(bgnet_minus, mean_mode=config.get("prediction_mode", "threshold"))(X_test).numpy()
             all_repeat_metrics["bgnet_minus"].append(evaluate_test_quantiles(Y_test, pred_minus))
             print(f"        BG-Net(-) Test MSE Overall:    {all_repeat_metrics['bgnet_minus'][-1]['Q_[0.0_1.0]']['mse']:.4f}")
         except Exception as e:

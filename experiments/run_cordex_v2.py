@@ -37,9 +37,10 @@ for p in [WORKSPACE_ROOT, SCRIPT_DIR]:
 from src.data_adapter_cordex import load_cordex_full_period
 from src.preprocessing import (ChannelStandardizer, channel_stats, looks_standardized,
                                split_masks_by_years, time_to_years)
-from src.ConvolutionalNetworks import BGNet, BGCallWrapper
+from src.ConvolutionalNetworks import BGCallWrapper
 from src.GammaLoss import GammaLoss
-from src.quantiles import Omega, OmegaLoss, ynetwork, bin_y_var
+from src.quantiles import OmegaLoss, ynetwork, bin_y_var
+from src.builders import build_bgnet, build_bgnet_minus, build_omega
 from src.useful_functions import data_between
 from src.segmentation import daily_totals
 from run_cordex_experiment import derive_gmm_quantile_ranges
@@ -162,21 +163,9 @@ def prepare_data(cfg):
 
 
 # -----------------------------------------------------------------------------
-# Models (legacy architecture until Phase 2)
+# Training. Models come from src/builders.py: QRE members and the BGNet
+# baseline share build_bgnet(), so they always have the same architecture.
 # -----------------------------------------------------------------------------
-def build_member(cfg, D, aux):
-    a = cfg["architecture"]
-    return BGNet(output_dim=D, coords=None, baseline=False, ch_attn=True, avg_pool=True, max_pool=True,
-                 kernel_sizes=[a["kernel"]] * 3, num_channels=a["channels"], num_dense=a["dense"],
-                 drop_out_rate=a["dropout"], aux_data=aux, aux_mode="embed",
-                 n=cfg["data"]["input_hw"][0], m=cfg["data"]["input_hw"][1])
-
-
-def build_weight_network(cfg, n):
-    a = cfg["architecture"]
-    return Omega(output_dim=n, kernels=[a["kernel"]] * 3, channels=a["channels"])
-
-
 def fit(model, loss, x, y, xv, yv, tcfg):
     model.compile(optimizer=tf.keras.optimizers.Adam(learning_rate=tcfg["learning_rate"]), loss=loss)
     stop = tf.keras.callbacks.EarlyStopping(monitor="val_loss", patience=tcfg["patience"],
@@ -228,29 +217,44 @@ def run_repetition(cfg, data, k):
     q_ranges, gmm_diag = derive_gmm_quantile_ranges(Ytr, N, seed)
     log["q_ranges"] = q_ranges
 
+    mode = cfg["prediction"]["mode"]
     members, wrappers, log["members"] = [], [], []
     for i, (ql, qh) in enumerate(q_ranges):
         Xs, Ys = data_between(Ytr, ql, Xtr, qh)
-        m = build_member(cfg, D, aux)
+        m = build_bgnet(cfg, D, aux)
         info = fit(m, loss_fn, Xs, Ys, Xva, Yva, cfg["members"])
         info.update({"interval": [ql, qh], "train_days": int(len(Ys))})
         log["members"].append(info)
         members.append(m)
-        wrappers.append(BGCallWrapper(m))
+        wrappers.append(BGCallWrapper(m, mean_mode=mode))
         print(f"  member {i} [{ql:.3f},{qh:.3f}] n={len(Ys)} best_epoch={info['best_epoch']}/{info['epochs']} "
               f"({info['seconds_per_epoch']:.1f}s/epoch)", flush=True)
 
-    omega = build_weight_network(cfg, N)
+    omega = build_omega(cfg, N)
     Ltr = np.array(bin_y_var(Ytr, q_ranges), dtype=np.float32)
     Lva = np.array(bin_y_var(Yva, q_ranges), dtype=np.float32)
     log["omega"] = fit(omega, OmegaLoss(num_classes=N), Xtr, Ltr, Xva, Lva, cfg["weight_network"])
-    print(f"  weight network best_epoch={log['omega']['best_epoch']}/{log['omega']['epochs']}", flush=True)
+    print(f"  weight network best_epoch={log['omega']['best_epoch']}/{log['omega']['epochs']} "
+          f"({log['omega']['seconds_per_epoch']:.1f}s/epoch)", flush=True)
 
-    bgnet = build_member(cfg, D, aux)
+    # H3: the baseline is built by the same function as the members
+    bgnet = build_bgnet(cfg, D, aux)
     log["bgnet"] = fit(bgnet, loss_fn, Xtr, Ytr, Xva, Yva, cfg["members"])
+    print(f"  bgnet best_epoch={log['bgnet']['best_epoch']}/{log['bgnet']['epochs']} "
+          f"({log['bgnet']['seconds_per_epoch']:.1f}s/epoch)", flush=True)
+    # M7: no try/except; if BGNet(-) fails the run fails
+    bgnet_minus = build_bgnet_minus(cfg, D)
+    log["bgnet_minus"] = fit(bgnet_minus, loss_fn, Xtr, Ytr, Xva, Yva, cfg["members"])
+    print(f"  bgnet(-) best_epoch={log['bgnet_minus']['best_epoch']}/{log['bgnet_minus']['epochs']} "
+          f"({log['bgnet_minus']['seconds_per_epoch']:.1f}s/epoch)", flush=True)
 
     cnn = {f"CNN_{i}": [w] for i, w in enumerate(wrappers)}
-    models = {"qre": ynetwork(cnn, omega), "bgnet": BGCallWrapper(bgnet)}
+    prob_weights = [qh - ql for ql, qh in q_ranges]
+    models = {"qre": ynetwork(cnn, omega),
+              "bgnet": BGCallWrapper(bgnet, mean_mode=mode),
+              "bgnet_minus": BGCallWrapper(bgnet_minus, mean_mode=mode),
+              "bagging": ynetwork(cnn, fixed_weights=[1.0 / N] * N),
+              "probability": ynetwork(cnn, fixed_weights=prob_weights)}
     metrics = {}
     for split_name, (X, Y) in {"val": (Xva, Yva), "test": (Xte, Yte)}.items():
         metrics[split_name] = {name: regime_mse(Y, predict(fn, X), train_totals) for name, fn in models.items()}

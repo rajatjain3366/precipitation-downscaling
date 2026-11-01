@@ -15,15 +15,22 @@ def unpack_bgout(y_pred):
     
     return p, alpha, beta
 
-def BG_mean(p, alpha, beta, exp_format=False):
-    # mean of BG net distribution 
-    will_rain = tf.where(p > 0.5, 1.0, 0.0)
-    if exp_format:
-        mean = will_rain * alpha * beta
+def BG_mean(p, alpha, beta, exp_format=False, mode="expected"):
+    # mean of BG net distribution
+    # mode="expected":  p * alpha * beta, the paper's Eq. 3 (MSE-optimal)
+    # mode="threshold": 1[p > 0.5] * alpha * beta, the original repo's rule
+    if mode == "expected":
+        rain = p
+    elif mode == "threshold":
+        rain = tf.where(p > 0.5, 1.0, 0.0)
     else:
-        mean = will_rain * tf.exp(alpha) * tf.exp(beta)
-    
-    return mean 
+        raise ValueError(f"unknown BG_mean mode {mode!r}")
+    if exp_format:
+        mean = rain * alpha * beta
+    else:
+        mean = rain * tf.exp(alpha) * tf.exp(beta)
+
+    return mean
     
 def BG_variance(p, alpha, beta, exp_format=False):
     # variance of the BG network 
@@ -52,8 +59,10 @@ class BGNet(tf.keras.Model):
                         reduction_rate=1,                 # reduction rate of channel attention 
                         n=1,                              # size of predictor samples in n x m 
                         m=1,
-                        aux_data=None,                    # if aux module should be used 
-                        aux_mode='embed'
+                        aux_data=None,                    # if aux module should be used
+                        aux_mode='embed',
+                        conv_padding='valid',             # 'same' keeps 16x16 CORDEX inputs from shrinking away
+                        dense_activation='gelu'           # paper: ReLU in all hidden layers
                  ):
         
         # represents all BGNets; BGNet, BGNet(-), Embed, Interp
@@ -72,7 +81,8 @@ class BGNet(tf.keras.Model):
         self.num_channels = num_channels
         self.drop_out_rate = drop_out_rate
         self.reduction_rate = reduction_rate
-        
+        self.dense_activation = dense_activation
+
         self.init_conv = tf.keras.layers.Conv2D(self.num_channels[0], 3, activation='relu', padding='same') 
         
         # convolutional part 
@@ -88,7 +98,8 @@ class BGNet(tf.keras.Model):
                                                 # accepts np.ndarray or xr.DataArray
                                                 aux_data=None if aux_data is None else np.asarray(getattr(aux_data, 'values', aux_data), dtype=np.float32),
                                                 n=n,
-                                                m=m
+                                                m=m,
+                                                padding=conv_padding
                                         )
             
         # first dense layer 
@@ -105,7 +116,7 @@ class BGNet(tf.keras.Model):
         dense = tf.keras.Sequential([tf.keras.layers.Flatten()])
         
         for nd in self.num_dense:
-            dense.add(tf.keras.layers.Dense(nd, activation='gelu'))
+            dense.add(tf.keras.layers.Dense(nd, activation=self.dense_activation))
 
         return dense
 
@@ -136,16 +147,17 @@ class BGNet(tf.keras.Model):
         
 
 class BGCallWrapper:
-    # post training wrapper for BGNet 
-    def __init__(self, bg_net):
+    # post training wrapper for BGNet
+    def __init__(self, bg_net, mean_mode="expected"):
         self.bg_net = bg_net
+        self.mean_mode = mean_mode
 
     def __call__(self, x):
         params = self.bg_net(x)
-        # some saved models follow the old rule 
+        # some saved models follow the old rule
         if len(params.shape) == 3:
             p, alpha, beta = unpack_bgout(params)
-            mean = BG_mean(p, alpha, beta)
+            mean = BG_mean(p, alpha, beta, mode=self.mean_mode)
             if len(mean.shape) == 3 and mean.shape[-1] == 1:
                 mean = tf.squeeze(mean, axis=-1)
         else:

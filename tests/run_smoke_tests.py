@@ -17,6 +17,7 @@ WORKSPACE_ROOT = os.path.abspath(os.path.join(TESTS_DIR, ".."))
 
 STEPS = [
     ["-m", "pytest", "-q", os.path.join(TESTS_DIR, "test_segmentation.py")],
+    ["-m", "pytest", "-q", os.path.join(TESTS_DIR, "test_builders.py")],
     [os.path.join(TESTS_DIR, "test_cordex_adapter.py")],
     [os.path.join(TESTS_DIR, "generate_sample_cordex.py")],
     [os.path.join(TESTS_DIR, "test_real_data_specialist_smoke.py")],
