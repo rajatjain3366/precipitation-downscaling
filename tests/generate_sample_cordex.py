@@ -57,8 +57,12 @@ ds_pred_te = xr.Dataset(
 )
 
 # Target (pr, tasmax)
-raw_pr_tr = np.random.exponential(scale=5.0, size=(T_tr, H_out, W_out)).astype(np.float32)
-raw_pr_te = np.random.exponential(scale=5.0, size=(T_te, H_out, W_out)).astype(np.float32)
+# A per-day lognormal intensity makes daily domain totals heavy-tailed like real rain
+# (i.i.d. cells alone give almost Gaussian totals, on which the Bayesian GMM collapses)
+day_tr = np.random.lognormal(0.0, 1.0, size=(T_tr, 1, 1))
+day_te = np.random.lognormal(0.0, 1.0, size=(T_te, 1, 1))
+raw_pr_tr = (day_tr * np.random.exponential(scale=5.0, size=(T_tr, H_out, W_out))).astype(np.float32)
+raw_pr_te = (day_te * np.random.exponential(scale=5.0, size=(T_te, H_out, W_out))).astype(np.float32)
 
 # Realistic land mask
 xx, yy = np.meshgrid(np.linspace(-1, 1, W_out), np.linspace(-1, 1, H_out))

@@ -5,10 +5,21 @@ import os
 
 from src.useful_functions import *
 from src.Modules import *
+from src.segmentation import assign_intervals, daily_totals, one_hot
 
 
 # discretise the dataset, taking y sample to bin index
-def bin_y_var(y, Q_ranges):
+# thresholds: daily-total thresholds t_1..t_{N-1} fitted on the TRAINING split
+#   (src/segmentation.py). Pass them for every split so validation/test days are
+#   labelled with the training boundaries (fixes H5 and M1).
+# thresholds=None keeps the original behaviour: boundaries recomputed from y, and
+#   each boundary is the SUM of all days tied at that rounded total (bug H5).
+def bin_y_var(y, Q_ranges, thresholds=None):
+    if thresholds is not None:
+        if len(thresholds) != len(Q_ranges) - 1:
+            raise ValueError(f"need {len(Q_ranges) - 1} thresholds, got {len(thresholds)}")
+        return list(one_hot(assign_intervals(daily_totals(y), thresholds), len(Q_ranges)))
+
     bins = []
 
     # get bin limits

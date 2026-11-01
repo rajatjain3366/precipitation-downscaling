@@ -19,6 +19,13 @@
     "rain_threshold": 0.1,
     "epsilon": 0.0001
   },
+  "segmentation": {
+    "method": "bayesian_gmm",
+    "n_runs": 100,
+    "seed": 0,
+    "weight_concentration_prior": null,
+    "intervals_file": null
+  },
   "prediction": {
     "mode": "expected"
   },

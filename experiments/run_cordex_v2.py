@@ -42,10 +42,12 @@ from src.GammaLoss import GammaLoss
 from src.quantiles import OmegaLoss, ynetwork, bin_y_var
 from src.builders import build_bgnet, build_bgnet_minus, build_omega
 from src.useful_functions import data_between
-from src.segmentation import daily_totals
+from src.segmentation import (assign_intervals, bounds_to_thresholds, daily_totals,
+                              gmm_quantile_bounds, partition_indices)
 from run_cordex_experiment import derive_gmm_quantile_ranges
 
 PREDICTOR_NAMES = ["q850", "t850", "u850", "v850"]
+PAPER_BOUNDS_N6 = [0.0, 0.166, 0.392, 0.61, 0.812, 0.923, 1.0]  # Table 1 of the paper
 
 
 # -----------------------------------------------------------------------------
@@ -163,6 +165,44 @@ def prepare_data(cfg):
 
 
 # -----------------------------------------------------------------------------
+# Segmentation (Phase 3): computed ONCE on the training split, reused by every
+# repetition, applied unchanged to validation and test days
+# -----------------------------------------------------------------------------
+def derive_segmentation(cfg, data):
+    scfg, N = cfg["segmentation"], cfg["n_intervals"]
+    if scfg["method"] == "legacy":
+        return {"method": "legacy"}  # old behaviour: re-fitted per repetition in run_repetition()
+
+    s = data["split"]
+    train_totals = daily_totals(s["train"]["y"])
+    if scfg.get("intervals_file"):
+        with open(os.path.join(WORKSPACE_ROOT, scfg["intervals_file"])) as f:
+            seg = json.load(f)
+        if len(seg["bounds"]) != N + 1:
+            raise ValueError(f"{scfg['intervals_file']} has {len(seg['bounds']) - 1} intervals, config wants {N}")
+    else:
+        t0 = time.time()
+        bounds, per_run, n_degenerate = gmm_quantile_bounds(
+            train_totals, N, n_runs=scfg["n_runs"], base_seed=scfg["seed"],
+            weight_concentration_prior=scfg["weight_concentration_prior"])
+        seg = {"method": "bayesian_gmm", "n_runs": scfg["n_runs"], "n_degenerate_runs": n_degenerate,
+               "weight_concentration_prior": scfg["weight_concentration_prior"],
+               "seed": scfg["seed"], "bounds": bounds,
+               "per_run_bounds": per_run, "per_run_bound_std": np.std(per_run, axis=0).tolist(),
+               "seconds": time.time() - t0}
+    seg["method"] = "bayesian_gmm"
+    seg["thresholds_daily_total_mm"] = bounds_to_thresholds(train_totals, seg["bounds"])
+    seg["paper_bounds"] = PAPER_BOUNDS_N6 if N == 6 else None
+    for name in ("train", "val", "test"):
+        labels = assign_intervals(daily_totals(s[name]["y"]), seg["thresholds_daily_total_mm"])
+        seg[f"{name}_days_per_interval"] = np.bincount(labels, minlength=N).tolist()
+    seg["train_fraction_per_interval"] = (np.array(seg["train_days_per_interval"]) / len(train_totals)).tolist()
+    assert sum(seg["train_days_per_interval"]) == len(train_totals), "segments must cover every training day once"
+    save_json(seg, os.path.join(cfg["save_dir"], "segmentation.json"))
+    return seg
+
+
+# -----------------------------------------------------------------------------
 # Training. Models come from src/builders.py: QRE members and the BGNet
 # baseline share build_bgnet(), so they always have the same architecture.
 # -----------------------------------------------------------------------------
@@ -202,7 +242,7 @@ def regime_mse(y_true, y_pred, train_totals, regimes=((0.0, 1.0), (0.0, 0.2), (0
 # -----------------------------------------------------------------------------
 # One repetition
 # -----------------------------------------------------------------------------
-def run_repetition(cfg, data, k):
+def run_repetition(cfg, data, seg, k):
     seed = cfg["base_seed"] + 1000 * k
     set_seed(seed)
     s = data["split"]
@@ -213,14 +253,26 @@ def run_repetition(cfg, data, k):
     loss_fn = GammaLoss(epsilon=cfg["loss"]["epsilon"], y_thrs=cfg["loss"]["rain_threshold"])
     log = {"seed": seed}
 
-    # Segmentation (legacy until Phase 3)
-    q_ranges, gmm_diag = derive_gmm_quantile_ranges(Ytr, N, seed)
+    if seg["method"] == "legacy":
+        # old behaviour: GMM per repetition, inclusive/rounded bounds, labels recomputed per split
+        q_ranges, _ = derive_gmm_quantile_ranges(Ytr, N, seed)
+        segments = [data_between(Ytr, ql, Xtr, qh) for ql, qh in q_ranges]
+        Ltr = np.array(bin_y_var(Ytr, q_ranges), dtype=np.float32)
+        Lva = np.array(bin_y_var(Yva, q_ranges), dtype=np.float32)
+        prob_weights = [qh - ql for ql, qh in q_ranges]
+    else:
+        b, thr = seg["bounds"], seg["thresholds_daily_total_mm"]
+        q_ranges = [(b[i], b[i + 1]) for i in range(N)]
+        parts = partition_indices(train_totals, thr, N)
+        segments = [(Xtr[idx], Ytr[idx]) for idx in parts]
+        Ltr = np.array(bin_y_var(Ytr, q_ranges, thresholds=thr), dtype=np.float32)
+        Lva = np.array(bin_y_var(Yva, q_ranges, thresholds=thr), dtype=np.float32)  # M1: training thresholds
+        prob_weights = seg["train_fraction_per_interval"]
     log["q_ranges"] = q_ranges
 
     mode = cfg["prediction"]["mode"]
     members, wrappers, log["members"] = [], [], []
-    for i, (ql, qh) in enumerate(q_ranges):
-        Xs, Ys = data_between(Ytr, ql, Xtr, qh)
+    for i, ((ql, qh), (Xs, Ys)) in enumerate(zip(q_ranges, segments)):
         m = build_bgnet(cfg, D, aux)
         info = fit(m, loss_fn, Xs, Ys, Xva, Yva, cfg["members"])
         info.update({"interval": [ql, qh], "train_days": int(len(Ys))})
@@ -231,8 +283,6 @@ def run_repetition(cfg, data, k):
               f"({info['seconds_per_epoch']:.1f}s/epoch)", flush=True)
 
     omega = build_omega(cfg, N)
-    Ltr = np.array(bin_y_var(Ytr, q_ranges), dtype=np.float32)
-    Lva = np.array(bin_y_var(Yva, q_ranges), dtype=np.float32)
     log["omega"] = fit(omega, OmegaLoss(num_classes=N), Xtr, Ltr, Xva, Lva, cfg["weight_network"])
     print(f"  weight network best_epoch={log['omega']['best_epoch']}/{log['omega']['epochs']} "
           f"({log['omega']['seconds_per_epoch']:.1f}s/epoch)", flush=True)
@@ -249,7 +299,6 @@ def run_repetition(cfg, data, k):
           f"({log['bgnet_minus']['seconds_per_epoch']:.1f}s/epoch)", flush=True)
 
     cnn = {f"CNN_{i}": [w] for i, w in enumerate(wrappers)}
-    prob_weights = [qh - ql for ql, qh in q_ranges]
     models = {"qre": ynetwork(cnn, omega),
               "bgnet": BGCallWrapper(bgnet, mean_mode=mode),
               "bgnet_minus": BGCallWrapper(bgnet_minus, mean_mode=mode),
@@ -271,6 +320,12 @@ def main():
     save_json(data["report"], os.path.join(cfg["save_dir"], "data_report.json"))
     print(json.dumps({k: v for k, v in data["report"].items() if k.endswith(("_days", "_years", "_fraction"))}, indent=1))
     print("raw predictors already standardized:", data["report"]["raw_predictors_already_standardized"])
+    seg = derive_segmentation(cfg, data)
+    if seg["method"] != "legacy":
+        print("interval bounds (ours): ", np.round(seg["bounds"], 3).tolist())
+        print("interval bounds (paper):", seg["paper_bounds"])
+        print("train days per interval:", seg["train_days_per_interval"],
+              "val:", seg["val_days_per_interval"], "test:", seg["test_days_per_interval"])
     if args.dry_run:
         return
 
@@ -278,7 +333,7 @@ def main():
     for k in range(cfg["repeats"]):
         print(f"=== repetition {k + 1}/{cfg['repeats']} ===", flush=True)
         t_rep = time.time()
-        log = run_repetition(cfg, data, k)
+        log = run_repetition(cfg, data, seg, k)
         log["seconds"] = time.time() - t_rep
         logs.append(log)
         save_json(log, os.path.join(cfg["save_dir"], f"repetition_{k}.json"))
