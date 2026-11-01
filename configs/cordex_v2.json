@@ -40,20 +40,32 @@
     "omega_init_conv": true
   },
   "members": {
-    "learning_rate": 0.001,
-    "patience": 5,
-    "max_epochs": 30,
-    "batch_size": 16
+    "learning_rate": 0.0001,
+    "decay_rate": 0.7,
+    "decay_steps": 6000,
+    "patience": 4,
+    "max_epochs": 100,
+    "extend_epochs": 50,
+    "max_epochs_hard": 300,
+    "batch_size": 91,
+    "validate_on_own_segment": true
   },
   "weight_network": {
     "dense": 100,
     "dropout": 0.2,
-    "learning_rate": 0.001,
-    "patience": 3,
-    "max_epochs": 25,
-    "batch_size": 16
+    "emd_reduction": "sum",
+    "learning_rate": 0.00005,
+    "decay_rate": 0.7,
+    "decay_steps": 6000,
+    "patience": 15,
+    "max_epochs": 100,
+    "extend_epochs": 50,
+    "max_epochs_hard": 300,
+    "batch_size": 91,
+    "collapse_fraction": 0.7
   },
   "sanity": {
-    "max_epochs": 2
+    "members_max_epochs": 2,
+    "weight_network_max_epochs": 2
   }
 }

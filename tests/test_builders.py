@@ -60,6 +60,15 @@ def test_elevation_required_when_enabled(cfg):
         build_bgnet(cfg, D, aux=None)
 
 
+def test_emd_loss_sum_matches_eq6():
+    from src.quantiles import OmegaLoss
+    y_true = tf.constant([[0.0, 0.0, 1.0, 0.0]])          # true interval k' = 2
+    w = tf.constant([[0.1, 0.2, 0.3, 0.4]])
+    eq6 = 2 * 0.1 + 1 * 0.2 + 0 * 0.3 + 1 * 0.4          # sum_k |k - k'| * w_k
+    assert np.isclose(OmegaLoss(4, class_reduction="sum")(y_true, w).numpy(), eq6)
+    assert np.isclose(OmegaLoss(4, class_reduction="mean")(y_true, w).numpy(), eq6 / 4)
+
+
 def test_bg_mean_modes():
     p = tf.constant([[0.3], [0.8]])
     log_a = tf.math.log(tf.constant([[2.0], [2.0]]))

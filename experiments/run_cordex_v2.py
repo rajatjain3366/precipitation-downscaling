@@ -40,7 +40,7 @@ from src.preprocessing import (ChannelStandardizer, channel_stats, looks_standar
 from src.ConvolutionalNetworks import BGCallWrapper
 from src.GammaLoss import GammaLoss
 from src.quantiles import OmegaLoss, ynetwork, bin_y_var
-from src.builders import build_bgnet, build_bgnet_minus, build_omega
+from src.builders import build_bgnet, build_bgnet_minus, build_omega, make_optimizer
 from src.useful_functions import data_between
 from src.segmentation import (assign_intervals, bounds_to_thresholds, daily_totals,
                               gmm_quantile_bounds, partition_indices)
@@ -91,7 +91,8 @@ def load_config(args):
     if args.sanity:
         cfg["repeats"] = 1
         for section in ("members", "weight_network"):
-            cfg[section]["max_epochs"] = cfg["sanity"]["max_epochs"]
+            cfg[section]["max_epochs"] = cfg["sanity"][f"{section}_max_epochs"]
+            cfg[section]["max_epochs_hard"] = cfg["sanity"][f"{section}_max_epochs"]  # no extension in sanity runs
         cfg["save_dir"] = os.path.join(cfg["save_dir"], "sanity")
     for k in ("save_dir",):
         if not os.path.isabs(cfg[k]):
@@ -206,18 +207,66 @@ def derive_segmentation(cfg, data):
 # Training. Models come from src/builders.py: QRE members and the BGNet
 # baseline share build_bgnet(), so they always have the same architecture.
 # -----------------------------------------------------------------------------
+class BestWeightsEarlyStopping(tf.keras.callbacks.Callback):
+    """
+    Early stopping on val_loss that keeps the best weights across several fit()
+    calls. (TF 2.10's EarlyStopping only restores the best weights when it
+    actually stops early, not when the epoch cap is reached.)
+    """
+
+    def __init__(self, patience):
+        super().__init__()
+        self.patience, self.best, self.best_epoch, self.best_weights = patience, np.inf, 0, None
+
+    def on_epoch_end(self, epoch, logs=None):
+        if logs["val_loss"] < self.best:
+            self.best, self.best_epoch, self.best_weights = logs["val_loss"], epoch + 1, self.model.get_weights()
+        elif epoch + 1 - self.best_epoch >= self.patience:
+            self.model.stop_training = True
+
+
 def fit(model, loss, x, y, xv, yv, tcfg):
-    model.compile(optimizer=tf.keras.optimizers.Adam(learning_rate=tcfg["learning_rate"]), loss=loss)
-    stop = tf.keras.callbacks.EarlyStopping(monitor="val_loss", patience=tcfg["patience"],
-                                            restore_best_weights=True)
-    t0 = time.time()
-    hist = model.fit(x, y, validation_data=(xv, yv), epochs=tcfg["max_epochs"],
-                     batch_size=tcfg["batch_size"], callbacks=[stop], verbose=0).history
+    """
+    Adam + ExponentialDecay from the config, early stopping on val_loss, best
+    weights restored. M3: if training is still improving when max_epochs is
+    reached, it continues in blocks of extend_epochs up to max_epochs_hard.
+    """
+    model.compile(optimizer=make_optimizer(tcfg), loss=loss)
+    stopper = BestWeightsEarlyStopping(tcfg["patience"])
+    t0, hist, cap = time.time(), {}, tcfg["max_epochs"]
+    while True:
+        done = len(hist.get("loss", []))
+        h = model.fit(x, y, validation_data=(xv, yv), initial_epoch=done, epochs=cap,
+                      batch_size=tcfg["batch_size"], callbacks=[stopper], verbose=0).history
+        for key, vals in h.items():
+            hist.setdefault(key, []).extend(float(v) for v in vals)
+        epochs = len(hist["loss"])
+        still_improving = epochs == cap and stopper.best_epoch > epochs - tcfg["patience"]
+        if not still_improving or cap >= tcfg["max_epochs_hard"]:
+            break
+        cap = min(cap + tcfg["extend_epochs"], tcfg["max_epochs_hard"])
+    model.set_weights(stopper.best_weights)
     epochs = len(hist["loss"])
-    return {"epochs": epochs, "best_epoch": int(np.argmin(hist["val_loss"]) + 1),
-            "best_val_loss": float(np.min(hist["val_loss"])), "hit_epoch_cap": epochs == tcfg["max_epochs"],
-            "seconds": time.time() - t0, "seconds_per_epoch": (time.time() - t0) / epochs,
-            "history": {k: [float(v) for v in vals] for k, vals in hist.items()}}
+    return {"epochs": epochs, "best_epoch": stopper.best_epoch, "best_val_loss": float(stopper.best),
+            "still_improving_at_cap": epochs >= cap and stopper.best_epoch > epochs - tcfg["patience"],
+            "final_epoch_cap": cap, "seconds": time.time() - t0, "seconds_per_epoch": (time.time() - t0) / epochs,
+            "history": hist}
+
+
+def weight_network_diagnostics(weights, labels, n, collapse_fraction):
+    """Validation accuracy, confusion matrix (rows = true interval), argmax histogram, mean max weight."""
+    pred = np.argmax(weights, axis=1)
+    conf = np.zeros((n, n), dtype=int)
+    np.add.at(conf, (labels, pred), 1)
+    hist = np.bincount(pred, minlength=n)
+    top_share = float(hist.max() / len(pred))
+    return {"accuracy": float(np.mean(pred == labels)),
+            "within_one_interval": float(np.mean(np.abs(pred - labels) <= 1)),
+            "confusion_matrix_rows_true_cols_pred": conf.tolist(),
+            "argmax_histogram": hist.tolist(), "true_histogram": np.bincount(labels, minlength=n).tolist(),
+            "mean_max_weight": float(np.mean(weights.max(axis=1))),
+            "largest_class_share": top_share,
+            "collapsed": top_share > collapse_fraction}
 
 
 def predict(fn, x, batch=256):
@@ -269,23 +318,43 @@ def run_repetition(cfg, data, seg, k):
         Lva = np.array(bin_y_var(Yva, q_ranges, thresholds=thr), dtype=np.float32)  # M1: training thresholds
         prob_weights = seg["train_fraction_per_interval"]
     log["q_ranges"] = q_ranges
+    val_label = np.argmax(Lva, axis=1)
+    val_parts = [np.flatnonzero(val_label == i) for i in range(N)]
 
     mode = cfg["prediction"]["mode"]
+    own_val = cfg["members"]["validate_on_own_segment"]
+    if own_val and seg["method"] == "legacy":
+        raise ValueError("members.validate_on_own_segment needs segmentation.method = bayesian_gmm")
     members, wrappers, log["members"] = [], [], []
     for i, ((ql, qh), (Xs, Ys)) in enumerate(zip(q_ranges, segments)):
+        # M2: early-stop each member on validation days of ITS interval (training thresholds)
+        if own_val:
+            if len(val_parts[i]) == 0:
+                raise ValueError(f"no validation days in interval {i}; cannot early-stop member {i}")
+            Xv, Yv = Xva[val_parts[i]], Yva[val_parts[i]]
+        else:
+            Xv, Yv = Xva, Yva
         m = build_bgnet(cfg, D, aux)
-        info = fit(m, loss_fn, Xs, Ys, Xva, Yva, cfg["members"])
-        info.update({"interval": [ql, qh], "train_days": int(len(Ys))})
+        info = fit(m, loss_fn, Xs, Ys, Xv, Yv, cfg["members"])
+        info.update({"interval": [ql, qh], "train_days": int(len(Ys)), "val_days": int(len(Yv))})
         log["members"].append(info)
         members.append(m)
         wrappers.append(BGCallWrapper(m, mean_mode=mode))
-        print(f"  member {i} [{ql:.3f},{qh:.3f}] n={len(Ys)} best_epoch={info['best_epoch']}/{info['epochs']} "
-              f"({info['seconds_per_epoch']:.1f}s/epoch)", flush=True)
+        print(f"  member {i} [{ql:.3f},{qh:.3f}] n={len(Ys)} val={len(Yv)} best_epoch={info['best_epoch']}/"
+              f"{info['epochs']} ({info['seconds_per_epoch']:.1f}s/epoch)", flush=True)
 
+    wcfg = cfg["weight_network"]
     omega = build_omega(cfg, N)
-    log["omega"] = fit(omega, OmegaLoss(num_classes=N), Xtr, Ltr, Xva, Lva, cfg["weight_network"])
+    log["omega"] = fit(omega, OmegaLoss(num_classes=N, class_reduction=wcfg["emd_reduction"]),
+                       Xtr, Ltr, Xva, Lva, wcfg)
     print(f"  weight network best_epoch={log['omega']['best_epoch']}/{log['omega']['epochs']} "
           f"({log['omega']['seconds_per_epoch']:.1f}s/epoch)", flush=True)
+    # H1 check on the validation set
+    diag = weight_network_diagnostics(predict(omega, Xva), val_label, N, wcfg["collapse_fraction"])
+    log["omega_diagnostics_val"] = diag
+    print(f"  weight network val accuracy={diag['accuracy']:.3f} argmax histogram={diag['argmax_histogram']} "
+          f"(true {diag['true_histogram']}) mean max weight={diag['mean_max_weight']:.3f} "
+          f"collapsed={diag['collapsed']}", flush=True)
 
     # H3: the baseline is built by the same function as the members
     bgnet = build_bgnet(cfg, D, aux)
@@ -308,6 +377,17 @@ def run_repetition(cfg, data, seg, k):
     for split_name, (X, Y) in {"val": (Xva, Yva), "test": (Xte, Yte)}.items():
         metrics[split_name] = {name: regime_mse(Y, predict(fn, X), train_totals) for name, fn in models.items()}
     log["metrics"] = metrics
+
+    # Paper's core assumption: each member beats the single BGNet on its own interval (validation)
+    bg_val = predict(models["bgnet"], Xva)
+    log["member_vs_bgnet_own_interval_val"] = []
+    for i, idx in enumerate(val_parts):
+        if len(idx) == 0:
+            continue
+        mem = float(np.mean((predict(wrappers[i], Xva[idx]) - Yva[idx]) ** 2))
+        bg = float(np.mean((bg_val[idx] - Yva[idx]) ** 2))
+        log["member_vs_bgnet_own_interval_val"].append(
+            {"interval": i, "val_days": int(len(idx)), "member_mse": mem, "bgnet_mse": bg, "member_wins": mem < bg})
     return log
 
 

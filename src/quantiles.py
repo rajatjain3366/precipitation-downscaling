@@ -57,9 +57,13 @@ class OmegaLoss(tf.keras.losses.Loss):
         p=1,
         weight_func=weight,
         loss_weights=tf.constant([0.0, 0.0, 1.0]),
+        class_reduction="mean",  # "sum" = paper Eq. 6; "mean" (original code) divides by N
     ):
         super(OmegaLoss, self).__init__()
 
+        if class_reduction not in ("sum", "mean"):
+            raise ValueError(f"class_reduction must be 'sum' or 'mean', got {class_reduction!r}")
+        self.class_reduction = class_reduction
         self.num_classes = num_classes
         self.p = p
         self.weight_func = weight_func
@@ -83,7 +87,11 @@ class OmegaLoss(tf.keras.losses.Loss):
         col_indices = tf.argmax(y_true, axis=1)
         weight_cols = tf.pow(tf.gather(self.weight_matrix, col_indices), self.p)
 
-        emd = tf.reduce_mean(weight_cols * y_pred, axis=1)
+        # Eq. 6: L = sum_k |k - k'|^p * omega_k
+        if self.class_reduction == "sum":
+            emd = tf.reduce_sum(weight_cols * y_pred, axis=1)
+        else:
+            emd = tf.reduce_mean(weight_cols * y_pred, axis=1)
 
         return emd
 
