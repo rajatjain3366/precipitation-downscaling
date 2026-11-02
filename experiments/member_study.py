@@ -12,6 +12,10 @@ this script trains two new member sets (member_study.* in the config):
   warm_start  initialised from the saved BGNet weights, fine-tuned on the
               member's own segment (lower LR, same early stopping)
 
+With member_study.retrain_bgnet, BGNet is also retrained to convergence
+(member_study.bgnet_converged) and used as a second reference; the 10-epoch
+BGNet stays the warm start of B.
+
 For each set (and the saved 10-epoch members, as the "before" row): each
 member's MSE on its own validation interval vs BGNet, Perfect-Member validation
 MSE on [0,1], [0,0.2], [0.9,1], and the time taken. Once both sets exist, the
@@ -82,20 +86,39 @@ def main():
         checkpoints.load(model, ckdir, name, sig, Xtr[:1])
         return model
 
+    study = cfg["member_study"]
     bgnet_sig = checkpoints.signature(cfg, "bgnet", seed)
     bgnet = load(build_bgnet(cfg, D, aux), f"rep{k}/bgnet", bgnet_sig)
-    bg_fn = BGCallWrapper(bgnet, mean_mode=mode)
-    bg_val = R.predict(bg_fn, Xva)
-    results["bgnet_val_mse"] = R.regime_mse(Yva, bg_val, train_totals)
+    # reference BGNets: "bgnet" = the saved 10-epoch one (also the warm start of B);
+    # "bgnet_converged" = retrained to convergence (member_study.retrain_bgnet)
+    refs = {"bgnet": BGCallWrapper(bgnet, mean_mode=mode)}
+    if study["retrain_bgnet"]:
+        bcfg = copy.deepcopy(cfg)
+        bcfg["members"].update(study["bgnet_converged"])
+        R.set_seed(seed)
+        bgc, info = R.train_or_load(bcfg, f"rep{k}/bgnet_converged", checkpoints.signature(bcfg, "bgnet", seed),
+                                    lambda: build_bgnet(bcfg, D, aux), Xtr,
+                                    lambda model: R.fit(model, loss_fn, Xtr, Ytr, Xva, Yva, bcfg["members"]))
+        results["bgnet_converged_training"] = {key: v for key, v in info.items() if key != "history"}
+        print(f"  bgnet_converged best_epoch={info['best_epoch']}/{info['epochs']} "
+              f"({info['seconds_per_epoch']:.1f}s/epoch)", flush=True)
+        refs["bgnet_converged"] = BGCallWrapper(bgc, mean_mode=mode)
+    ref_val = {name: R.predict(fn, Xva) for name, fn in refs.items()}
+    for name, pred in ref_val.items():
+        results[f"{name}_val_mse"] = R.regime_mse(Yva, pred, train_totals)
+    R.save_json(results, out_path)
 
     def evaluate(member_fns, infos):
-        """Own-interval validation MSE vs BGNet per member, and Perfect-Member validation MSE."""
+        """Own-interval validation MSE vs each reference BGNet per member, and Perfect-Member validation MSE."""
         mem_val = np.stack([R.predict(f, Xva) for f in member_fns])
         own = []
         for i, idx in enumerate(val_parts):
             mem = float(np.mean((mem_val[i, idx] - Yva[idx]) ** 2))
-            bg = float(np.mean((bg_val[idx] - Yva[idx]) ** 2))
-            row = {"interval": i, "val_days": int(len(idx)), "member_mse": mem, "bgnet_mse": bg, "ratio": mem / bg}
+            row = {"interval": i, "val_days": int(len(idx)), "member_mse": mem}
+            for name, pred in ref_val.items():
+                bg = float(np.mean((pred[idx] - Yva[idx]) ** 2))
+                suffix = "" if name == "bgnet" else "_converged"
+                row.update({f"bgnet{suffix}_mse": bg, f"ratio{suffix}": mem / bg})
             if infos:
                 row.update({key: infos[i][key] for key in ("epochs", "best_epoch", "still_improving_at_cap",
                                                            "seconds", "seconds_per_epoch") if key in infos[i]})
@@ -104,8 +127,10 @@ def main():
                                                                                           train_totals)}
 
     def report(name, res):
+        conv = (f" (vs converged BGNet {[round(r['ratio_converged'], 3) for r in res['own_interval_val']]})"
+                if "bgnet_converged" in refs else "")
         print(f"{name}: member/BGNet own-interval MSE ratio "
-              f"{[round(r['ratio'], 3) for r in res['own_interval_val']]}, Perfect-Member val MSE "
+              f"{[round(r['ratio'], 3) for r in res['own_interval_val']]}{conv}, Perfect-Member val MSE "
               f"{ {k2: round(v['mse'], 2) for k2, v in res['perfect_member_val_mse'].items()} }", flush=True)
 
     # --- "before": the saved 10-epoch members ---
@@ -118,7 +143,6 @@ def main():
     R.save_json(results, out_path)
 
     # --- new member sets, one training at a time ---
-    study = cfg["member_study"]
     member_fns = {}
     for variant in study["variants"]:
         vcfg = copy.deepcopy(cfg)
@@ -176,7 +200,7 @@ def main():
                    "perfect_member": R.regime_mse(
                        Yte, ensemble(mem_te, np.array(bin_y_var(Yte, q_ranges, thresholds=thr), dtype=np.float32)),
                        train_totals),
-                   "bgnet": R.regime_mse(Yte, R.predict(bg_fn, Xte), train_totals)}
+                   **{name: R.regime_mse(Yte, R.predict(fn, Xte), train_totals) for name, fn in refs.items()}}
     results["selection"] = sel
     print(f"best member set by Perfect-Member val MSE [0,1]: {best}", flush=True)
     for v in ("scratch", "warm_start"):

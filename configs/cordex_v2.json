@@ -70,7 +70,9 @@
   "member_study": {
     "variants": ["warm_start", "scratch"],
     "scratch": {"patience": 4, "max_epochs": 100, "max_epochs_hard": 100},
-    "warm_start": {"learning_rate": 0.00005, "patience": 4, "max_epochs": 100, "max_epochs_hard": 100}
+    "warm_start": {"learning_rate": 0.00005, "patience": 4, "max_epochs": 100, "max_epochs_hard": 100},
+    "retrain_bgnet": false,
+    "bgnet_converged": {"patience": 4, "max_epochs": 100, "max_epochs_hard": 100}
   },
   "checkpoints": {
     "dir": null
