@@ -12,7 +12,7 @@ for p in [SRC_DIR, WORKSPACE_ROOT]:
     if p not in sys.path:
         sys.path.insert(0, p)
 
-from src.data_adapter_cordex import load_cordex_dataset, extract_land_mask, unflatten_target_cordex
+from src.data_adapter_cordex import load_cordex_dataset, unflatten_target_cordex
 from src.ConvolutionalNetworks import BGNet, BGCallWrapper, unpack_bgout
 
 print("=" * 85)

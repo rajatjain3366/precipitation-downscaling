@@ -21,7 +21,6 @@ first with the same flags, e.g.
   python experiments/weight_network_losses.py --sanity --set checkpoints.dir='"checkpoints/nz_v2_sanity"' ...
 """
 import copy
-import json
 import os
 import sys
 import time

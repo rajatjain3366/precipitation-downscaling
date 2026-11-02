@@ -18,7 +18,6 @@ Usage:
   python experiments/run_cordex_v2.py --set data.standardize_predictors=false --save-dir results/fixes_v2/ablation_no_norm
 """
 import argparse
-import copy
 import json
 import os
 import random

@@ -1,7 +1,5 @@
-import xarray as xr
 import numpy as np
 import tensorflow as tf
-import os
 
 from src.useful_functions import *
 from src.Modules import *

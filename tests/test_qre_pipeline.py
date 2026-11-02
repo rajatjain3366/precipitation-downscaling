@@ -5,14 +5,14 @@ import numpy as np
 import tensorflow as tf
 from sklearn.mixture import GaussianMixture
 
-# Ensure C:/BTP is in python path
+# Make the repository root and src/ importable
 WORKSPACE_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 SRC_DIR = os.path.join(WORKSPACE_ROOT, "src")
 for p in [SRC_DIR, WORKSPACE_ROOT]:
     if p not in sys.path:
         sys.path.insert(0, p)
 
-from src.ConvolutionalNetworks import BGNet, BGCallWrapper, unpack_bgout, BG_mean
+from src.ConvolutionalNetworks import BGNet, BGCallWrapper
 from src.GammaLoss import GammaLoss, EpochLogger
 from src.quantiles import bin_y_var, OmegaLoss, Omega, ynetwork
 from src.useful_functions import data_between

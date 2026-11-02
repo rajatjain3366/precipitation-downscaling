@@ -1,7 +1,6 @@
 import os
 import sys
 import time
-import traceback
 import numpy as np
 import tensorflow as tf
 
@@ -12,8 +11,8 @@ for p in [SRC_DIR, WORKSPACE_ROOT]:
         sys.path.insert(0, p)
 
 from src.data_adapter_cordex import load_cordex_dataset
-from src.ConvolutionalNetworks import BGNet, BGCallWrapper, unpack_bgout, BG_mean
-from src.GammaLoss import GammaLoss, EpochLogger
+from src.ConvolutionalNetworks import BGNet, BGCallWrapper, unpack_bgout
+from src.GammaLoss import GammaLoss
 from src.useful_functions import data_between
 
 print("=" * 85)

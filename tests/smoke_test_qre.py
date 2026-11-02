@@ -4,7 +4,7 @@ import traceback
 import numpy as np
 import tensorflow as tf
 
-# Ensure C:/BTP is in python path
+# Make the repository root and src/ importable
 WORKSPACE_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 SRC_DIR = os.path.join(WORKSPACE_ROOT, "src")
 for p in [SRC_DIR, WORKSPACE_ROOT]:
@@ -14,7 +14,6 @@ for p in [SRC_DIR, WORKSPACE_ROOT]:
 from src.ConvolutionalNetworks import BGNet, unpack_bgout, BG_mean, BGCallWrapper
 from src.GammaLoss import GammaLoss
 from src.quantiles import bin_y_var, OmegaLoss, Omega, ynetwork
-from src.useful_functions import data_between
 
 print("=" * 80)
 print("ISOLATED SYNTHETIC SMOKE TEST SUITE - QRE REPRODUCTION")

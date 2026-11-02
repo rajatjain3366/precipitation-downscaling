@@ -1,7 +1,6 @@
 import os
 import numpy as np
 import xarray as xr
-import tensorflow as tf
 
 """
 CORDEX-ML-Bench Real-Data Adapter for QRE Reproduction (AAAI 2024)
