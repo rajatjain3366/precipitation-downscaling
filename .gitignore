@@ -59,3 +59,6 @@ checkpoints/
 *.tar
 *.tar.gz
 *.nc
+
+# Cleanup staging area: files moved here for review before deletion
+_to_delete/

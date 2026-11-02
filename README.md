@@ -1,7 +1,7 @@
 # Quantile-Regression-Ensemble (QRE) for Precipitation Downscaling
 
 > **Bachelor Thesis Project (BTP)**
-> **Based on the AAAI-24 paper**: *"Quantile-Regression-Ensemble: A Deep Learning Algorithm for Downscaling Extreme Precipitation"* (Bailie, Koh, Rampal & Gibson)
+> **Based on the AAAI-24 paper**: *"Quantile-Regression-Ensemble: A Deep Learning Algorithm for Downscaling Extreme Precipitation"* (Bailie, Koh, Rampal & Gibson), Proceedings of the AAAI Conference on Artificial Intelligence 38(20), 21914–21922, 2024, [doi:10.1609/aaai.v38i20.30193](https://doi.org/10.1609/aaai.v38i20.30193) ([AAAI page](https://ojs.aaai.org/index.php/AAAI/article/view/30193))
 > **This repository**: a reproduction on alternative data (CORDEX-ML-Bench, New Zealand), and an extension to India (ERA5 → IMD) with a global mass-conservation regularization (§8, implemented and smoke-tested; no India results yet)
 
 ---
@@ -32,7 +32,7 @@ Sources:
 
 - [Zenodo record 17957264](https://zenodo.org/records/17957264) (v4, `NZ_domain.zip`, md5 `a3f586f28d78b3a4c53b7b8324db4e62`) for all files except the 1981–2000 target. v4 does not contain any test targets.
 - `test/historical/target/pr_tasmax_ACCESS-CM2_1981-2000.nc` from [Zenodo record 20985924](https://zenodo.org/records/20985924) (v7), md5 `15b0007f910b0c72c632cc37409d17f1`. Every file that exists in v4 is byte-identical in v7 (same CRC32 and size).
-- Check: the v4 1961–1975 data reproduces the GMM intervals of our first run exactly ([results/baseline_rerun/data_match_check.json](results/baseline_rerun/data_match_check.json)).
+- Check: the v4 1961–1975 data reproduces the GMM intervals of our first run exactly ([results/baseline_rerun/data_match_check.json](results/baseline_rerun/data_match_check.json), produced by `scripts/data_match_check.py`).
 
 Expected layout under `data/CORDEX_NZ/`:
 
@@ -217,6 +217,7 @@ experiments/
   india_day_offset.py          ERA5 -> IMD day offset check (train + val only)
 scripts/
   download_era5_india.py       ERA5 CDS download + 4x4 coarsening (not run here)
+  data_match_check.py          produced results/baseline_rerun/data_match_check.json
 src/
   data_adapter_cordex.py       NetCDF loading, land mask, elevation, 1961-2000 loader
   india_data.py                IMD / ERA5 loading, grid alignment, day matching, cell areas
