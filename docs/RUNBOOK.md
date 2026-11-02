@@ -3,6 +3,7 @@
 This file lists every long training run in order: the exact command, the expected time, where the outputs go, what to check afterwards and what to send back. The code is finished and tested on small samples, so nothing here should need code changes. If something fails, send the console log instead of fixing it.
 
 **Time estimates:**
+
 - They are measured or extrapolated on the author's laptop CPU (TensorFlow 2.10 CPU build), which was running on battery and so possibly throttled.
 - On another CPU they can differ by 2× either way. A GPU should be much faster, but that has not been measured.
 - "Expected" assumes early stopping ends training before the epoch cap; "worst case" means every model runs to its cap.
@@ -84,16 +85,18 @@ NZ='--sanity --set segmentation.intervals_file="results/fixes_v2/dry_run/segment
 ```
 
 | Step | Command | Expected CPU time | Output |
-|---|---|---|---|
+| --- | --- | --- | --- |
 | 1. B: members warm-started from BGNet | `python experiments/member_study.py $NZ --set 'member_study.variants=["warm_start"]' 2>&1 \| tee results/fixes_v2/nz_wn/member_B.log` | 20–50 min (worst 3.2 h) | `results/fixes_v2/nz_wn/sanity/member_study/results.json` |
 | 2. A: members from scratch, to convergence | `python experiments/member_study.py $NZ 2>&1 \| tee results/fixes_v2/nz_wn/member_A.log` | 1.5–3.2 h (worst 3.2 h) | same file, plus the selection and the test table |
 | 3. BGNet retrained to convergence | `python experiments/member_study.py $NZ --set member_study.retrain_bgnet=true 2>&1 \| tee results/fixes_v2/nz_wn/member_bgnet.log` | 1–3 h (worst 3.2 h) | same file, plus a `bgnet_converged` column |
 
 Notes:
+
 - **Step 2** reloads B from its checkpoints, trains A, picks the better set by validation Perfect-Member MSE and only then evaluates on test.
 - **Step 3** reloads A and B and reports everything against both the 10-epoch BGNet and the converged one.
 
 What to check after each step (in `results.json` and the log):
+
 - **Training:** each member line shows `best_epoch` < `epochs`, i.e. early stopping, not the cap. `still_improving_at_cap` should be false.
 - **Members vs BGNet:** `own_interval_val[*].ratio` is each member's MSE on its own validation interval divided by BGNet's. Below 1 means the member wins.
 - **Perfect-Member:** `perfect_member_val_mse` should be well below the 10-epoch members' value of 116.7 ([0, 1]) and ideally close to BGNet's 60.8.
@@ -129,6 +132,7 @@ python experiments/india_day_offset.py --config configs/india_v1.json 2>&1 | tee
 Output: `results/india/qre_mass_v1/day_offset/day_offset.json`. It uses training and validation days only.
 
 Check:
+
 - `recommended_day_offset` and `score_difference`. Set `"day_offset"` in `configs/india_v1.json` to the recommended value. If the difference is below 0.005, keep 0 and say so in your report.
 - If the loader reports missing days, the downloads are incomplete. Fix that before step 6; don't set `allow_missing_days` without asking.
 
@@ -141,7 +145,7 @@ Check:
 First create the folder for the logs: `mkdir -p results/india/qre_mass_v1`. `tee` does not create folders.
 
 | Step | Command | Expected CPU time | Output (`results/india/qre_mass_v1/`) |
-|---|---|---|---|
+| --- | --- | --- | --- |
 | 6. Experiment A (λ = 0) | `python experiments/run_india.py --config configs/india_v1.json --stage A 2>&1 \| tee results/india/qre_mass_v1/stage_A.log` | 4–12 h | `data_report.json`, `segmentation.json`, `A/` (metrics, loss scales, training log, plots) |
 | 7. λ sweep (validation only) | `python experiments/run_india.py --config configs/india_v1.json --stage sweep 2>&1 \| tee results/india/qre_mass_v1/stage_sweep.log` | 1–7 h (3 λ > 0, each a short Weight Network fine-tune) | `sweep/sweep.json`, `sweep/selection.json` |
 | 8. Experiment B (selected λ) | `python experiments/run_india.py --config configs/india_v1.json --stage B 2>&1 \| tee results/india/qre_mass_v1/stage_B.log` | 10–30 min (everything is loaded; evaluation and plots only) | `B/`, `comparison.json` |
@@ -149,6 +153,7 @@ First create the folder for the logs: `mkdir -p results/india/qre_mass_v1`. `tee
 (`--stage all` runs 6–8 in one go if you prefer.)
 
 **Where step 6's time goes.** These are extrapolated from measured step times of 1.6 s per BGNet step and 1.9 s per Weight Network step at batch 91. With 21 training years, one epoch is 85 steps:
+
 - single BGNet: about 2.5 min per epoch, patience 4, at most 100 epochs, so 0.5–4 h;
 - members: about 2.5 min per epoch summed over all six, so 1–4 h;
 - Weight Network: about 3 min per epoch, patience 15, at most 300 epochs. Expect 1.5–5 h; on NZ it was still improving at 30 epochs;
@@ -212,6 +217,7 @@ The code was only run on CPU with TensorFlow 2.10. Kaggle images ship a newer Te
 
 1. **Make a dataset:** create a Kaggle Dataset with `data/India/` (the coarse `era5/` files and `imd/`) and, for the smoke tests, `data/India_sample/`. Add the NZ data and NZ checkpoints as a second dataset if you run the NZ study there.
 2. **Notebook:** use a GPU accelerator with Internet on.
+
    ```bash
    !git clone -b main https://github.com/rajatjain3366/precipitation-downscaling.git
    %cd precipitation-downscaling
@@ -220,6 +226,7 @@ The code was only run on CPU with TensorFlow 2.10. Kaggle images ship a newer Te
    !mkdir -p data && ln -s /kaggle/input/<your-dataset> data/India
    !TF_USE_LEGACY_KERAS=1 python tests/run_smoke_tests.py
    ```
+
    If `tf-keras` does not match Kaggle's TensorFlow version, install the `tf-keras` release with the same minor version, for example `tf-keras==2.17.*` for TF 2.17.
 3. **Runs:** use the same commands with `TF_USE_LEGACY_KERAS=1` in front, and write outputs to `/kaggle/working`: add `--save-dir /kaggle/working/results/india/qre_mass_v1 --set 'checkpoints.dir="/kaggle/working/checkpoints/india"'` to **every** India command.
 4. **Session limit:** Kaggle sessions stop after about 12 h. Save `/kaggle/working/checkpoints` as an output dataset, attach it in the next session, copy it back to the same path and rerun the command. The run resumes as described above.

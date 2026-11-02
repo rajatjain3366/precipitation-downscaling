@@ -4,13 +4,15 @@
 
 ## Done
 
-**NZ (CORDEX-ML-Bench), QRE replication with fixes**
+### NZ (CORDEX-ML-Bench), QRE replication with fixes
+
 - All Phase 1–4 fixes are implemented and committed: train-only normalization, $p\alpha\beta$ predictions, one builder for members and BGNet, fixed segment bounds and ties, training thresholds for labels, own-interval member validation, paper LRs, decay and patience, and Bayesian-GMM intervals fitted once. Each fix has a config flag that restores the old behaviour.
 - Checkpoint and resume support: `src/checkpoints.py`, with config signatures so a model trained under other settings cannot be loaded by mistake.
 - **Weight Network collapse found and fixed.** The paper's EMD loss (Eq. 6) put every validation day in one interval: argmax histogram [0, 0, 0, 1825, 0, 0]. Cross-entropy, squared EMD and CE + EMD all fix it, with accuracy 0.65–0.66 against a majority-class chance of 0.21. The default is now squared EMD; the three new losses are tied within noise.
 - **Member study implemented** (`experiments/member_study.py`): warm start from BGNet (B), from scratch to convergence (A), and an optional BGNet retrain to convergence. It is sample-tested but **not run on real data**.
 
-**India (ERA5 → IMD), QRE with global mass-conservation regularization**
+### India (ERA5 → IMD), QRE with global mass-conservation regularization
+
 - **Data pipeline:** multi-file IMD and ERA5, latitude flip, 4 × 4 block alignment check with partial edge blocks dropped (32 × 33 inputs), constant IMD mask with NaN never zero-filled (4,964 cells), configurable day offset with missing days reported, sub-daily ERA5 averaged to days, spherical cell areas.
 - **Mass-conservation loss**, absolute or relative, applied to members, to a joint ensemble stage, or both. λ is a list, swept in one command and selected on validation only.
 - **Runner** `experiments/run_india.py` with stages data / A / sweep / B / all; every model is checkpointed and resumable.
@@ -23,7 +25,7 @@
 All models below are undertrained: members and BGNet ran 10 epochs, the Weight Networks 30.
 
 | Model | MSE |
-|---|---|
+| --- | --- |
 | Single BGNet (10 epochs) | **60.60 / 2.85 / 231.79** |
 | QRE, cross-entropy Weight Network | **109.02 / 2.41 / 531.39** |
 | QRE, paper EMD Weight Network (collapsed) | 124.13 / 15.23 / 627.19 |
@@ -36,7 +38,7 @@ All models below are undertrained: members and BGNet ran 10 epochs, the Weight N
 ## Where things are
 
 | What | Where |
-|---|---|
+| --- | --- |
 | How to run everything (for the teammate) | [docs/RUNBOOK.md](RUNBOOK.md) |
 | Method, deviations, results | [README.md](../README.md) (§4 deviations, §5 NZ results, §8 India) |
 | NZ v2 configs / outputs | `configs/cordex_v2.json`, `results/fixes_v2/` |

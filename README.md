@@ -22,7 +22,7 @@ Deep-learning downscaling models trained over the whole record tend to regress t
 The paper used ERA5 predictors and VCSN observations, which were not available to us. Following advice from co-author Neelesh Rampal, we use **CORDEX-ML-Bench** (New Zealand domain):
 
 | Item | Description |
-|---|---|
+| --- | --- |
 | Predictors $X$ | q850, t850, u850, v850 on a 16 × 16 grid (ACCESS-CM2 "perfect" predictors). w850 is not in the benchmark. |
 | Target $Y$ | Daily precipitation `pr` (regional climate model output) on a 128 × 128 grid, flattened to the **2,804** land cells (`sftlf > 0.5`) |
 | Static input | Surface elevation `orog` from `Static_fields.nc` |
@@ -75,7 +75,7 @@ The same conv backbone, then 2 × Dense 100 (dropout 0.2) and an $N$-way softmax
 ## 4. Deviations from the paper
 
 | Item | Paper | Ours | Reason |
-|---|---|---|---|
+| --- | --- | --- | --- |
 | Data | ERA5 → VCSN observations, 5 km, 11,491 points | CORDEX-ML-Bench GCM predictors → regional-model precipitation, 128 × 128, **2,804 land cells** | ERA5/VCSN not available to us; CORDEX recommended by a co-author. Absolute MSE is not comparable with the paper. |
 | Predictors | T, Q, U, V, **W** at 850 hPa, (5, 36, 41) | T, Q, U, V at 850 hPa, (4, 16, 16) | W850 is not in the benchmark |
 | Split | 32 / 6 / 8 years | **1961–1988 / 1989–1993 / 1994–2000** (28 / 5 / 7 years) | Same 70 / 12.5 / 17.5 % proportions over the 40 years with targets |
@@ -96,13 +96,14 @@ The same conv backbone, then 2 × Dense 100 (dropout 0.2) and an $N$-way softmax
 ### First run (before fixes), `results/final_cordex_qre/`
 
 Old split (train 1961–1975, val 1976–1980, test 1981–2000), 3 repetitions, produced by `experiments/run_cordex_experiment.py` with `configs/cordex_final.json`. These numbers come from the pipeline **before** the fixes. Its known problems:
+
 - the Weight Network collapsed onto one class;
 - the predictors were not normalized;
 - the BGNet baseline had a different architecture from the members;
 - predictions used a $p > 0.5$ threshold instead of $p\cdot\alpha\beta$.
 
 | Model | MSE [0, 1] | MSE [0, 0.2] | MSE [0.9, 1] |
-|---|---|---|---|
+| --- | --- | --- | --- |
 | QRE | 112.47 ± 9.45 | 27.86 ± 15.06 | 579.69 ± 80.66 |
 | Single BGNet | 62.03 ± 0.22 | 4.28 ± 0.35 | 251.72 ± 3.78 |
 | Bagging | 106.96 ± 5.82 | 43.22 ± 8.84 | 494.99 ± 19.88 |
@@ -113,7 +114,7 @@ Old split (train 1961–1975, val 1976–1980, test 1981–2000), 3 repetitions,
 NZ sanity run ([results/fixes_v2/nz/sanity/](results/fixes_v2/nz/sanity/)): 1 repetition, new split, all fixes. Epochs were cut to 10 for the members and both BGNets and 30 for the Weight Network, so **every model is undertrained** (all stopped at their epoch cap while still improving). Test set is 1994–2000, so the numbers are not comparable with the first run's 1981–2000 test set.
 
 | Model (test, 1994–2000) | MSE [0, 1] | MSE [0, 0.2] | MSE [0.9, 1] |
-|---|---|---|---|
+| --- | --- | --- | --- |
 | QRE | 124.13 | 15.23 | 627.19 |
 | Single BGNet | 60.60 | 2.85 | 231.79 |
 | BGNet(-) | 67.31 | 2.45 | 261.29 |
@@ -129,7 +130,7 @@ Members vs single BGNet on each member's own validation interval: the members wi
 Produced by `experiments/weight_network_losses.py`. It reuses the 6 members and BGNet saved from one sanity run: members and BGNet trained 10 epochs, each Weight Network trained 30 epochs, seed 42, same backbone for every variant. The variants were trained one at a time. **Everything below is on validation (1989–1993, 1825 days)** except the last table. True interval histogram: [234, 384, 388, 320, 260, 239]. Chance levels: uniform 0.167, majority class 0.213.
 
 | Weight source | Accuracy | Within ±1 | Argmax histogram | Mean max ω | QRE val MSE [0,1] / [0,0.2] / [0.9,1] |
-|---|---|---|---|---|---|
+| --- | --- | --- | --- | --- | --- |
 | Ceiling: interval of BGNet's predicted daily total (no training) | 0.627 | 0.984 | — | 1 (one-hot) | 117.88 / 2.36 / 583.0 |
 | Perfect Member: true interval (no training) | 1.000 | 1.000 | — | 1 (one-hot) | 116.74 / 1.89 / 585.1 |
 | EMD, Eq. 6 (paper) | 0.175 | 0.530 | [0, 0, 0, 1825, 0, 0] | 1.000 | 134.93 / 14.76 / 693.2 |
@@ -143,7 +144,7 @@ Confusion matrices (rows are the true interval) are in `results.json`. The three
 Selection (validation QRE MSE [0, 1]) picked **cross-entropy**. The three new losses differ by less than 0.5 MSE, which is well within what one repetition can resolve, so the ranking among them is not meaningful. The config default was therefore set to squared EMD afterwards (see §4); the variant is named `emd_squared_cdf` in this run's `results.json`. Only after selection was the test set evaluated, for the cross-entropy variant that the rule picked:
 
 | Model (test, 1994–2000) | MSE [0, 1] | MSE [0, 0.2] | MSE [0.9, 1] |
-|---|---|---|---|
+| --- | --- | --- | --- |
 | QRE, cross-entropy Weight Network | 109.02 | 2.41 | 531.39 |
 | QRE, EMD Weight Network (sanity run above) | 124.13 | 15.23 | 627.19 |
 | Single BGNet | 60.60 | 2.85 | 231.79 |
@@ -183,7 +184,7 @@ The legacy runner `experiments/run_cordex_experiment.py` (with `configs/cordex_f
 ### Config flags that restore old behaviour (`configs/cordex_v2.json`)
 
 | Flag | v2 value | Old behaviour |
-|---|---|---|
+| --- | --- | --- |
 | `data.train_years` / `val_years` / `test_years` | 1961–1988 / 1989–1993 / 1994–2000 | 1961–1975 / 1976–1980 / 1981–2000 |
 | `data.standardize_predictors` | `true` | `false` |
 | `data.use_elevation` | `true` | `false` |
@@ -251,7 +252,7 @@ The same QRE code as the NZ v2 pipeline is used: train-only normalization, $p\al
 ### Data pipeline (`src/india_data.py`)
 
 | Item | India setting |
-|---|---|
+| --- | --- |
 | Predictors $X$ | ERA5 q, t, u, v, w at 850 hPa, 4 × 4 block means of the 0.25° grid (1°). Sample: one 00 UTC field per day. Daily means (preferred) and hourly data are also supported; sub-daily data is averaged per day, optionally over 03–03 UTC (`data.aggregation_shift_hours = 3`). |
 | Target $Y$ | IMD gridded rainfall (mm/day), 0.25°, 129 × 135, flattened to the **4,964** valid cells |
 | Grid alignment | ERA5 latitude flipped to ascending. Each ERA5 coordinate is checked to be the mean of exactly 4 IMD coordinates, with the blocks contiguous. The partial last row (6.5° N) and column (99.75° E) are dropped, which gives **32 × 33** inputs. |
@@ -278,7 +279,7 @@ $$L_\text{mass,abs} = \frac{1}{B}\sum_t \frac{|S_t - O_t|}{\sum_i M_i A_i} \quad
 **Why absolute is the default.** The relative form divides by the observed total, so a near-dry day weighs up to $1/\varepsilon$ = 10× while a 10 mm/day monsoon day weighs 0.1×. The days that carry most of the rainfall count least. Scales on the sample (January 1990, validation days):
 
 | Prediction | $L_\text{mass,rel}$ | $L_\text{mass,abs}$ (mm/day) |
-|---|---|---|
+| --- | --- | --- |
 | zero everywhere | 0.52 | 0.25 |
 | training climatology | 1.66 | 0.28 |
 
@@ -289,7 +290,7 @@ The relative form ranks "no rain anywhere" far better than climatology, although
 $L_\text{total} = L_\text{QRE} + \lambda_\text{mass} L_\text{mass}$, where $L_\text{QRE}$ is the loss of the stage being trained: the Bernoulli-Gamma NLL for members and the squared EMD for the Weight Network. Both terms are logged separately (`bg_nll` / `mass_loss`, `qre_loss` / `mass_loss` in each training history). With $\lambda = 0$ the mass term is skipped, and loss and gradients are exactly the original ones (tested).
 
 | `mass.placement` | What is trained with the mass term | CPU cost of the λ sweep | Trade-offs |
-|---|---|---|---|
+| --- | --- | --- | --- |
 | `"ensemble"` (**default**) | A joint fine-tuning stage of $g(x)=\sum_i \omega_i(x) f_i(x)$, starting from experiment A's Weight Network. Members are frozen by default, with their predictions precomputed; `ensemble.train_members = true` also fine-tunes them, keeping each member's NLL on its own days. | One short Weight Network fine-tune per λ; members and Weight Network are reused from A | Constrains exactly the quantity that is evaluated, the ensemble output. A and B differ only in this stage, because λ = 0 runs the same stage as the control. With frozen members it can only reweight members, so it fixes totals only as far as the members bracket the truth. Precomputed member predictions need about 1 GB of RAM for 21 training years. |
 | `"members"` | Each member's training: NLL + λ·L_mass on its $p\alpha\beta$ | A full set of 6 members per λ | Changes the members themselves, but each member only sees its own intensity segment. The ensemble total is not constrained directly, since the Weight Network mixes the members afterwards. |
 | `"both"` | Both of the above, with the same λ | As `"members"` plus the ensemble stage | The strongest constraint and the most expensive. Hardest to attribute. |
@@ -314,7 +315,7 @@ $L_\text{total} = L_\text{QRE} + \lambda_\text{mass} L_\text{mass}$, where $L_\t
 ### Deviations (India)
 
 | Item | Paper | India here | Reason |
-|---|---|---|---|
+| --- | --- | --- | --- |
 | Target | VCSN, NZ | IMD 0.25° gridded rainfall, India | End-evaluation dataset |
 | Predictors | ERA5 q, t, u, v, w 850 hPa, (36, 41) | Same variables, 1° (4 × 4 block means), 32 × 33 | Grid of the provided ERA5 sample |
 | Conv kernel | 6, valid | **6, valid (as in the paper)** | 32 × 33 ≥ 31 × 31, so the paper's architecture fits (NZ needed kernel 3). This also shrinks BGNet from 147 M to 13 M parameters. |
