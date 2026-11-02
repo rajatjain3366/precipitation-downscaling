@@ -1,0 +1,21 @@
+{
+  "selected_lambda": 0.1,
+  "tolerance_met": true,
+  "reason": "lowest val daily_mae_mm_per_day with val MSE[0.0,1.0] within 2% of lambda=0",
+  "rule": {
+    "mse_regime": "[0.0,1.0]",
+    "mse_tolerance": 0.02,
+    "total_metric": "daily_mae_mm_per_day"
+  },
+  "val_mse": {
+    "0": 4.011075973510742,
+    "0.1": 4.011075973510742,
+    "1": 4.011075973510742
+  },
+  "val_daily_mae_mm_per_day": {
+    "0": 0.32819694402727123,
+    "0.1": 0.32819694821151996,
+    "1": 0.3281969483650044
+  },
+  "val_totals_improved_vs_lambda0": false
+}

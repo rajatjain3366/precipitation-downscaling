@@ -22,10 +22,8 @@ IMPORTANT: Software integration test only. Not a scientific reproduction of pape
 
 import os
 import sys
-import time
 import numpy as np
 import tensorflow as tf
-import xarray as xr
 
 # Add root directory to path
 WORKSPACE_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
@@ -126,7 +124,6 @@ def run_phase10_integration():
             output_dim=D_land,
             coords=None,
             baseline=False,
-            ch_attn=True,
             avg_pool=True,
             max_pool=True,
             kernel_sizes=[3, 3, 3],

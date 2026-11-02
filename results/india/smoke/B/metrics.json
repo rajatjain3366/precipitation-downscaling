@@ -1,0 +1,312 @@
+{
+  "lambda_mass": 0.1,
+  "placement": "ensemble",
+  "val": {
+    "qre": {
+      "regime_mse": {
+        "[0.0,1.0]": {
+          "mse": 4.011075973510742,
+          "days": 7
+        },
+        "[0.0,0.2]": {
+          "mse": 0.33685603737831116,
+          "days": 3
+        },
+        "[0.9,1.0]": {
+          "mse": null,
+          "days": 0
+        }
+      },
+      "interval_mse": [
+        {
+          "interval": 0,
+          "days": 4,
+          "mse": 0.4704955220222473
+        },
+        {
+          "interval": 1,
+          "days": 1,
+          "mse": 2.1487812995910645
+        },
+        {
+          "interval": 2,
+          "days": 2,
+          "mse": 12.02338695526123
+        }
+      ],
+      "spatial": {
+        "mae": 0.7260880470275879,
+        "rmse": 2.0027670860290527,
+        "mse": 4.011075973510742,
+        "bias": 0.22737570106983185,
+        "spatial_corr_daily_mean": 0.12599382592253108,
+        "spatial_corr_days_used": 7,
+        "spatial_corr_of_time_mean": 0.31650955381737483
+      },
+      "all_india_totals": {
+        "observed_mean_mm_per_day": 0.24759304146721292,
+        "predicted_mean_mm_per_day": 0.49997385024941304,
+        "total_observed_km3": 6.057954362897484,
+        "total_predicted_km3": 12.233052873798844,
+        "total_discrepancy_km3": 6.175098510901359,
+        "total_relative_discrepancy": 1.0193372450478226,
+        "daily_bias_mm_per_day": 0.2523808087822001,
+        "daily_mae_mm_per_day": 0.32819694821151996,
+        "daily_rmse_mm_per_day": 0.35994246332769186,
+        "daily_abs_error_p95_mm_per_day": 0.4874704690201243,
+        "daily_mean_relative_error": 1.9622975639165123,
+        "daily_median_relative_error": 1.3991871527357405,
+        "relative_error_eps_mm_per_day": 0.1,
+        "daily_totals_corr": 0.061782885382083645,
+        "days": 7
+      }
+    },
+    "perfect_member": {
+      "regime_mse": {
+        "[0.0,1.0]": {
+          "mse": 4.011061191558838,
+          "days": 7
+        },
+        "[0.0,0.2]": {
+          "mse": 0.3368208110332489,
+          "days": 3
+        },
+        "[0.9,1.0]": {
+          "mse": null,
+          "days": 0
+        }
+      },
+      "interval_mse": [
+        {
+          "interval": 0,
+          "days": 4,
+          "mse": 0.4704427421092987
+        },
+        {
+          "interval": 1,
+          "days": 1,
+          "mse": 2.1489017009735107
+        },
+        {
+          "interval": 2,
+          "days": 2,
+          "mse": 12.0233793258667
+        }
+      ],
+      "spatial": {
+        "mae": 0.7260799407958984,
+        "rmse": 2.002763271331787,
+        "mse": 4.011061191558838,
+        "bias": 0.22736778855323792,
+        "spatial_corr_daily_mean": 0.07526487559297569,
+        "spatial_corr_days_used": 7,
+        "spatial_corr_of_time_mean": 0.31269620157130557
+      },
+      "all_india_totals": {
+        "observed_mean_mm_per_day": 0.24759304146721292,
+        "predicted_mean_mm_per_day": 0.49996547212189785,
+        "total_observed_km3": 6.057954362897484,
+        "total_predicted_km3": 12.232847882924169,
+        "total_discrepancy_km3": 6.174893520026685,
+        "total_relative_discrepancy": 1.019303406748226,
+        "daily_bias_mm_per_day": 0.25237243065468495,
+        "daily_mae_mm_per_day": 0.3281753735069456,
+        "daily_rmse_mm_per_day": 0.3599133740910146,
+        "daily_abs_error_p95_mm_per_day": 0.48743537172084106,
+        "daily_mean_relative_error": 1.9621581695438317,
+        "daily_median_relative_error": 1.3990412307887328,
+        "relative_error_eps_mm_per_day": 0.1,
+        "daily_totals_corr": 0.9046664195909222,
+        "days": 7
+      }
+    },
+    "weight_network": {
+      "accuracy": 0.42857142857142855,
+      "within_one_interval": 1.0,
+      "confusion_matrix_rows_true_cols_pred": [
+        [
+          2,
+          2,
+          0
+        ],
+        [
+          0,
+          1,
+          0
+        ],
+        [
+          0,
+          2,
+          0
+        ]
+      ],
+      "argmax_histogram": [
+        2,
+        5,
+        0
+      ],
+      "true_histogram": [
+        4,
+        1,
+        2
+      ],
+      "mean_max_weight": 0.334469735622406,
+      "largest_class_share": 0.7142857142857143,
+      "collapsed": true
+    }
+  },
+  "test": {
+    "qre": {
+      "regime_mse": {
+        "[0.0,1.0]": {
+          "mse": 25.368955612182617,
+          "days": 7
+        },
+        "[0.0,0.2]": {
+          "mse": 0.2594352066516876,
+          "days": 1
+        },
+        "[0.9,1.0]": {
+          "mse": 42.14426040649414,
+          "days": 4
+        }
+      },
+      "interval_mse": [
+        {
+          "interval": 0,
+          "days": 2,
+          "mse": 2.7503292560577393
+        },
+        {
+          "interval": 1,
+          "days": 0,
+          "mse": null
+        },
+        {
+          "interval": 2,
+          "days": 5,
+          "mse": 34.41640853881836
+        }
+      ],
+      "spatial": {
+        "mae": 1.3092052936553955,
+        "rmse": 5.036760330200195,
+        "mse": 25.368955612182617,
+        "bias": -0.3960636854171753,
+        "spatial_corr_daily_mean": 0.08159226047315671,
+        "spatial_corr_days_used": 7,
+        "spatial_corr_of_time_mean": 0.19872414365522084
+      },
+      "all_india_totals": {
+        "observed_mean_mm_per_day": 0.8327031152069393,
+        "predicted_mean_mm_per_day": 0.49997208264743237,
+        "total_observed_km3": 20.37406802660167,
+        "total_predicted_km3": 12.233009625199983,
+        "total_discrepancy_km3": -8.141058401401688,
+        "total_relative_discrepancy": -0.3995794257078266,
+        "daily_bias_mm_per_day": -0.332731032559507,
+        "daily_mae_mm_per_day": 0.6052886356029179,
+        "daily_rmse_mm_per_day": 0.8456257606323594,
+        "daily_abs_error_p95_mm_per_day": 1.562739021335071,
+        "daily_mean_relative_error": 1.1487403900725977,
+        "daily_median_relative_error": 0.4371051213477027,
+        "relative_error_eps_mm_per_day": 0.1,
+        "daily_totals_corr": -0.5598078215619694,
+        "days": 7
+      }
+    },
+    "perfect_member": {
+      "regime_mse": {
+        "[0.0,1.0]": {
+          "mse": 25.368846893310547,
+          "days": 7
+        },
+        "[0.0,0.2]": {
+          "mse": 0.25940150022506714,
+          "days": 1
+        },
+        "[0.9,1.0]": {
+          "mse": 42.14408874511719,
+          "days": 4
+        }
+      },
+      "interval_mse": [
+        {
+          "interval": 0,
+          "days": 2,
+          "mse": 2.750293016433716
+        },
+        {
+          "interval": 1,
+          "days": 0,
+          "mse": null
+        },
+        {
+          "interval": 2,
+          "days": 5,
+          "mse": 34.4162712097168
+        }
+      ],
+      "spatial": {
+        "mae": 1.3092182874679565,
+        "rmse": 5.036749839782715,
+        "mse": 25.368846893310547,
+        "bias": -0.3960407078266144,
+        "spatial_corr_daily_mean": 0.07968825161625417,
+        "spatial_corr_days_used": 7,
+        "spatial_corr_of_time_mean": 0.22545546830989988
+      },
+      "all_india_totals": {
+        "observed_mean_mm_per_day": 0.8327031152069393,
+        "predicted_mean_mm_per_day": 0.49999513024671877,
+        "total_observed_km3": 20.37406802660167,
+        "total_predicted_km3": 12.233573539693799,
+        "total_discrepancy_km3": -8.14049448690787,
+        "total_relative_discrepancy": -0.39955174765683155,
+        "daily_bias_mm_per_day": -0.3327079849602205,
+        "daily_mae_mm_per_day": 0.6052601987422831,
+        "daily_rmse_mm_per_day": 0.845597247363655,
+        "daily_abs_error_p95_mm_per_day": 1.562698124103985,
+        "daily_mean_relative_error": 1.1486702802216324,
+        "daily_median_relative_error": 0.4370618591924709,
+        "relative_error_eps_mm_per_day": 0.1,
+        "daily_totals_corr": 0.5850472680501511,
+        "days": 7
+      }
+    },
+    "weight_network": {
+      "accuracy": 0.0,
+      "within_one_interval": 1.0,
+      "confusion_matrix_rows_true_cols_pred": [
+        [
+          0,
+          2,
+          0
+        ],
+        [
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          5,
+          0
+        ]
+      ],
+      "argmax_histogram": [
+        0,
+        7,
+        0
+      ],
+      "true_histogram": [
+        2,
+        0,
+        5
+      ],
+      "mean_max_weight": 0.33459189534187317,
+      "largest_class_share": 1.0,
+      "collapsed": true
+    }
+  }
+}

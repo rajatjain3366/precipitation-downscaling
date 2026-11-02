@@ -1,7 +1,6 @@
 import os
 import numpy as np
 import xarray as xr
-import tensorflow as tf
 
 """
 CORDEX-ML-Bench Real-Data Adapter for QRE Reproduction (AAAI 2024)
@@ -167,8 +166,11 @@ def load_cordex_dataset(
     if not os.path.exists(test_targ_path):
         test_targ_path = os.path.join(data_dir, f"pr_tasmax_{test_gcm}_1981-2000_target.nc")
 
-    # Validate essential files exist
-    for p_name, p_val in [("Train Predictor", train_pred_path), ("Train Target", train_targ_path), ("Static", static_path)]:
+    # Validate essential files exist (the test files are required too: never
+    # substitute training data for missing test data)
+    for p_name, p_val in [("Train Predictor", train_pred_path), ("Train Target", train_targ_path),
+                          ("Static", static_path), ("Test Predictor", test_pred_path),
+                          ("Test Target", test_targ_path)]:
         if not os.path.exists(p_val):
             raise FileNotFoundError(f"Required {p_name} file missing: {os.path.abspath(p_val)}")
 
@@ -177,13 +179,9 @@ def load_cordex_dataset(
     ds_y_train = xr.open_dataset(train_targ_path)
     ds_static = xr.open_dataset(static_path)
 
-    has_test = os.path.exists(test_pred_path) and os.path.exists(test_targ_path)
-    if has_test:
-        ds_x_test = xr.open_dataset(test_pred_path)
-        ds_y_test = xr.open_dataset(test_targ_path)
-    else:
-        ds_x_test = None
-        ds_y_test = None
+    has_test = True
+    ds_x_test = xr.open_dataset(test_pred_path)
+    ds_y_test = xr.open_dataset(test_targ_path)
 
     # Slice temporal window if requested
     if sample_days is not None and sample_days > 0:
@@ -219,8 +217,9 @@ def load_cordex_dataset(
                         sub = ds.sel(channel=avail_alt)
                         x_arr = sub.to_array().values if isinstance(sub, xr.Dataset) else sub.values
                     else:
-                        # Fallback to first 4 channels
-                        x_arr = ds.values[..., :4]
+                        raise ValueError(
+                            f"config_A needs channels q/t/u/v at 850 hPa, found {all_channels}"
+                        )
             else:
                 x_arr = ds.values
         else:
@@ -253,9 +252,9 @@ def load_cordex_dataset(
                     # Stack along trailing channel dimension: (time, H, W, 4)
                     x_arr = np.stack(selected_arrays, axis=-1)
                 else:
-                    # Fallback to stacking all variables and taking first 4
-                    all_arrs = [ds[v].values for v in ds.data_vars]
-                    x_arr = np.stack(all_arrs, axis=-1)[..., :4]
+                    raise ValueError(
+                        f"config_A needs variables q/t/u/v at 850 hPa, found {list(ds.data_vars)}"
+                    )
             else:
                 all_arrs = [ds[v].values for v in ds.data_vars]
                 x_arr = np.stack(all_arrs, axis=-1)
@@ -271,7 +270,7 @@ def load_cordex_dataset(
         return x_arr.astype(np.float32)
 
     x_train = extract_predictors(ds_x_train, config)
-    x_test = extract_predictors(ds_x_test, config) if has_test else x_train[:min(10, x_train.shape[0])]
+    x_test = extract_predictors(ds_x_test, config)
 
     # 5. Extract and Structure Precipitation Target (Y)
     if 'pr' in ds_y_train:
@@ -286,18 +285,15 @@ def load_cordex_dataset(
     if len(y_train_raw.shape) == 2:
         y_train_raw = np.expand_dims(y_train_raw, axis=0)
 
-    if has_test:
-        if 'pr' in ds_y_test:
-            y_test_da = ds_y_test['pr']
-        elif 'Rain_bc' in ds_y_test:
-            y_test_da = ds_y_test['Rain_bc']
-        else:
-            y_test_da = ds_y_test[list(ds_y_test.data_vars)[0]]
-        y_test_raw = y_test_da.values.astype(np.float32)
-        if len(y_test_raw.shape) == 2:
-            y_test_raw = np.expand_dims(y_test_raw, axis=0)
+    if 'pr' in ds_y_test:
+        y_test_da = ds_y_test['pr']
+    elif 'Rain_bc' in ds_y_test:
+        y_test_da = ds_y_test['Rain_bc']
     else:
-        y_test_raw = y_train_raw[:min(10, y_train_raw.shape[0])]
+        y_test_da = ds_y_test[list(ds_y_test.data_vars)[0]]
+    y_test_raw = y_test_da.values.astype(np.float32)
+    if len(y_test_raw.shape) == 2:
+        y_test_raw = np.expand_dims(y_test_raw, axis=0)
 
     # Format target output according to target_mode
     T_tr, H_tg, W_tg = y_train_raw.shape
@@ -323,9 +319,21 @@ def load_cordex_dataset(
         y_test = np.nan_to_num(y_test, nan=0.0)
 
     # 6. Build Metadata & Coordinates
+    lat_vals = ds_y_train['lat'].values if 'lat' in ds_y_train.coords else np.arange(H_tg)
+    lon_vals = ds_y_train['lon'].values if 'lon' in ds_y_train.coords else np.arange(W_tg)
+    if lat_vals.ndim == 1 and lon_vals.ndim == 1:
+        lat_2d, lon_2d = np.meshgrid(lat_vals, lon_vals, indexing='ij')
+    else:
+        lat_2d, lon_2d = lat_vals, lon_vals
+    raw_orog = ds_static['orog'].values.squeeze() if 'orog' in ds_static else None
+
     coords_dict = {
-        'lat': ds_y_train['lat'].values if 'lat' in ds_y_train.coords else np.arange(H_tg),
-        'lon': ds_y_train['lon'].values if 'lon' in ds_y_train.coords else np.arange(W_tg),
+        'lat': lat_vals,
+        'lon': lon_vals,
+        # per land cell, same order as the columns of y_train / y_test
+        'lat_land': lat_2d[land_mask] if lat_2d.shape == land_mask.shape else None,
+        'lon_land': lon_2d[land_mask] if lon_2d.shape == land_mask.shape else None,
+        'orog_land': raw_orog[land_mask] if raw_orog is not None else None,
         'train_time': ds_y_train['time'].values if 'time' in ds_y_train.coords else None,
         'test_time': ds_y_test['time'].values if has_test and 'time' in ds_y_test.coords else None,
         'target_shape': (H_tg, W_tg),
@@ -374,3 +382,32 @@ def load_cordex_dataset(
     }
 
     return data_dict
+
+
+def load_cordex_full_period(data_dir, config="config_A", target_mode="land_masked",
+                            train_gcm="ACCESS-CM2", test_gcm="ACCESS-CM2", verbose=False):
+    """
+    Loads both CORDEX files (1961-1980 and 1981-2000) as ONE continuous series,
+    so the train/val/test split can be chosen by year (see preprocessing.split_masks_by_years).
+
+    Returns dict with 'x' (T, H, W, C), 'y' (T, D), 'time' (T,), plus the
+    'auxiliary', 'coords', 'mask', 'metadata' entries of load_cordex_dataset().
+    """
+    d = load_cordex_dataset(data_dir, config=config, target_mode=target_mode,
+                            train_gcm=train_gcm, test_gcm=test_gcm, verbose=verbose)
+    t_first, t_second = d['coords']['train_time'], d['coords']['test_time']
+    if t_first is None or t_second is None:
+        raise ValueError("Both CORDEX files need a time coordinate to be concatenated")
+    if d['x_train'].shape[1:] != d['x_test'].shape[1:] or d['y_train'].shape[1:] != d['y_test'].shape[1:]:
+        raise ValueError(f"Grid mismatch between files: x {d['x_train'].shape} vs {d['x_test'].shape}, "
+                         f"y {d['y_train'].shape} vs {d['y_test'].shape}")
+
+    time = np.concatenate([np.asarray(t_first), np.asarray(t_second)])
+    if not all(time[i] < time[i + 1] for i in range(len(time) - 1)):
+        raise ValueError("Concatenated time axis is not strictly increasing (overlap or gap ordering)")
+
+    out = {k: d[k] for k in ('auxiliary', 'coords', 'mask', 'metadata')}
+    out['x'] = np.concatenate([d['x_train'], d['x_test']], axis=0)
+    out['y'] = np.concatenate([d['y_train'], d['y_test']], axis=0)
+    out['time'] = time
+    return out

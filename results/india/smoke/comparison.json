@@ -1,0 +1,113 @@
+{
+  "note": "test split; lambda chosen on validation only",
+  "lambda_B": 0.1,
+  "A": {
+    "mse": {
+      "[0.0,1.0]": 25.368955612182617,
+      "[0.0,0.2]": 0.2594352066516876,
+      "[0.9,1.0]": 42.14426040649414
+    },
+    "mae": 1.3092052936553955,
+    "rmse": 5.036760330200195,
+    "spatial_corr": 0.08159211980676581,
+    "total_relative_discrepancy": -0.3995794230399374,
+    "daily_total_mae_mm_per_day": 0.6052886333813584,
+    "daily_mean_relative_error": 1.1487403877201938
+  },
+  "B": {
+    "mse": {
+      "[0.0,1.0]": 25.368955612182617,
+      "[0.0,0.2]": 0.2594352066516876,
+      "[0.9,1.0]": 42.14426040649414
+    },
+    "mae": 1.3092052936553955,
+    "rmse": 5.036760330200195,
+    "spatial_corr": 0.08159226047315671,
+    "total_relative_discrepancy": -0.3995794257078266,
+    "daily_total_mae_mm_per_day": 0.6052886356029179,
+    "daily_mean_relative_error": 1.1487403900725977
+  },
+  "bgnet": {
+    "mse": {
+      "[0.0,1.0]": 25.368547439575195,
+      "[0.0,0.2]": 0.2594459056854248,
+      "[0.9,1.0]": 42.14356994628906
+    },
+    "mae": 1.3091858625411987,
+    "rmse": 5.036719799041748,
+    "spatial_corr": 0.12453390625637598,
+    "total_relative_discrepancy": -0.3995679390524931,
+    "daily_total_mae_mm_per_day": 0.6052873408866644,
+    "daily_mean_relative_error": 1.1487567441174409
+  },
+  "weight_network": {
+    "A": {
+      "accuracy": 0.0,
+      "within_one_interval": 1.0,
+      "confusion_matrix_rows_true_cols_pred": [
+        [
+          0,
+          2,
+          0
+        ],
+        [
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          5,
+          0
+        ]
+      ],
+      "argmax_histogram": [
+        0,
+        7,
+        0
+      ],
+      "true_histogram": [
+        2,
+        0,
+        5
+      ],
+      "mean_max_weight": 0.33459189534187317,
+      "largest_class_share": 1.0,
+      "collapsed": true
+    },
+    "B": {
+      "accuracy": 0.0,
+      "within_one_interval": 1.0,
+      "confusion_matrix_rows_true_cols_pred": [
+        [
+          0,
+          2,
+          0
+        ],
+        [
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          5,
+          0
+        ]
+      ],
+      "argmax_histogram": [
+        0,
+        7,
+        0
+      ],
+      "true_histogram": [
+        2,
+        0,
+        5
+      ],
+      "mean_max_weight": 0.33459189534187317,
+      "largest_class_share": 1.0,
+      "collapsed": true
+    }
+  }
+}

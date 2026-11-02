@@ -4,17 +4,16 @@ import traceback
 import numpy as np
 import tensorflow as tf
 
-# Ensure C:/BTP is in python path
+# Make the repository root and src/ importable
 WORKSPACE_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 SRC_DIR = os.path.join(WORKSPACE_ROOT, "src")
 for p in [SRC_DIR, WORKSPACE_ROOT]:
     if p not in sys.path:
         sys.path.insert(0, p)
 
-from src.ConvolutionalNetworks import BGNet, unpack_bgout, BG_mean, BG_variance, MSENet, BGCallWrapper
+from src.ConvolutionalNetworks import BGNet, unpack_bgout, BG_mean, BGCallWrapper
 from src.GammaLoss import GammaLoss
 from src.quantiles import bin_y_var, OmegaLoss, Omega, ynetwork
-from src.useful_functions import data_between
 
 print("=" * 80)
 print("ISOLATED SYNTHETIC SMOKE TEST SUITE - QRE REPRODUCTION")
@@ -40,12 +39,11 @@ try:
     x_sample = tf.random.normal((batch_size, in_lat, in_lon, in_channels))
     print(f"  [1.1] Input Tensor Shape:           {x_sample.shape}")
 
-    # 2. Instantiate BGNet (baseline=False, ch_attn=True, small dense)
+    # 2. Instantiate BGNet (baseline=False, small dense)
     model = BGNet(
         output_dim=toy_output_dim,
         coords=None,
         baseline=False,
-        ch_attn=True,
         avg_pool=True,
         max_pool=True,
         num_dense=[64],
