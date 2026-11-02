@@ -68,7 +68,7 @@ QRE members and the single-BGNet baseline are built by the same function (`src/b
 
 ### Weight Network
 
-The same conv backbone, then 2 × Dense 100 (dropout 0.2) and an $N$-way softmax. It is trained with the EMD loss (Eq. 5–6, $p = 1$): $\mathcal{L}_\omega = \sum_{k} |k - k'|\,\omega_k$, where $k'$ is the true interval.
+The same conv backbone, then 2 × Dense 100 (dropout 0.2) and an $N$-way softmax. The paper trains it with the EMD loss (Eq. 5–6, $p = 1$): $\mathcal{L}_\omega = \sum_{k} |k - k'|\,\omega_k$, where $k'$ is the true interval. On CORDEX NZ this loss collapses the network onto one interval, so v2 uses cross-entropy instead (see §4 and §5). The other losses can be selected with `weight_network.loss`.
 
 ---
 
@@ -86,6 +86,7 @@ The same conv backbone, then 2 × Dense 100 (dropout 0.2) and an $N$-way softmax
 | Learning-rate decay | 0.7 every 6,000 steps | same; with batch 91 that is about every 53 epochs for the full training set | — |
 | Max epochs | not stated | 100, extended in blocks of 50 (up to 300) while the validation loss still improves | Early stopping decides in practice |
 | Member early stopping | not stated | on validation days of the member's own interval | A member is only used for its interval |
+| Weight Network loss | EMD, Eq. 6: $\sum_k \lvert k-k'\rvert\,\omega_k$ | **Cross-entropy** $-\log \omega_{k'}$ | Eq. 6 collapsed on NZ: validation argmax histogram **[0, 0, 0, 1825, 0, 0]**, mean max weight 1.000, best epoch 1. The loss is linear in $\omega$, so its gradient through the softmax vanishes once $\omega$ is one-hot. Cross-entropy, squared EMD on CDFs (Hou et al. 2016) and CE + EMD all fix the collapse. Cross-entropy was chosen by validation QRE MSE (§5). Old behaviour: `weight_network.loss = "emd"`. |
 | Repetitions | 40 | NZ: 1 sanity repetition only (the NZ study was reduced to "show the fixes work") | Compute |
 
 ---
@@ -119,9 +120,41 @@ NZ sanity run ([results/fixes_v2/nz/sanity/](results/fixes_v2/nz/sanity/)): 1 re
 | Bagging | 134.36 | 17.35 | 674.44 |
 | Probability | 133.96 | 14.47 | 682.15 |
 
-**The Weight Network still collapses** even with the paper's training settings (LR 5e-5, decay 0.7/6000, patience 15, EMD as a sum): 100 % of validation days go to interval 3 and the mean max weight is 1.000, from epoch 1 on. At initialization its output is uniform (mean max weight 0.167), so this is not an initialization problem. The likely cause is the EMD loss of Eq. 6 itself, $\sum_k |k-k'|\,\omega_k$. It is linear in $\omega$, so its minimum is a one-hot vector, and its gradient through the softmax, $\omega_k(c_k - \mathcal{L})$, goes to zero once $\omega$ is one-hot. QRE therefore equals member 3 for every day. Fixing this is open (see `results/fixes_v2/nz/sanity/repetition_0.json` for the diagnostics).
+**The Weight Network still collapses** even with the paper's training settings (LR 5e-5, decay 0.7/6000, patience 15, EMD as a sum): 100 % of validation days go to interval 3 and the mean max weight is 1.000, from epoch 1 on. At initialization its output is uniform (mean max weight 0.167), so this is not an initialization problem. The likely cause is the EMD loss of Eq. 6 itself, $\sum_k |k-k'|\,\omega_k$. It is linear in $\omega$, so its minimum is a one-hot vector, and its gradient through the softmax, $\omega_k(c_k - \mathcal{L})$, goes to zero once $\omega$ is one-hot. QRE therefore equals member 3 for every day. Diagnostics are in `results/fixes_v2/nz/sanity/repetition_0.json`. The loss study below fixes the collapse.
 
 Members vs single BGNet on each member's own validation interval: the members win on the two lowest intervals (MSE ratio 0.90, 0.82) and lose on the others (1.06 to 2.49). With a fixed epoch cap the small high-intensity members get far fewer optimizer steps than BGNet (e.g. 14 vs 112 steps per epoch), so this comparison is biased against them.
+
+### Weight Network loss study, `results/fixes_v2/nz_wn/sanity/weight_network_losses/`
+
+Produced by `experiments/weight_network_losses.py`. It reuses the 6 members and BGNet saved from one sanity run: members and BGNet trained 10 epochs, each Weight Network trained 30 epochs, seed 42, same backbone for every variant. The variants were trained one at a time. **Everything below is on validation (1989–1993, 1825 days)** except the last table. True interval histogram: [234, 384, 388, 320, 260, 239]. Chance levels: uniform 0.167, majority class 0.213.
+
+| Weight source | Accuracy | Within ±1 | Argmax histogram | Mean max ω | QRE val MSE [0,1] / [0,0.2] / [0.9,1] |
+|---|---|---|---|---|---|
+| Ceiling: interval of BGNet's predicted daily total (no training) | 0.627 | 0.984 | — | 1 (one-hot) | 117.88 / 2.36 / 583.0 |
+| Perfect Member: true interval (no training) | 1.000 | 1.000 | — | 1 (one-hot) | 116.74 / 1.89 / 585.1 |
+| EMD, Eq. 6 (paper) | 0.175 | 0.530 | [0, 0, 0, 1825, 0, 0] | 1.000 | 134.93 / 14.76 / 693.2 |
+| **Cross-entropy** | 0.649 | 0.982 | [243, 395, 405, 326, 242, 214] | 0.683 | **116.55** / 2.02 / 580.2 |
+| Squared EMD on CDFs | 0.656 | 0.980 | [229, 438, 349, 329, 267, 213] | 0.685 | 117.04 / 1.99 / 581.5 |
+| CE + EMD (1 : 1) | 0.654 | 0.986 | [196, 426, 407, 322, 268, 206] | 0.768 | 116.96 / 2.03 / 581.8 |
+| *Single BGNet (for reference)* | | | | | *60.82 / 2.42 / 229.9* |
+
+Confusion matrices (rows are the true interval) are in `results.json`. The three new losses all give a near-diagonal matrix with almost all errors one interval away. They beat the BGNet-ceiling accuracy slightly, and none of them collapses.
+
+Selection (validation QRE MSE [0, 1]) picked **cross-entropy**. The three new losses differ by less than 0.5 MSE, which is well within what one repetition can resolve, so the ranking among them is not meaningful. Only after selection was the test set evaluated:
+
+| Model (test, 1994–2000) | MSE [0, 1] | MSE [0, 0.2] | MSE [0.9, 1] |
+|---|---|---|---|
+| QRE, cross-entropy Weight Network | 109.02 | 2.41 | 531.39 |
+| QRE, EMD Weight Network (sanity run above) | 124.13 | 15.23 | 627.19 |
+| Single BGNet | 60.60 | 2.85 | 231.79 |
+
+What this shows:
+
+- **The Weight Network is fixed.** The new loss removes the collapse and its accuracy is about 3× chance.
+- **QRE still loses to BGNet, and the cause is now the members.** Even always picking the correct member (Perfect Member, 116.7) is nearly twice BGNet's validation MSE (60.8). The cross-entropy network is already at that bound. No weighting can close the gap with these members; it needs better-trained members.
+- **Everything is undertrained.** Every new-loss Weight Network was still improving at the 30-epoch cap (best epochs 28–30). Members and BGNet were capped at 10 epochs.
+
+Time per Weight Network epoch was 140–190 s in this run, against 85 s in the earlier sanity run, on the same CPU.
 
 ---
 
@@ -158,6 +191,7 @@ The legacy runner `experiments/run_cordex_experiment.py` (with `configs/cordex_f
 | `prediction.mode` | `"expected"` ($p\alpha\beta$) | `"threshold"` |
 | `segmentation.method` | `"bayesian_gmm"` | `"legacy"` |
 | `members.validate_on_own_segment` | `true` | `false` |
+| `weight_network.loss` | `"cross_entropy"` (also `"emd_squared_cdf"`, `"ce_plus_emd"`) | `"emd"` (paper Eq. 6) |
 | `weight_network.emd_reduction` | `"sum"` | `"mean"` |
 | `architecture.*`, learning rates, decay, patience | paper values where possible | see `configs/cordex_final.json` |
 
@@ -172,11 +206,13 @@ configs/
 experiments/
   run_cordex_v2.py             v2 pipeline (train-only statistics, flags for every fix)
   run_cordex_experiment.py     legacy runner (first run)
+  weight_network_losses.py     Weight Network loss study on saved checkpoints
 src/
   data_adapter_cordex.py       NetCDF loading, land mask, elevation, 1961-2000 loader
   preprocessing.py             year split, training-split standardization
   segmentation.py              Bayesian-GMM intervals, thresholds, partition
   builders.py                  shared model builders (members = baseline)
+  checkpoints.py               save/load weights with a config signature
   ConvolutionalNetworks.py     BGNet, BG_mean (p*alpha*beta or threshold)
   Modules.py                   conv backbone, CBAM-style channel attention, elevation embedding
   GammaLoss.py                 Bernoulli-Gamma loss

@@ -1,0 +1,98 @@
+{
+  "config": {
+    "experiment_name": "cordex_qre_fixes_v2",
+    "save_dir": "D:\\GitHub_P\\precipitation-downscaling\\results\\fixes_v2\\nz_wn\\sanity",
+    "repeats": 1,
+    "base_seed": 42,
+    "n_intervals": 6,
+    "data": {
+      "data_dir": "D:\\GitHub_P\\precipitation-downscaling\\data\\CORDEX_NZ",
+      "predictor_config": "config_A",
+      "gcm": "ACCESS-CM2",
+      "train_years": [
+        1961,
+        1988
+      ],
+      "val_years": [
+        1989,
+        1993
+      ],
+      "test_years": [
+        1994,
+        2000
+      ],
+      "standardize_predictors": true,
+      "use_elevation": true,
+      "input_hw": [
+        16,
+        16
+      ]
+    },
+    "loss": {
+      "rain_threshold": 0.1,
+      "epsilon": 0.0001
+    },
+    "segmentation": {
+      "method": "bayesian_gmm",
+      "n_runs": 100,
+      "seed": 0,
+      "weight_concentration_prior": null,
+      "intervals_file": "results/fixes_v2/dry_run/segmentation.json"
+    },
+    "prediction": {
+      "mode": "expected"
+    },
+    "architecture": {
+      "channels": [
+        64,
+        128,
+        256
+      ],
+      "kernel": 3,
+      "padding": "same",
+      "dense": [
+        512
+      ],
+      "dense_activation": "relu",
+      "dropout": 0.2,
+      "attention_reduction": 1,
+      "omega_init_conv": true
+    },
+    "members": {
+      "learning_rate": 0.0001,
+      "decay_rate": 0.7,
+      "decay_steps": 6000,
+      "patience": 4,
+      "max_epochs": 10,
+      "extend_epochs": 50,
+      "max_epochs_hard": 10,
+      "batch_size": 91,
+      "validate_on_own_segment": true
+    },
+    "weight_network": {
+      "dense": 100,
+      "dropout": 0.2,
+      "loss": "emd",
+      "ce_weight": 1.0,
+      "emd_weight": 1.0,
+      "emd_reduction": "sum",
+      "learning_rate": 5e-05,
+      "decay_rate": 0.7,
+      "decay_steps": 6000,
+      "patience": 15,
+      "max_epochs": 30,
+      "extend_epochs": 50,
+      "max_epochs_hard": 30,
+      "batch_size": 91,
+      "collapse_fraction": 0.7
+    },
+    "checkpoints": {
+      "dir": "D:\\GitHub_P\\precipitation-downscaling\\checkpoints\\nz_v2_sanity"
+    },
+    "sanity": {
+      "members_max_epochs": 10,
+      "weight_network_max_epochs": 30
+    }
+  },
+  "total_seconds": 4673.2205131053925
+}

@@ -53,7 +53,7 @@
   "weight_network": {
     "dense": 100,
     "dropout": 0.2,
-    "loss": "emd",
+    "loss": "cross_entropy",
     "ce_weight": 1.0,
     "emd_weight": 1.0,
     "emd_reduction": "sum",
