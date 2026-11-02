@@ -1,0 +1,88 @@
+{
+  "experiment_name": "india_smoke",
+  "_note": "SMOKE TEST ONLY: 31 days of January 1990, tiny network, 2 epochs. Its numbers only show that the code runs.",
+  "save_dir": "results/india/smoke",
+  "base_seed": 42,
+  "n_intervals": 3,
+  "data": {
+    "data_dir": "data/India_sample",
+    "imd_pattern": "RF25_ind*_rfp25.nc",
+    "imd_variable": "RAINFALL",
+    "era5_pattern": "india_era5_*.nc",
+    "era5_variables": ["q", "t", "u", "v", "w"],
+    "pressure_level": 850.0,
+    "coarsen_factor": 4,
+    "aggregation_shift_hours": 0,
+    "day_offset": 0,
+    "period": ["1990-01-01", "1990-01-31"],
+    "allow_missing_days": false,
+    "standardize_predictors": true,
+    "use_elevation": false,
+    "input_hw": [32, 33]
+  },
+  "split": {
+    "train": ["1990-01-01", "1990-01-17"],
+    "val": ["1990-01-18", "1990-01-24"],
+    "test": ["1990-01-25", "1990-01-31"]
+  },
+  "loss": {
+    "rain_threshold": 0.0,
+    "epsilon": 0.0001
+  },
+  "segmentation": {
+    "method": "bayesian_gmm",
+    "n_runs": 6,
+    "seed": 0,
+    "weight_concentration_prior": 10.0,
+    "intervals_file": null
+  },
+  "prediction": {
+    "mode": "expected"
+  },
+  "architecture": {
+    "channels": [4, 8, 8],
+    "kernel": 6,
+    "padding": "valid",
+    "dense": [8],
+    "dense_activation": "relu",
+    "dropout": 0.2,
+    "attention_reduction": 1,
+    "omega_init_conv": true
+  },
+  "bgnet": {
+    "learning_rate": 0.0001, "decay_rate": 0.7, "decay_steps": 6000, "patience": 1,
+    "max_epochs": 2, "extend_epochs": 0, "max_epochs_hard": 2, "batch_size": 8
+  },
+  "members": {
+    "init": "scratch",
+    "warm_start": {"learning_rate": 0.00005},
+    "learning_rate": 0.0001, "decay_rate": 0.7, "decay_steps": 6000, "patience": 1,
+    "max_epochs": 2, "extend_epochs": 0, "max_epochs_hard": 2, "batch_size": 8
+  },
+  "weight_network": {
+    "dense": 8, "dropout": 0.2, "loss": "squared_emd", "ce_weight": 1.0, "emd_weight": 1.0, "emd_reduction": "sum",
+    "learning_rate": 0.00005, "decay_rate": 0.7, "decay_steps": 6000, "patience": 1,
+    "max_epochs": 2, "extend_epochs": 0, "max_epochs_hard": 2, "batch_size": 8, "collapse_fraction": 0.7
+  },
+  "mass": {
+    "placement": "ensemble",
+    "mode": "absolute",
+    "eps_mm_per_day": 0.1,
+    "lambdas": [0, 0.1, 1],
+    "lambda_scaling": "initial_ratio",
+    "scaling_max_days": 512
+  },
+  "ensemble": {
+    "train_members": false, "precompute_member_predictions": true,
+    "learning_rate": 0.00005, "decay_rate": null, "decay_steps": 6000, "patience": 1,
+    "max_epochs": 2, "extend_epochs": 0, "max_epochs_hard": 2, "batch_size": 8
+  },
+  "selection": {
+    "mse_regime": "[0.0,1.0]",
+    "mse_tolerance": 0.02,
+    "total_metric": "daily_mae_mm_per_day"
+  },
+  "checkpoints": {
+    "dir": "checkpoints/india/smoke"
+  }
+}
