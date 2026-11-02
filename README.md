@@ -2,7 +2,7 @@
 
 > **Bachelor Thesis Project (BTP)**
 > **Based on the AAAI-24 paper**: *"Quantile-Regression-Ensemble: A Deep Learning Algorithm for Downscaling Extreme Precipitation"* (Bailie, Koh, Rampal & Gibson)
-> **This repository**: a reproduction on alternative data (CORDEX-ML-Bench, New Zealand)
+> **This repository**: a reproduction on alternative data (CORDEX-ML-Bench, New Zealand), and an extension to India (ERA5 → IMD) with a global mass-conservation regularization (§8, implemented and smoke-tested; no India results yet)
 
 ---
 
@@ -203,13 +203,26 @@ The legacy runner `experiments/run_cordex_experiment.py` (with `configs/cordex_f
 configs/
   cordex_v2.json               v2 configuration (all fixes)
   cordex_final.json            configuration of the first run
+  india_v1.json                India experiment (ERA5 -> IMD, mass conservation)
+  india_smoke.json             India smoke test on data/India_sample/
+docs/
+  RUNBOOK.md                   every long run, in order, for running on another machine
+  STATUS.md                    what is done, key numbers, next steps, open questions
 experiments/
   run_cordex_v2.py             v2 pipeline (train-only statistics, flags for every fix)
   run_cordex_experiment.py     legacy runner (first run)
   weight_network_losses.py     Weight Network loss study on saved checkpoints
+  member_study.py              NZ member study: warm start (B) / from scratch (A), BGNet retrain
+  run_india.py                 India runner, stages data / A / sweep / B / all
+  india_day_offset.py          ERA5 -> IMD day offset check (train + val only)
+scripts/
+  download_era5_india.py       ERA5 CDS download + 4x4 coarsening (not run here)
 src/
   data_adapter_cordex.py       NetCDF loading, land mask, elevation, 1961-2000 loader
-  preprocessing.py             year split, training-split standardization
+  india_data.py                IMD / ERA5 loading, grid alignment, day matching, cell areas
+  mass_conservation.py         mass loss, member loss with mass, joint ensemble stage
+  india_metrics.py, india_plots.py   India evaluation and plots
+  preprocessing.py             year / date splits, training-split standardization
   segmentation.py              Bayesian-GMM intervals, thresholds, partition
   builders.py                  shared model builders (members = baseline)
   checkpoints.py               save/load weights with a config signature
@@ -222,10 +235,107 @@ results/
   final_cordex_qre/            first run (before fixes)
   baseline_rerun/              data-match check against the first run
   fixes_v2/                    v2 outputs
+  india/smoke/                 India smoke-test outputs (code check only, not results)
 ```
 
 ---
 
-## 8. Scope
+## 8. India: QRE with global mass-conservation regularization
 
-This is QRE implemented on an alternative dataset with documented adjustments. It is not a numerical reproduction of the paper's ERA5 → VCSN experiment, and absolute MSE values are not comparable with the paper's tables.
+**Status: implemented and tested on the sample files only. No India experiment has been run, and no India result exists yet.** The long runs are listed in [docs/RUNBOOK.md](docs/RUNBOOK.md).
+
+The same QRE code as the NZ v2 pipeline is used: train-only normalization, $p\alpha\beta$ predictions, one builder for members and BGNet, Bayesian-GMM intervals fitted once on training totals, training thresholds for validation and test labels, members early-stopped on their own validation interval, the squared-EMD Weight Network and checkpoints. Everything is new code (`experiments/run_india.py`, `configs/india_*.json`, `results/india/`). The NZ code, configs and outputs are unchanged. There is one addition: a constraint on the all-India daily rainfall total. It does not model moisture-flux convergence or any other physics.
+
+### Data pipeline (`src/india_data.py`)
+
+| Item | India setting |
+|---|---|
+| Predictors $X$ | ERA5 q, t, u, v, w at 850 hPa, 4 × 4 block means of the 0.25° grid (1°). Sample: one 00 UTC field per day. Daily means (preferred) and hourly data are also supported; sub-daily data is averaged per day, optionally over 03–03 UTC (`data.aggregation_shift_hours = 3`). |
+| Target $Y$ | IMD gridded rainfall (mm/day), 0.25°, 129 × 135, flattened to the **4,964** valid cells |
+| Grid alignment | ERA5 latitude flipped to ascending. Each ERA5 coordinate is checked to be the mean of exactly 4 IMD coordinates, with the blocks contiguous. The partial last row (6.5° N) and column (99.75° E) are dropped, which gives **32 × 33** inputs. |
+| Mask | IMD NaN cells are outside India. The mask is computed once and checked to be constant over time. NaN is never replaced by zero; only valid cells are used everywhere. |
+| Days | ERA5 day $D$ + `data.day_offset` (0 or 1) predicts IMD day $D$ (IMD days are 24 h accumulations ending 08:30 IST). `experiments/india_day_offset.py` picks the offset by predictor–rainfall correlation on train + val days. Missing days are listed in `data_report.json` and are an error unless `data.allow_missing_days` is set. |
+| Period, split | 1990–2019; train 1990–2010, val 2011–2014, test 2015–2019 (21 / 4 / 5 years = 70 / 13.3 / 16.7 %), configurable date ranges |
+| Rain threshold | $y > 0$: IMD is gauge-based with true zeros (sample: 67.2 % of valid values are exactly 0, none in (0, 0.1)) |
+| Elevation | Not used (`data.use_elevation = false`). No elevation source is configured for India. |
+
+### Mass-conservation loss (`src/mass_conservation.py`)
+
+For day $t$, valid mask $M$, cell area $A_i$, observed $P$ and predicted $\hat P$ (mm/day):
+
+$$O_t = \sum_i M_i A_i P_{i,t}, \qquad S_t = \sum_i M_i A_i \hat P_{i,t}$$
+
+$$L_\text{mass,abs} = \frac{1}{B}\sum_t \frac{|S_t - O_t|}{\sum_i M_i A_i} \quad\text{(area-mean mm/day, default)}, \qquad L_\text{mass,rel} = \frac{1}{B}\sum_t \frac{|S_t - O_t|}{O_t + \varepsilon'}$$
+
+- **Cell areas:** $A_i = R^2\,\Delta\lambda\,(\sin\varphi_\text{north} - \sin\varphi_\text{south})$, in radians, with $R = 6371$ km. They are precomputed once with the mask as constant tensors. The valid cells total 3.50 M km², and the areas of the full grid sum exactly to the analytic box area (tested).
+- **Implementation:** the code uses the normalized weights $w_i = M_iA_i / \sum M A$, so it works on area-mean totals. This is the same formula; the relative form's $\varepsilon'$ equals $\varepsilon\sum M A$, with $\varepsilon$ = `mass.eps_mm_per_day` (0.1).
+- **Per-day averaging:** the loss is computed per day and averaged over the batch, never pooled into one total across days.
+- **Masking:** masked cells are removed with `tf.where` before any arithmetic, so NaN there cannot reach the loss or its gradient.
+- **Units and gradients:** targets are never normalized, so the loss is in physical units, and everything stays in TensorFlow so gradients flow.
+
+**Why absolute is the default.** The relative form divides by the observed total, so a near-dry day weighs up to $1/\varepsilon$ = 10× while a 10 mm/day monsoon day weighs 0.1×. The days that carry most of the rainfall count least. Scales on the sample (January 1990, validation days):
+
+| Prediction | $L_\text{mass,rel}$ | $L_\text{mass,abs}$ (mm/day) |
+|---|---|---|
+| zero everywhere | 0.52 | 0.25 |
+| training climatology | 1.66 | 0.28 |
+
+The relative form ranks "no rain anywhere" far better than climatology, although their absolute total errors are almost equal. For conserving rainfall mass we therefore recommend the absolute form (`mass.mode = "absolute"`). `"relative"` remains available. The sample covers only dry-season days, so the teammate's run also writes both scales on the full data to `A/loss_scales.json`.
+
+### Combining the losses and where to apply them
+
+$L_\text{total} = L_\text{QRE} + \lambda_\text{mass} L_\text{mass}$, where $L_\text{QRE}$ is the loss of the stage being trained: the Bernoulli-Gamma NLL for members and the squared EMD for the Weight Network. Both terms are logged separately (`bg_nll` / `mass_loss`, `qre_loss` / `mass_loss` in each training history). With $\lambda = 0$ the mass term is skipped, and loss and gradients are exactly the original ones (tested).
+
+| `mass.placement` | What is trained with the mass term | CPU cost of the λ sweep | Trade-offs |
+|---|---|---|---|
+| `"ensemble"` (**default**) | A joint fine-tuning stage of $g(x)=\sum_i \omega_i(x) f_i(x)$, starting from experiment A's Weight Network. Members are frozen by default, with their predictions precomputed; `ensemble.train_members = true` also fine-tunes them, keeping each member's NLL on its own days. | One short Weight Network fine-tune per λ; members and Weight Network are reused from A | Constrains exactly the quantity that is evaluated, the ensemble output. A and B differ only in this stage, because λ = 0 runs the same stage as the control. With frozen members it can only reweight members, so it fixes totals only as far as the members bracket the truth. Precomputed member predictions need about 1 GB of RAM for 21 training years. |
+| `"members"` | Each member's training: NLL + λ·L_mass on its $p\alpha\beta$ | A full set of 6 members per λ | Changes the members themselves, but each member only sees its own intensity segment. The ensemble total is not constrained directly, since the Weight Network mixes the members afterwards. |
+| `"both"` | Both of the above, with the same λ | As `"members"` plus the ensemble stage | The strongest constraint and the most expensive. Hardest to attribute. |
+
+**λ values:** λ is a list (`mass.lambdas`, default [0, 0.01, 0.1, 1]), and `--stage sweep` trains all of them in one command. With `mass.lambda_scaling = "initial_ratio"`, each λ is multiplied by $L_\text{QRE}/L_\text{mass}$ measured at the start of the stage on training days. λ = 1 therefore means both terms start equally large, and the effective λ is logged.
+
+**λ selection (validation only):** among λ > 0 whose validation QRE MSE on [0, 1] is within 2 % of λ = 0, take the one with the lowest validation all-India daily-total MAE. If none qualifies, take the λ > 0 with the lowest MSE and flag it (`sweep/selection.json`). The test split is never used for a choice.
+
+### Experiments
+
+- **A:** India QRE, λ = 0.
+- **B:** India QRE with mass conservation at the selected λ.
+- **Shared:** same data, preprocessing, split, seeds and evaluation; the conservation term is the only difference. Both are compared with a single BGNet (same builder, plain NLL, early stopping with patience 4 and at most 100 epochs).
+- **Members:** trained to convergence (patience 4, at most 100 epochs). `members.init = "warm_start"` starts them from BGNet, as in the NZ member study.
+- **Evaluation**, in physical units on the same mask (`src/india_metrics.py`):
+  - MSE on the [0, 1], [0, 0.2] and [0.9, 1] quantile ranges of daily totals, per-interval MSE and the Perfect-Member bound;
+  - MAE, RMSE and spatial correlation;
+  - area-weighted all-India daily totals, with the absolute and relative total discrepancy and daily total-error statistics;
+  - Weight Network diagnostics: accuracy, confusion matrix and argmax histogram.
+- **Plots:** daily-total time series and scatter, example maps (observed / A / B) and spatial error maps.
+
+### Deviations (India)
+
+| Item | Paper | India here | Reason |
+|---|---|---|---|
+| Target | VCSN, NZ | IMD 0.25° gridded rainfall, India | End-evaluation dataset |
+| Predictors | ERA5 q, t, u, v, w 850 hPa, (36, 41) | Same variables, 1° (4 × 4 block means), 32 × 33 | Grid of the provided ERA5 sample |
+| Conv kernel | 6, valid | **6, valid (as in the paper)** | 32 × 33 ≥ 31 × 31, so the paper's architecture fits (NZ needed kernel 3). This also shrinks BGNet from 147 M to 13 M parameters. |
+| Weight Network loss | EMD, Eq. 6 | Squared EMD on CDFs | Eq. 6 collapsed on NZ (§4) |
+| Loss | BG NLL / EMD | + λ·L_mass (global mass conservation) | Extension of this project |
+| Elevation input | yes | no | No India elevation source configured |
+| Split | 32 / 6 / 8 years | 21 / 4 / 5 years (1990–2019) | Data planned for download |
+
+Measured on this laptop's CPU (batch 91, India sizes): one BGNet training step takes 1.6 s and one Weight Network step 1.9 s. With kernel 3 "same" it would be 3.5 s and 2.7 s. Expected run times are in the RUNBOOK.
+
+### How to run
+
+```powershell
+python experiments/india_day_offset.py --config configs/india_v1.json      # then set data.day_offset
+python experiments/run_india.py --config configs/india_v1.json --stage A
+python experiments/run_india.py --config configs/india_v1.json --stage sweep
+python experiments/run_india.py --config configs/india_v1.json --stage B
+# smoke test on the samples (about 30 s):
+python experiments/run_india.py --config configs/india_smoke.json --stage all
+```
+
+---
+
+## 9. Scope
+
+This is QRE implemented on alternative datasets with documented adjustments. It is not a numerical reproduction of the paper's ERA5 → VCSN experiment, and absolute MSE values are not comparable with the paper's tables.
