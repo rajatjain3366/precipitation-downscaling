@@ -229,13 +229,14 @@ class BestWeightsEarlyStopping(tf.keras.callbacks.Callback):
             self.model.stop_training = True
 
 
-def fit(model, loss, x, y, xv, yv, tcfg):
+def fit(model, loss, x, y, xv, yv, tcfg, metrics=None):
     """
     Adam + ExponentialDecay from the config, early stopping on val_loss, best
     weights restored. M3: if training is still improving when max_epochs is
     reached, it continues in blocks of extend_epochs up to max_epochs_hard.
+    `metrics` are only logged (the India runner logs the loss terms separately).
     """
-    model.compile(optimizer=make_optimizer(tcfg), loss=loss)
+    model.compile(optimizer=make_optimizer(tcfg), loss=loss, metrics=metrics)
     stopper = BestWeightsEarlyStopping(tcfg["patience"])
     t0, hist, cap = time.time(), {}, tcfg["max_epochs"]
     while True:
