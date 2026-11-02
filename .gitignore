@@ -62,3 +62,5 @@ checkpoints/
 
 # Cleanup staging area: files moved here for review before deletion
 _to_delete/
+# Smoke-suite output (timings change on every run; the reference copy is results/india/smoke/)
+results/india/smoke_run/

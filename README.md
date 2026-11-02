@@ -236,7 +236,8 @@ results/
   final_cordex_qre/            first run (before fixes)
   baseline_rerun/              data-match check against the first run
   fixes_v2/                    v2 outputs
-  india/smoke/                 India smoke-test outputs (code check only, not results)
+  india/smoke/                 India smoke-test outputs (code check only, not results; reference copy)
+  india/smoke_run/             written by tests/run_smoke_tests.py (gitignored)
 ```
 
 ---

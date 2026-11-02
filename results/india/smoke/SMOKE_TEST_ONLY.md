@@ -8,3 +8,7 @@ Produced by `python experiments/run_india.py --config configs/india_smoke.json -
 Every model is still at its initial output (about 0.5 mm/day everywhere), so QRE, BGNet and
 all λ values give the same numbers to several decimals, and the λ "selection" is a tie. These
 files only show that every stage runs end to end and writes its outputs. Do not quote them.
+
+This folder is a committed reference copy. `tests/run_smoke_tests.py` writes its own run to the
+gitignored `results/india/smoke_run/` instead (the outputs contain timings), so running the tests
+leaves this folder and `git status` unchanged.

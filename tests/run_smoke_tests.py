@@ -14,6 +14,7 @@ import time
 
 TESTS_DIR = os.path.abspath(os.path.dirname(__file__))
 WORKSPACE_ROOT = os.path.abspath(os.path.join(TESTS_DIR, ".."))
+INDIA_SMOKE_OUT = "results/india/smoke_run"
 
 STEPS = [
     ["-m", "pytest", "-q", os.path.join(TESTS_DIR, "test_segmentation.py")],
@@ -24,11 +25,14 @@ STEPS = [
     [os.path.join(TESTS_DIR, "test_real_data_qre_integration.py")],
     [os.path.join(TESTS_DIR, "smoke_test_qre.py")],
     [os.path.join(TESTS_DIR, "test_qre_pipeline.py")],
-    # India (needs data/India_sample/): unit tests, then the runner and the day-offset check on the samples
+    # India (needs data/India_sample/): unit tests, then the runner and the day-offset check on the samples.
+    # Outputs go to the gitignored results/india/smoke_run/ (they contain timings), so a test run leaves
+    # the committed reference outputs in results/india/smoke/ untouched.
     ["-m", "pytest", "-q", os.path.join(TESTS_DIR, "test_india.py")],
     [os.path.join(WORKSPACE_ROOT, "experiments", "run_india.py"), "--config", "configs/india_smoke.json",
-     "--stage", "all"],
-    [os.path.join(WORKSPACE_ROOT, "experiments", "india_day_offset.py"), "--config", "configs/india_smoke.json"],
+     "--stage", "all", "--save-dir", INDIA_SMOKE_OUT],
+    [os.path.join(WORKSPACE_ROOT, "experiments", "india_day_offset.py"), "--config", "configs/india_smoke.json",
+     "--save-dir", INDIA_SMOKE_OUT],
 ]
 
 # Scripts that catch their own exceptions and only print FAIL lines
