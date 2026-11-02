@@ -1,0 +1,230 @@
+{
+  "bgnet": {
+    "epochs": 2,
+    "best_epoch": 2,
+    "best_val_loss": 0.9650737643241882,
+    "still_improving_at_cap": true,
+    "final_epoch_cap": 2,
+    "seconds": 2.890284776687622,
+    "seconds_per_epoch": 1.445142388343811,
+    "history": {
+      "loss": [
+        1.1178579330444336,
+        1.1175719499588013
+      ],
+      "bg_nll": [
+        1.0314770936965942,
+        1.0692964792251587
+      ],
+      "mass_loss": [
+        0.4356398582458496,
+        0.3959181606769562
+      ],
+      "val_loss": [
+        0.9652947783470154,
+        0.9650737643241882
+      ],
+      "val_bg_nll": [
+        0.9652947783470154,
+        0.9650737643241882
+      ],
+      "val_mass_loss": [
+        0.32820969820022583,
+        0.3282042443752289
+      ]
+    }
+  },
+  "weight_network": {
+    "epochs": 2,
+    "best_epoch": 2,
+    "best_val_loss": 0.5073225498199463,
+    "still_improving_at_cap": true,
+    "final_epoch_cap": 2,
+    "seconds": 1.7864439487457275,
+    "seconds_per_epoch": 0.8932219743728638,
+    "history": {
+      "loss": [
+        0.536739706993103,
+        0.5358248353004456
+      ],
+      "val_loss": [
+        0.5074947476387024,
+        0.5073225498199463
+      ]
+    }
+  },
+  "members": [
+    {
+      "epochs": 2,
+      "best_epoch": 2,
+      "best_val_loss": 0.7546573877334595,
+      "still_improving_at_cap": true,
+      "final_epoch_cap": 2,
+      "seconds": 2.426600456237793,
+      "seconds_per_epoch": 1.2133002281188965,
+      "history": {
+        "loss": [
+          0.774802565574646,
+          0.7746906280517578
+        ],
+        "bg_nll": [
+          0.7840042114257812,
+          0.7753441333770752
+        ],
+        "mass_loss": [
+          0.4150592088699341,
+          0.4225184917449951
+        ],
+        "val_loss": [
+          0.7547582983970642,
+          0.7546573877334595
+        ],
+        "val_bg_nll": [
+          0.7547582983970642,
+          0.7546573877334595
+        ],
+        "val_mass_loss": [
+          0.4419858455657959,
+          0.4419550597667694
+        ]
+      },
+      "lambda_mass": 0.0,
+      "lambda_effective": 0.0,
+      "loss_ratio_nll_over_mass_at_init": null,
+      "interval": [
+        0.0,
+        0.5882352941176471
+      ],
+      "train_days": 10,
+      "val_days": 4
+    },
+    {
+      "epochs": 2,
+      "best_epoch": 2,
+      "best_val_loss": 1.0300023555755615,
+      "still_improving_at_cap": true,
+      "final_epoch_cap": 2,
+      "seconds": 2.1832656860351562,
+      "seconds_per_epoch": 1.0916328430175781,
+      "history": {
+        "loss": [
+          0.9523972868919373,
+          0.9523136615753174
+        ],
+        "bg_nll": [
+          0.9523972868919373,
+          0.9523136615753174
+        ],
+        "mass_loss": [
+          0.24708476662635803,
+          0.24706703424453735
+        ],
+        "val_loss": [
+          1.0300452709197998,
+          1.0300023555755615
+        ],
+        "val_bg_nll": [
+          1.0300452709197998,
+          1.0300023555755615
+        ],
+        "val_mass_loss": [
+          0.1948983073234558,
+          0.1948801875114441
+        ]
+      },
+      "lambda_mass": 0.0,
+      "lambda_effective": 0.0,
+      "loss_ratio_nll_over_mass_at_init": null,
+      "interval": [
+        0.5882352941176471,
+        0.6470588235294118
+      ],
+      "train_days": 1,
+      "val_days": 1
+    },
+    {
+      "epochs": 2,
+      "best_epoch": 2,
+      "best_val_loss": 1.3542754650115967,
+      "still_improving_at_cap": true,
+      "final_epoch_cap": 2,
+      "seconds": 2.3001832962036133,
+      "seconds_per_epoch": 1.1500916481018066,
+      "history": {
+        "loss": [
+          1.717298150062561,
+          1.7170969247817993
+        ],
+        "bg_nll": [
+          1.717298150062561,
+          1.7170969247817993
+        ],
+        "mass_loss": [
+          0.5506694912910461,
+          0.5506628155708313
+        ],
+        "val_loss": [
+          1.3544172048568726,
+          1.3542754650115967
+        ],
+        "val_bg_nll": [
+          1.3544172048568726,
+          1.3542754650115967
+        ],
+        "val_mass_loss": [
+          0.16726359724998474,
+          0.16726359724998474
+        ]
+      },
+      "lambda_mass": 0.0,
+      "lambda_effective": 0.0,
+      "loss_ratio_nll_over_mass_at_init": null,
+      "interval": [
+        0.6470588235294118,
+        1.0
+      ],
+      "train_days": 6,
+      "val_days": 2
+    }
+  ],
+  "ensemble_stage": {
+    "epochs": 2,
+    "best_epoch": 2,
+    "best_val_loss": 0.5070067644119263,
+    "still_improving_at_cap": true,
+    "final_epoch_cap": 2,
+    "seconds": 1.817042350769043,
+    "seconds_per_epoch": 0.9085211753845215,
+    "history": {
+      "loss": [
+        0.5541971921920776,
+        0.22133895754814148
+      ],
+      "qre_loss": [
+        0.5541971921920776,
+        0.22133895754814148
+      ],
+      "mass_loss": [
+        0.3832320272922516,
+        0.24705848097801208
+      ],
+      "val_loss": [
+        0.5072123408317566,
+        0.5070067644119263
+      ],
+      "val_qre_loss": [
+        0.5072123408317566,
+        0.5070067644119263
+      ],
+      "val_mass_loss": [
+        0.3281969726085663,
+        0.3281969428062439
+      ]
+    },
+    "lambda_mass": 0.0,
+    "lambda_effective": 0.0,
+    "loss_ratio_qre_over_mass_at_init": null,
+    "members_trained": false
+  },
+  "seconds": 14.328091144561768
+}

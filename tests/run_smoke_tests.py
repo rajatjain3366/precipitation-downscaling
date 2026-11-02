@@ -24,6 +24,11 @@ STEPS = [
     [os.path.join(TESTS_DIR, "test_real_data_qre_integration.py")],
     [os.path.join(TESTS_DIR, "smoke_test_qre.py")],
     [os.path.join(TESTS_DIR, "test_qre_pipeline.py")],
+    # India (needs data/India_sample/): unit tests, then the runner and the day-offset check on the samples
+    ["-m", "pytest", "-q", os.path.join(TESTS_DIR, "test_india.py")],
+    [os.path.join(WORKSPACE_ROOT, "experiments", "run_india.py"), "--config", "configs/india_smoke.json",
+     "--stage", "all"],
+    [os.path.join(WORKSPACE_ROOT, "experiments", "india_day_offset.py"), "--config", "configs/india_smoke.json"],
 ]
 
 # Scripts that catch their own exceptions and only print FAIL lines
@@ -34,7 +39,8 @@ def main():
     env = dict(os.environ, TF_CPP_MIN_LOG_LEVEL="2")
     results = []
     for step in STEPS:
-        name = os.path.basename(step[-1])
+        script = next((s for s in step if s.endswith(".py")), step[-1])
+        name = os.path.basename(script) + (" " + " ".join(step[step.index(script) + 1:]) if script != step[-1] else "")
         t0 = time.time()
         proc = subprocess.run([sys.executable] + step, cwd=WORKSPACE_ROOT, env=env,
                               capture_output=True, text=True)

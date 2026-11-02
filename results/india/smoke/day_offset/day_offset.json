@@ -1,0 +1,90 @@
+{
+  "days_used": 24,
+  "first_day": "1990-01-01",
+  "last_day": "1990-01-24",
+  "splits_used": [
+    "train",
+    "val"
+  ],
+  "offsets": {
+    "0": {
+      "per_variable": {
+        "q": {
+          "domain_corr": 0.44552838964843344,
+          "local_mean_abs_corr": 0.3069901913990748,
+          "local_mean_corr": 0.28981168427690085,
+          "cells_used": 1856
+        },
+        "t": {
+          "domain_corr": -0.4219230979880098,
+          "local_mean_abs_corr": 0.20738630488856694,
+          "local_mean_corr": -0.11361701159921532,
+          "cells_used": 1856
+        },
+        "u": {
+          "domain_corr": -0.4539274175018437,
+          "local_mean_abs_corr": 0.2378407480593686,
+          "local_mean_corr": 0.013953380526823022,
+          "cells_used": 1856
+        },
+        "v": {
+          "domain_corr": 0.4195206962978905,
+          "local_mean_abs_corr": 0.2621881733247276,
+          "local_mean_corr": 0.15703117342510148,
+          "cells_used": 1856
+        },
+        "w": {
+          "domain_corr": -0.09136640869414347,
+          "local_mean_abs_corr": 0.21778905340147492,
+          "local_mean_corr": -0.12400458867474988,
+          "cells_used": 1856
+        }
+      },
+      "score_mean_local_abs_corr": 0.24643889421464255,
+      "missing_era5_days": []
+    },
+    "1": {
+      "per_variable": {
+        "q": {
+          "domain_corr": 0.4429057216054715,
+          "local_mean_abs_corr": 0.2739778798923077,
+          "local_mean_corr": 0.2188959557027583,
+          "cells_used": 1856
+        },
+        "t": {
+          "domain_corr": -0.4348470178243931,
+          "local_mean_abs_corr": 0.21618345971176645,
+          "local_mean_corr": -0.10822250711688962,
+          "cells_used": 1856
+        },
+        "u": {
+          "domain_corr": -0.17402676131103026,
+          "local_mean_abs_corr": 0.1327469305539248,
+          "local_mean_corr": -0.008068325460661711,
+          "cells_used": 1856
+        },
+        "v": {
+          "domain_corr": 0.3988596748537423,
+          "local_mean_abs_corr": 0.26070005784828604,
+          "local_mean_corr": 0.15719801105990647,
+          "cells_used": 1856
+        },
+        "w": {
+          "domain_corr": 0.14049177193885132,
+          "local_mean_abs_corr": 0.1825762057515243,
+          "local_mean_corr": -0.01777584170518985,
+          "cells_used": 1856
+        }
+      },
+      "score_mean_local_abs_corr": 0.21323690675156187,
+      "missing_era5_days": [
+        {
+          "imd_day": "1990-01-31",
+          "era5_day_needed": "1990-02-01"
+        }
+      ]
+    }
+  },
+  "recommended_day_offset": 0,
+  "score_difference": 0.03320198746308067
+}
