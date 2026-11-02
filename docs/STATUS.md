@@ -1,4 +1,6 @@
-# Project status (2026-11-02, branch `fixes-v2`)
+# Project status (2026-11-02, branch `main`)
+
+`fixes-v2` was merged into `main` (PR #2, merge commit `1c0062b`). The code shown at the mid-term is tagged `midterm-eval`.
 
 ## Done
 

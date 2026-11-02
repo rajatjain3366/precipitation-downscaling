@@ -14,7 +14,7 @@ This file lists every long training run in order: the exact command, the expecte
 ```bash
 git clone https://github.com/rajatjain3366/precipitation-downscaling.git
 cd precipitation-downscaling
-git checkout fixes-v2
+git checkout main
 python3.10 -m venv .venv                 # Python 3.10 (3.10.11 used); TF 2.10 needs 3.7-3.10
 source .venv/bin/activate                # Windows PowerShell: .venv\Scripts\Activate.ps1
 pip install -r requirements.txt netCDF4==1.7.4 pytest
@@ -213,7 +213,7 @@ The code was only run on CPU with TensorFlow 2.10. Kaggle images ship a newer Te
 1. **Make a dataset:** create a Kaggle Dataset with `data/India/` (the coarse `era5/` files and `imd/`) and, for the smoke tests, `data/India_sample/`. Add the NZ data and NZ checkpoints as a second dataset if you run the NZ study there.
 2. **Notebook:** use a GPU accelerator with Internet on.
    ```bash
-   !git clone -b fixes-v2 https://github.com/rajatjain3366/precipitation-downscaling.git
+   !git clone -b main https://github.com/rajatjain3366/precipitation-downscaling.git
    %cd precipitation-downscaling
    !pip install netCDF4 tf-keras
    import os; os.environ["TF_USE_LEGACY_KERAS"] = "1"   # tf.keras -> Keras 2; before importing TF
