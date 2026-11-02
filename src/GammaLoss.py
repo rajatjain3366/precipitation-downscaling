@@ -20,10 +20,6 @@ class EpochLogger(tf.keras.callbacks.Callback):
             else:
                 self.statistics[key].append(stat)
 
-            
-    def get_statistics(self):
-        return self.statistics
-    
 
 # The Bernoulli-Gamma loss 
 class GammaLoss(tf.keras.losses.Loss):

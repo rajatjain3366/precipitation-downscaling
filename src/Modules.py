@@ -53,7 +53,6 @@ class DownScaleModule(tf.keras.Model):
         is_baseline,
         avg_pool,
         max_pool,
-        ch_attn,
         num_channels,
         kernel_sizes,
         reduction_rate=1,
@@ -72,7 +71,6 @@ class DownScaleModule(tf.keras.Model):
         self.reduction_rate = reduction_rate
         self.avg_pool = avg_pool
         self.max_pool = max_pool
-        self.ch_attn = ch_attn
         self.aux_data = aux_data
 
         self.input_layer = tf.keras.layers.InputLayer(input_shape=(36, 41, 5))

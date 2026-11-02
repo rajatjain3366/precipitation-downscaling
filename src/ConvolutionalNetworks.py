@@ -15,7 +15,7 @@ def unpack_bgout(y_pred):
     
     return p, alpha, beta
 
-def BG_mean(p, alpha, beta, exp_format=False, mode="expected"):
+def BG_mean(p, alpha, beta, mode="expected"):
     # mean of BG net distribution
     # mode="expected":  p * alpha * beta, the paper's Eq. 3 (MSE-optimal)
     # mode="threshold": 1[p > 0.5] * alpha * beta, the original repo's rule
@@ -25,22 +25,9 @@ def BG_mean(p, alpha, beta, exp_format=False, mode="expected"):
         rain = tf.where(p > 0.5, 1.0, 0.0)
     else:
         raise ValueError(f"unknown BG_mean mode {mode!r}")
-    if exp_format:
-        mean = rain * alpha * beta
-    else:
-        mean = rain * tf.exp(alpha) * tf.exp(beta)
+    mean = rain * tf.exp(alpha) * tf.exp(beta)
 
     return mean
-    
-def BG_variance(p, alpha, beta, exp_format=False):
-    # variance of the BG network 
-    will_rain = tf.where(p > 0.5, 1.0, 0.0)
-    if exp_format:
-        variance = will_rain*alpha*(1 + (1 - will_rain)*alpha)*beta**2
-    else:
-        variance = will_rain*tf.exp(alpha)*(1 + (1 -will_rain)*tf.exp(alpha))*tf.exp(2*beta)
-        
-    return variance 
 
 
 class BGNet(tf.keras.Model):
@@ -51,7 +38,6 @@ class BGNet(tf.keras.Model):
                         baseline=True,                    # if True, use BGNet(-)
                         avg_pool=True,                    # determines which pooling types to use  
                         max_pool=False,
-                        ch_attn=True,                     # 
                         num_dense=[256],                  # dense layers in the first dense layer 
                         kernel_sizes=[3, 3, 3],           # kernel sizes of each convolutional block 
                         num_channels=[64, 128, 256],      # channel sizes of convolutional block 
@@ -75,7 +61,6 @@ class BGNet(tf.keras.Model):
         self.baseline = baseline
         self.avg_pool = avg_pool
         self.max_pool = max_pool
-        self.ch_attn = ch_attn
         self.num_dense = num_dense
         self.kernel_sizes = kernel_sizes
         self.num_channels = num_channels
@@ -90,7 +75,6 @@ class BGNet(tf.keras.Model):
                                                 self.baseline,
                                                 self.avg_pool, 
                                                 self.max_pool,
-                                                self.ch_attn, 
                                                 self.num_channels, 
                                                 self.kernel_sizes,
                                                 self.reduction_rate,
@@ -163,24 +147,4 @@ class BGCallWrapper:
         else:
             mean = params 
         
-        return mean 
-    
-
-class BGStatWrapper(tf.keras.metrics.Metric):
-    # post training BGNet wrapper, used to track performance 
-    def __init__(self, name, stat_func, **kwargs):
-        super(BGStatWrapper, self).__init__(name=name, **kwargs)
-        self.stat_func = stat_func
-        self.stat = 0 
-            
-    def update_state(self, y_true, y_pred, sample_weight=None):
-        p, alpha, beta = unpack_bgout(y_pred)
-        mean = BG_mean(p, alpha, beta, exp_format=False)
-        
-        y_true = tf.expand_dims(y_true, axis=-1)
-        
-        self.stat = self.stat_func(mean, y_true)
-    
-    
-    def result(self):
-        return self.stat
+        return mean

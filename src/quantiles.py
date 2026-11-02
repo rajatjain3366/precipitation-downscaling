@@ -56,7 +56,6 @@ class OmegaLoss(tf.keras.losses.Loss):
         num_classes,
         p=1,
         weight_func=weight,
-        loss_weights=tf.constant([0.0, 0.0, 1.0]),
         class_reduction="mean",  # "sum" = paper Eq. 6; "mean" (original code) divides by N
         kind="emd",              # see call(); "emd" is the paper's loss
         ce_weight=1.0,
@@ -75,7 +74,6 @@ class OmegaLoss(tf.keras.losses.Loss):
         self.num_classes = num_classes
         self.p = p
         self.weight_func = weight_func
-        self.loss_weights = loss_weights
         self.weight_matrix = self.gen_matrix()
 
     def gen_matrix(self):
@@ -146,15 +144,11 @@ class Omega(tf.keras.Model):
         self.init_conv = init_conv
         self.dense_units = dense_units
         self.dropout = dropout
-        self.post_process = False
 
         self._omega = self.omega()
 
     def call(self, x, training=False):
         x = self._omega(x)
-
-        if self.post_process and not training and False:
-            x = post_process(x)
 
         return x
 

@@ -174,7 +174,6 @@ try:
         output_dim=D_land,
         coords=None,
         baseline=False,
-        ch_attn=True,
         avg_pool=True,
         max_pool=True,
         kernel_sizes=[3, 3, 3],
