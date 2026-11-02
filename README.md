@@ -68,7 +68,7 @@ QRE members and the single-BGNet baseline are built by the same function (`src/b
 
 ### Weight Network
 
-The same conv backbone, then 2 × Dense 100 (dropout 0.2) and an $N$-way softmax. The paper trains it with the EMD loss (Eq. 5–6, $p = 1$): $\mathcal{L}_\omega = \sum_{k} |k - k'|\,\omega_k$, where $k'$ is the true interval. On CORDEX NZ this loss collapses the network onto one interval, so v2 uses cross-entropy instead (see §4 and §5). The other losses can be selected with `weight_network.loss`.
+The same conv backbone, then 2 × Dense 100 (dropout 0.2) and an $N$-way softmax. The paper trains it with the EMD loss (Eq. 5–6, $p = 1$): $\mathcal{L}_\omega = \sum_{k} |k - k'|\,\omega_k$, where $k'$ is the true interval. On CORDEX NZ this loss collapses the network onto one interval, so v2 uses the squared EMD on cumulative distributions of Hou et al. (2016) instead, $\sum_k (\mathrm{CDF}_\omega(k) - \mathrm{CDF}_y(k))^2$ (see §4 and §5). The other losses can be selected with `weight_network.loss`.
 
 ---
 
@@ -86,7 +86,7 @@ The same conv backbone, then 2 × Dense 100 (dropout 0.2) and an $N$-way softmax
 | Learning-rate decay | 0.7 every 6,000 steps | same; with batch 91 that is about every 53 epochs for the full training set | — |
 | Max epochs | not stated | 100, extended in blocks of 50 (up to 300) while the validation loss still improves | Early stopping decides in practice |
 | Member early stopping | not stated | on validation days of the member's own interval | A member is only used for its interval |
-| Weight Network loss | EMD, Eq. 6: $\sum_k \lvert k-k'\rvert\,\omega_k$ | **Cross-entropy** $-\log \omega_{k'}$ | Eq. 6 collapsed on NZ: validation argmax histogram **[0, 0, 0, 1825, 0, 0]**, mean max weight 1.000, best epoch 1. The loss is linear in $\omega$, so its gradient through the softmax vanishes once $\omega$ is one-hot. Cross-entropy, squared EMD on CDFs (Hou et al. 2016) and CE + EMD all fix the collapse. Cross-entropy was chosen by validation QRE MSE (§5). Old behaviour: `weight_network.loss = "emd"`. |
+| Weight Network loss | EMD, Eq. 6: $\sum_k \lvert k-k'\rvert\,\omega_k$ | **Squared EMD on CDFs** (Hou et al. 2016): $\sum_k (\mathrm{CDF}_\omega(k) - \mathrm{CDF}_y(k))^2$ | Eq. 6 collapsed on NZ: validation argmax histogram **[0, 0, 0, 1825, 0, 0]**, mean max weight 1.000, best epoch 1. The loss is linear in $\omega$, so its gradient through the softmax vanishes once $\omega$ is one-hot. Cross-entropy, squared EMD and CE + EMD all fix the collapse, and their validation QRE MSE is within 0.5 of each other (§5), i.e. tied within noise. Squared EMD was chosen because it is the EMD family the paper cites, still penalises distant intervals more, and is smooth with a nonzero gradient. Options: `weight_network.loss = "emd"` (paper), `"cross_entropy"`, `"ce_plus_emd"`. |
 | Repetitions | 40 | NZ: 1 sanity repetition only (the NZ study was reduced to "show the fixes work") | Compute |
 
 ---
@@ -140,7 +140,7 @@ Produced by `experiments/weight_network_losses.py`. It reuses the 6 members and 
 
 Confusion matrices (rows are the true interval) are in `results.json`. The three new losses all give a near-diagonal matrix with almost all errors one interval away. They beat the BGNet-ceiling accuracy slightly, and none of them collapses.
 
-Selection (validation QRE MSE [0, 1]) picked **cross-entropy**. The three new losses differ by less than 0.5 MSE, which is well within what one repetition can resolve, so the ranking among them is not meaningful. Only after selection was the test set evaluated:
+Selection (validation QRE MSE [0, 1]) picked **cross-entropy**. The three new losses differ by less than 0.5 MSE, which is well within what one repetition can resolve, so the ranking among them is not meaningful. The config default was therefore set to squared EMD afterwards (see §4); the variant is named `emd_squared_cdf` in this run's `results.json`. Only after selection was the test set evaluated, for the cross-entropy variant that the rule picked:
 
 | Model (test, 1994–2000) | MSE [0, 1] | MSE [0, 0.2] | MSE [0.9, 1] |
 |---|---|---|---|
@@ -191,7 +191,7 @@ The legacy runner `experiments/run_cordex_experiment.py` (with `configs/cordex_f
 | `prediction.mode` | `"expected"` ($p\alpha\beta$) | `"threshold"` |
 | `segmentation.method` | `"bayesian_gmm"` | `"legacy"` |
 | `members.validate_on_own_segment` | `true` | `false` |
-| `weight_network.loss` | `"cross_entropy"` (also `"emd_squared_cdf"`, `"ce_plus_emd"`) | `"emd"` (paper Eq. 6) |
+| `weight_network.loss` | `"squared_emd"` (also `"cross_entropy"`, `"ce_plus_emd"`) | `"emd"` (paper Eq. 6) |
 | `weight_network.emd_reduction` | `"sum"` | `"mean"` |
 | `architecture.*`, learning rates, decay, patience | paper values where possible | see `configs/cordex_final.json` |
 

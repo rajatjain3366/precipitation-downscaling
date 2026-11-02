@@ -42,7 +42,7 @@ from src.segmentation import assign_intervals, daily_totals
 VARIANTS = {
     "emd_paper": {"loss": "emd"},  # loaded from the checkpoint run_cordex_v2.py trained
     "cross_entropy": {"loss": "cross_entropy"},
-    "emd_squared_cdf": {"loss": "emd_squared_cdf"},
+    "squared_emd": {"loss": "squared_emd"},
     "ce_plus_emd": {"loss": "ce_plus_emd", "ce_weight": 1.0, "emd_weight": 1.0},
 }
 

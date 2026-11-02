@@ -66,7 +66,7 @@ class OmegaLoss(tf.keras.losses.Loss):
 
         if class_reduction not in ("sum", "mean"):
             raise ValueError(f"class_reduction must be 'sum' or 'mean', got {class_reduction!r}")
-        if kind not in ("emd", "emd_squared_cdf", "cross_entropy", "ce_plus_emd"):
+        if kind not in ("emd", "squared_emd", "cross_entropy", "ce_plus_emd"):
             raise ValueError(f"unknown Weight Network loss kind {kind!r}")
         self.class_reduction = class_reduction
         self.kind = kind
@@ -91,14 +91,14 @@ class OmegaLoss(tf.keras.losses.Loss):
     # kind="emd":             paper Eq. 6, sum_k |k - k'|^p * w_k. Linear in w, so its
     #                          minimum is one-hot and its softmax gradient w_k (c_k - L)
     #                          vanishes there (observed: Weight Network collapse).
-    # kind="emd_squared_cdf":  squared EMD of Hou et al. (2016), sum_k (CDF_w(k) - CDF_y(k))^2
+    # kind="squared_emd":      squared EMD of Hou et al. (2016), sum_k (CDF_w(k) - CDF_y(k))^2
     # kind="cross_entropy":    -sum_k y_k log w_k
     # kind="ce_plus_emd":      ce_weight * cross-entropy + emd_weight * Eq. 6
     def call(self, y_true, y_pred):
         y_true = tf.cast(y_true, tf.float32)
         y_pred = tf.cast(y_pred, tf.float32)
 
-        if self.kind == "emd_squared_cdf":
+        if self.kind == "squared_emd":
             diff = tf.cumsum(y_pred, axis=1) - tf.cumsum(y_true, axis=1)
             return tf.reduce_sum(tf.square(diff), axis=1)
         if self.kind == "cross_entropy":

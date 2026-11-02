@@ -53,7 +53,7 @@
   "weight_network": {
     "dense": 100,
     "dropout": 0.2,
-    "loss": "cross_entropy",
+    "loss": "squared_emd",
     "ce_weight": 1.0,
     "emd_weight": 1.0,
     "emd_reduction": "sum",
@@ -66,6 +66,11 @@
     "max_epochs_hard": 300,
     "batch_size": 91,
     "collapse_fraction": 0.7
+  },
+  "member_study": {
+    "variants": ["warm_start", "scratch"],
+    "scratch": {"patience": 4, "max_epochs": 100, "max_epochs_hard": 100},
+    "warm_start": {"learning_rate": 0.00005, "patience": 4, "max_epochs": 100, "max_epochs_hard": 100}
   },
   "checkpoints": {
     "dir": null

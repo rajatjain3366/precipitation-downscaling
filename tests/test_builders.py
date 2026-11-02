@@ -78,10 +78,10 @@ def test_weight_network_loss_variants():
     eq6 = 2 * 0.1 + 1 * 0.2 + 1 * 0.4
     loss = lambda **kw: float(OmegaLoss(4, class_reduction="sum", **kw)(y_true, w).numpy())
     assert np.isclose(loss(kind="cross_entropy"), ce, atol=1e-6)
-    assert np.isclose(loss(kind="emd_squared_cdf"), np.sum(cdf ** 2), atol=1e-6)
+    assert np.isclose(loss(kind="squared_emd"), np.sum(cdf ** 2), atol=1e-6)
     assert np.isclose(loss(kind="ce_plus_emd", ce_weight=1.0, emd_weight=0.5), ce + 0.5 * eq6, atol=1e-6)
     # a perfect one-hot prediction costs nothing for the EMD variants
-    assert np.isclose(float(OmegaLoss(4, kind="emd_squared_cdf")(y_true, y_true).numpy()), 0.0)
+    assert np.isclose(float(OmegaLoss(4, kind="squared_emd")(y_true, y_true).numpy()), 0.0)
 
 
 def test_bg_mean_modes():
