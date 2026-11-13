@@ -47,6 +47,9 @@ def build_bgnet(cfg, output_dim, aux=None):
 def build_bgnet_minus(cfg, output_dim):
     """BGNet(-), the Rampal et al. (2022) style network: BatchNorm/conv/max-pool, no attention, no elevation."""
     a = _arch(cfg)
+    # optional: BGNet(-) pools after every conv, so on 16x16 inputs it needs "same" padding even when
+    # the members use "valid" (configs/cordex_midterm_on_v2_split.json); absent = architecture.padding
+    a["conv_padding"] = cfg["architecture"].get("bgnet_minus_padding", a["conv_padding"])
     return BGNet(output_dim=output_dim, coords=None, baseline=True, aux_data=None, **a)
 
 

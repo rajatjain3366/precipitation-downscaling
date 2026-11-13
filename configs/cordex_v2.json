@@ -74,6 +74,32 @@
     "retrain_bgnet": false,
     "bgnet_converged": {"patience": 4, "max_epochs": 100, "max_epochs_hard": 100}
   },
+  "mass": {
+    "placement": "ensemble",
+    "mode": "absolute",
+    "eps_mm_per_day": 0.1,
+    "lambdas": [0, 0.01, 0.1, 1],
+    "lambda_scaling": "initial_ratio",
+    "scaling_max_days": 512,
+    "lambda0": "original"
+  },
+  "ensemble": {
+    "train_members": false,
+    "precompute_member_predictions": true,
+    "learning_rate": 0.00005,
+    "decay_rate": null,
+    "decay_steps": 6000,
+    "patience": 5,
+    "max_epochs": 50,
+    "extend_epochs": 0,
+    "max_epochs_hard": 50,
+    "batch_size": 91
+  },
+  "selection": {
+    "mse_regime": "[0.0,1.0]",
+    "mse_tolerance": 0.02,
+    "total_metric": "daily_mae_mm_per_day"
+  },
   "checkpoints": {
     "dir": null
   },

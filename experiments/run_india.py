@@ -137,8 +137,9 @@ def prepare_data(cfg):
     report["cell_areas_km2"] = {"min": float(areas.min()), "max": float(areas.max()), "total_valid": float(areas.sum())}
     mass = MassConservation(areas, mode=cfg["mass"]["mode"], eps=cfg["mass"]["eps_mm_per_day"])
     R.save_json(report, os.path.join(cfg["save_dir"], "data_report.json"))
-    return {"split": split, "aux": None, "D": full["y"].shape[1], "mask": full["mask"], "imd_lat": full["imd_lat"],
-            "imd_lon": full["imd_lon"], "areas": areas, "mass": mass, "report": report}
+    return {"split": split, "aux": None, "D": full["y"].shape[1], "mask": full["mask"], "grid_lat": full["imd_lat"],
+            "grid_lon": full["imd_lon"], "areas": areas, "mass": mass, "report": report,
+            "obs_label": "observed (IMD)", "region": "all-India"}
 
 
 class Context:
@@ -204,7 +205,7 @@ def get_bgnet(c):
     bcfg = bgnet_cfg(c.cfg)
     R.set_seed(c.seed)
     model, info = R.train_or_load(
-        bcfg, "bgnet", checkpoints.signature(bcfg, "bgnet", c.seed), lambda: build_bgnet(bcfg, c.D), c.X["train"],
+        bcfg, "bgnet", checkpoints.signature(bcfg, "bgnet", c.seed), lambda: build_bgnet(bcfg, c.D, c.data["aux"]), c.X["train"],
         lambda m: R.fit(m, c.nll, c.X["train"], c.Y["train"], c.X["val"], c.Y["val"], bcfg["members"],
                         metrics=member_metrics(c.nll, c.mass)))
     return model, info
@@ -212,9 +213,9 @@ def get_bgnet(c):
 
 def member_cfg(cfg):
     m = copy.deepcopy(cfg)
-    if cfg["members"]["init"] == "warm_start":
+    if cfg["members"].get("init", "scratch") == "warm_start":
         m["members"].update(cfg["members"]["warm_start"])
-    elif cfg["members"]["init"] != "scratch":
+    elif cfg["members"].get("init", "scratch") != "scratch":
         raise ValueError(f"members.init must be 'scratch' or 'warm_start', got {cfg['members']['init']!r}")
     return m
 
@@ -222,7 +223,7 @@ def member_cfg(cfg):
 def get_members(c, lam_m, bgnet):
     """The N members; with lam_m > 0 each is trained with NLL + lambda_eff * L_mass on its own segment."""
     cfg, mcfg = c.cfg, member_cfg(c.cfg)
-    init = mcfg["members"]["init"]
+    init = mcfg["members"].get("init", "scratch")
     R.set_seed(c.seed)
     models, infos = [], []
     for i in range(c.N):
@@ -236,7 +237,7 @@ def get_members(c, lam_m, bgnet):
             extra["init_from"] = checkpoints.signature(bgnet_cfg(cfg), "bgnet", c.seed)
 
         def build():
-            m = build_bgnet(mcfg, c.D)
+            m = build_bgnet(mcfg, c.D, c.data["aux"])
             if init == "warm_start":
                 m(c.X["train"][:1], training=False)
                 m.set_weights(bgnet.get_weights())  # same builder, so the weights line up
@@ -296,7 +297,7 @@ def get_ensemble_stage(c, lam_e, lam_m, members, omega):
     mcfg = member_cfg(cfg)
 
     def copy_member(m, i):
-        new = build_bgnet(mcfg, c.D)
+        new = build_bgnet(mcfg, c.D, c.data["aux"])
         new(c.X["train"][:1], training=False)
         new.set_weights(m.get_weights())
         return new
@@ -337,7 +338,7 @@ def get_ensemble_stage(c, lam_e, lam_m, members, omega):
     if train_members and info.get("loaded_from_checkpoint"):
         loaded = []
         for i in range(c.N):
-            m = build_bgnet(mcfg, c.D)
+            m = build_bgnet(mcfg, c.D, c.data["aux"])
             checkpoints.load(m, c.cfg["checkpoints"]["dir"], f"{tag}/member_{i}", dict(sig, member=i), c.X["train"][:1])
             loaded.append(m)
         tuned["members"] = loaded
@@ -352,9 +353,21 @@ def build_qre(c, lam, bgnet, omega):
     lam_m = float(lam) if placement in ("members", "both") else 0.0
     members, m_infos = get_members(c, lam_m, bgnet)
     final_omega, e_info = omega, None
-    if placement in ("ensemble", "both"):
+    if placement in ("ensemble", "both") and not skip_lambda0_stage(c.cfg, lam):
         final_omega, members, e_info = get_ensemble_stage(c, float(lam), lam_m, members, omega)
     return members, final_omega, {"members": m_infos, "ensemble_stage": e_info}
+
+
+def skip_lambda0_stage(cfg, lam):
+    """
+    mass.lambda0 = "finetune_control" (default): lambda = 0 also runs the ensemble stage (a fine-tuned
+    control, so lambda = 0 and lambda > 0 get the same extra Weight Network training);
+    "original": lambda = 0 is the trained QRE as it is, without that stage.
+    """
+    mode = cfg["mass"].get("lambda0", "finetune_control")
+    if mode not in ("finetune_control", "original"):
+        raise ValueError(f"mass.lambda0 must be 'finetune_control' or 'original', got {mode!r}")
+    return float(lam) == 0.0 and mode == "original"
 
 
 # -----------------------------------------------------------------------------
@@ -393,9 +406,12 @@ def loss_scales(c, preds):
 
 
 def plots(c, out_dir, split, preds):
-    P.daily_totals(out_dir, c.dates[split], c.Y[split], preds, c.data["areas"], title=f"({split})")
-    P.example_maps(out_dir, c.dates[split], c.Y[split], preds, c.data["mask"], c.data["imd_lat"], c.data["imd_lon"])
-    P.error_maps(out_dir, c.Y[split], preds, c.data["mask"], c.data["imd_lat"], c.data["imd_lon"])
+    obs, region = c.data["obs_label"], c.data["region"]
+    P.daily_totals(out_dir, c.dates[split], c.Y[split], preds, c.data["areas"], title=f"({split})", obs_label=obs,
+                   region=region)
+    P.example_maps(out_dir, c.dates[split], c.Y[split], preds, c.data["mask"], c.data["grid_lat"], c.data["grid_lon"],
+                   obs_label=obs)
+    P.error_maps(out_dir, c.Y[split], preds, c.data["mask"], c.data["grid_lat"], c.data["grid_lon"])
 
 
 def bgnet_eval(c, bgnet, split):

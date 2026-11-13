@@ -17,16 +17,16 @@ def to_grid(values, mask):
     return g
 
 
-def daily_totals(out_dir, dates, y_true, preds, areas_km2, title=""):
+def daily_totals(out_dir, dates, y_true, preds, areas_km2, title="", obs_label="observed", region="domain"):
     """Time series and scatter of area-weighted all-India daily means. preds: {name: (T, D)}."""
     os.makedirs(out_dir, exist_ok=True)
     w = areas_km2 / areas_km2.sum()
     o = area_mean_totals(y_true, w)
     fig, ax = plt.subplots(figsize=(11, 3.5))
-    ax.plot(dates, o, color="black", lw=1.2, label="observed (IMD)")
+    ax.plot(dates, o, color="black", lw=1.2, label=obs_label)
     for name, p in preds.items():
         ax.plot(dates, area_mean_totals(p, w), lw=0.9, label=name)
-    ax.set_ylabel("all-India mean (mm/day)")
+    ax.set_ylabel(f"{region} mean (mm/day)")
     ax.set_title(f"Area-weighted daily totals {title}")
     ax.legend(loc="upper right", fontsize=8)
     fig.tight_layout()
@@ -47,13 +47,13 @@ def daily_totals(out_dir, dates, y_true, preds, areas_km2, title=""):
     plt.close(fig)
 
 
-def example_maps(out_dir, dates, y_true, preds, mask, lat, lon, n_days=3):
+def example_maps(out_dir, dates, y_true, preds, mask, lat, lon, n_days=3, obs_label="observed"):
     """Observed and predicted maps on the wettest, 75th-percentile and median days."""
     os.makedirs(out_dir, exist_ok=True)
     tot = y_true.sum(axis=1)
     order = np.argsort(tot)
     days = [order[-1], order[int(0.75 * (len(order) - 1))], order[(len(order) - 1) // 2]][:n_days]
-    cols = ["observed (IMD)"] + list(preds)
+    cols = [obs_label] + list(preds)
     fig, axes = plt.subplots(len(days), len(cols), figsize=(3.2 * len(cols), 3.0 * len(days)), squeeze=False)
     extent = [lon[0], lon[-1], lat[0], lat[-1]]
     for r, t in enumerate(days):

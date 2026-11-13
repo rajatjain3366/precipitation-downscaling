@@ -318,7 +318,7 @@ def regime_mse(y_true, y_pred, train_totals, regimes=((0.0, 1.0), (0.0, 0.2), (0
 # -----------------------------------------------------------------------------
 # One repetition
 # -----------------------------------------------------------------------------
-def run_repetition(cfg, data, seg, k):
+def run_repetition(cfg, data, seg, k, return_models=False):
     seed = cfg["base_seed"] + 1000 * k
     set_seed(seed)
     s = data["split"]
@@ -421,6 +421,8 @@ def run_repetition(cfg, data, seg, k):
         bg = float(np.mean((bg_val[idx] - Yva[idx]) ** 2))
         log["member_vs_bgnet_own_interval_val"].append(
             {"interval": i, "val_days": int(len(idx)), "member_mse": mem, "bgnet_mse": bg, "member_wins": mem < bg})
+    if return_models:  # experiments/nz_mass.py builds the mass-conservation study on these exact models
+        return log, {"members": members, "omega": omega, "bgnet": bgnet, "models": models}
     return log
 
 

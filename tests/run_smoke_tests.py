@@ -33,6 +33,8 @@ STEPS = [
      "--stage", "all", "--save-dir", INDIA_SMOKE_OUT],
     [os.path.join(WORKSPACE_ROOT, "experiments", "india_day_offset.py"), "--config", "configs/india_smoke.json",
      "--save-dir", INDIA_SMOKE_OUT],
+    # NZ mass conservation (needs the fixture above): cell areas, mask, lambda = 0 / lambda > 0 smoke run
+    ["-m", "pytest", "-q", os.path.join(TESTS_DIR, "test_nz_mass.py")],
 ]
 
 # Scripts that catch their own exceptions and only print FAIL lines
