@@ -8,7 +8,9 @@ The members, Weight Network and BGNet are the NZ v2 models: they are trained or
 loaded by run_cordex_v2.run_repetition with the same checkpoint names,
 signatures and seeds as `python experiments/run_cordex_v2.py`. With
 mass.lambda0 = "original", lambda = 0 IS that QRE (checked: its test MSEs must
-equal run_repetition's exactly). For lambda > 0 the mass term of
+equal run_repetition's exactly). A fine-tuned lambda = 0 control (the same
+Weight Network fine-tune as lambda > 0, mass term off) is reported next to it,
+so QRE + mass can be compared with a model that had the same extra training. For lambda > 0 the mass term of
 src/mass_conservation.py (the India module: same formula, absolute mode by
 default, placements members / ensemble / both, lambda list) is added; lambda is
 selected on validation only, then the test split is evaluated once.
@@ -93,6 +95,18 @@ def build(c, lam, base):
     return members, omega, infos
 
 
+def build_control(c, base):
+    """
+    Fine-tuned lambda = 0 control: the same ensemble stage as lambda > 0 (same epochs, LR, early stopping),
+    with the mass term off, so "QRE + mass" vs this row isolates the mass term. With placement "members"
+    there is no ensemble stage, and the control is the v2 QRE itself.
+    """
+    if c.cfg["mass"]["placement"] not in ("ensemble", "both"):
+        return base["members"], base["omega"], None
+    omega, members, info = I.get_ensemble_stage(c, 0.0, 0.0, base["members"], base["omega"])
+    return members, omega, info
+
+
 def qre(c, members, omega):
     """Same ensemble function as run_cordex_v2 (ynetwork), so lambda = 0 gives its predictions exactly."""
     return ynetwork({f"CNN_{i}": [BGCallWrapper(m, mean_mode=c.mode)] for i, m in enumerate(members)}, omega)
@@ -154,7 +168,8 @@ def table_md(comp):
         lines.append(f"| Mid-term {name.upper() if name == 'qre' else 'BGNet'} (reference) | 1981–2000 | "
                      + " | ".join(mse) + f" | {r['mae']:.2f} | n/a | n/a | n/a | n/a | n/a | n/a |")
     years = "–".join(str(y) for y in comp["split"]["test"])
-    for label, key in (("BGNet (converged)", "bgnet"), ("QRE (λ = 0)", "qre_lambda0"),
+    for label, key in (("BGNet (converged)", "bgnet"), ("QRE (λ = 0, no fine-tune)", "qre_lambda0"),
+                       ("QRE (λ = 0, fine-tuned)", "qre_lambda0_finetuned"),
                        (f"QRE + mass (λ = {comp['selected_lambda']:g})", "qre_mass")):
         r = comp["test"][key]
         wn = r.get("weight_network", {})
@@ -162,7 +177,10 @@ def table_md(comp):
                      + f" | {fmt(r['mae'])} | {fmt(r['rmse'])} | {fmt(r['spatial_corr'], 3)} | "
                      f"{fmt(r['daily_total_mae_mm_per_day'], 3)} | {fmt(r['total_relative_discrepancy'], 3)} | "
                      f"{fmt(wn.get('accuracy'), 3)} | {fmt(wn.get('collapsed'))} |")
-    note = (f"\n\nMid-term rows: {comp['midterm_reference']['note']}\n\n"
+    note = ("\n\n\"QRE (λ = 0, no fine-tune)\" is the current NZ v2 QRE. \"QRE (λ = 0, fine-tuned)\" gets the same "
+            "extra Weight Network fine-tune as QRE + mass with the mass term off: compare QRE + mass with it to see "
+            "the effect of the mass term alone."
+            f"\n\nMid-term rows: {comp['midterm_reference']['note']}\n\n"
             f"λ selected on validation only ({comp['selection']['reason']}). "
             "Daily-total errors are area-weighted over the land cells.\n")
     return head + "\n".join(lines) + note
@@ -206,10 +224,16 @@ def main():
     lam_b = float(sel["selected_lambda"])
     print(f"  selected lambda_mass = {lam_b:g} ({sel['reason']})", flush=True)
 
+    # fine-tuned lambda = 0 control (not part of the selection; reported next to QRE + mass)
+    memc, omc, info_c = build_control(c, base)
+    rc_val, _ = evaluate(c, memc, omc, "val")
+    R.save_json({"val": rc_val, "training": I.summary(info_c)}, os.path.join(out, "sweep", "control_lambda0_finetuned.json"))
+
     # 3. test, once, after the selection
     mem0, om0, _ = build(c, 0.0, base)
     memb, omb, _ = build(c, lam_b, base)
     r0, g0 = evaluate(c, mem0, om0, "test")
+    rc, gc = evaluate(c, memc, omc, "test")
     rb, gb = evaluate(c, memb, omb, "test")
     bg = R.predict(BGCallWrapper(base["bgnet"], mean_mode=c.mode), c.X["test"])
     bg_m = M.evaluate(c.Y["test"], bg, c.train_totals, c.labels["test"], c.N, c.data["areas"], c.mass.eps)
@@ -223,15 +247,17 @@ def main():
             "selected_lambda": lam_b, "selection": sel, "placement": mcfg["placement"], "mass_mode": mcfg["mode"],
             "lambda0_reproduces_nz_v2_qre_exactly": lambda0_exact,
             "test": {"bgnet": row(bg_m), "qre_lambda0": row(r0["qre"], r0["weight_network"]),
+                     "qre_lambda0_finetuned": row(rc["qre"], rc["weight_network"]),
                      "qre_mass": row(rb["qre"], rb["weight_network"]),
                      "perfect_member_lambda0": row(r0["perfect_member"])},
-            "test_full": {"qre_lambda0": r0, "qre_mass": rb, "bgnet": bg_m},
+            "control_lambda0_finetuned_training": I.summary(info_c),
+            "test_full": {"qre_lambda0": r0, "qre_lambda0_finetuned": rc, "qre_mass": rb, "bgnet": bg_m},
             "midterm_reference": midterm_reference(), "seconds": time.time() - t0}
     R.save_json(comp, os.path.join(out, "comparison.json"))
     with open(os.path.join(out, "comparison.md"), "w", encoding="utf-8") as f:
         f.write(table_md(comp))
     I.plots(c, os.path.join(out, "plots"), "test",
-            {"QRE (λ=0)": g0, f"QRE+mass (λ={lam_b:g})": gb, "BGNet": bg})
+            {"QRE (λ=0)": g0, "QRE (λ=0, fine-tuned)": gc, f"QRE+mass (λ={lam_b:g})": gb, "BGNet": bg})
     pt = {"qre_lambda0": {"train": R.predict(qre(c, mem0, om0), c.X["train"]), "val": evaluate(c, mem0, om0, "val")[1]},
           "bgnet": {s: R.predict(BGCallWrapper(base["bgnet"], mean_mode=c.mode), c.X[s]) for s in ("train", "val")}}
     R.save_json(I.loss_scales(c, pt), os.path.join(out, "loss_scales.json"))

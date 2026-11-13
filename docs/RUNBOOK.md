@@ -115,12 +115,12 @@ mkdir -p results/fixes_v2/nz_mass
 python experiments/nz_mass.py --set 'checkpoints.dir="checkpoints/nz_mass"' --save-dir results/fixes_v2/nz_mass 2>&1 | tee results/fixes_v2/nz_mass/nz_mass.log
 ```
 
-(In PowerShell 7 the command works as written.) Expected CPU time: **3–13 h**, extrapolated from the NZ times measured on Kartik's laptop:
+(In PowerShell 7 the command works as written.) Expected CPU time: **3–14 h**, extrapolated from the NZ times measured on Kartik's laptop:
 
 - members: about 2 min per epoch summed over all six, patience 4, continuing while still improving up to 300 epochs, so 1–4 h;
 - Weight Network: about 1.5 min per epoch, patience 15, so 0.5–3.5 h;
 - BGNet: about 2 min per epoch, so 0.5–3 h; BGNet(-) is under 0.5 h;
-- λ sweep: three ensemble fine-tunes of at most 50 epochs each, 0.6–3.6 h in total.
+- λ sweep and the fine-tuned λ = 0 control: four ensemble fine-tunes of at most 50 epochs each, 0.8–4.8 h in total.
 
 Output: `results/fixes_v2/nz_mass/`. To resume after an interruption, run the same command again.
 
@@ -129,7 +129,7 @@ What to check:
 - **The log:** it must not stop with "lambda = 0 does not reproduce the NZ v2 QRE test MSEs". In `comparison.json`, `lambda0_reproduces_nz_v2_qre_exactly` must be `true`.
 - **`repetition_0.json`:** for each model, `best_epoch` < `epochs`, i.e. it converged rather than hitting the cap. `omega_diagnostics_val.collapsed` must be `false`.
 - **`sweep/sweep.json`:** for each λ, the Weight Network is not collapsed, and the daily-total MAE should fall as λ grows while the MSE barely changes. `sweep/selection.json` gives the selected λ and `tolerance_met`.
-- **`comparison.md`:** the one table, with BGNet, QRE (λ = 0) and QRE + mass on test, and the mid-term rows. The mid-term rows use other test years (1981–2000), so compare them only qualitatively.
+- **`comparison.md`:** the one table, with BGNet, QRE (λ = 0, no fine-tune), QRE (λ = 0, fine-tuned) and QRE + mass on test, and the mid-term rows. Compare QRE + mass with the **fine-tuned** λ = 0 row to see the effect of the mass term alone. The mid-term rows use other test years (1981–2000), so compare them only qualitatively.
 - **`plots/`:** look at all four PNGs; the maps should show the NZ coastline.
 
 ---

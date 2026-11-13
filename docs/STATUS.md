@@ -73,12 +73,12 @@ All models below are undertrained: members and BGNet ran 10 epochs, the Weight N
 7. **India split:** 1990–2019, train 1990–2010, val 2011–2014, test 2015–2019 (70 / 13.3 / 16.7 %).
 8. **No elevation input for India.** No source is configured, and no data was fabricated.
 9. **No long runs on the laptop.** The teammate runs them following the RUNBOOK.
-10. **NZ mass study, λ = 0 means the original QRE** (`mass.lambda0 = "original"`), so λ = 0 reproduces the current NZ model exactly, as required. The cost is that λ > 0 gets an extra Weight Network fine-tune that λ = 0 doesn't. India keeps the fine-tuned λ = 0 control (`"finetune_control"`), which isolates the mass term instead. Either mode can be selected in either config.
+10. **NZ mass study reports two λ = 0 rows.** "QRE (λ = 0, no fine-tune)" is the current NZ QRE exactly, as required. "QRE (λ = 0, fine-tuned)" gets the same extra Weight Network fine-tune as λ > 0 with the mass term off, so it is the fair control for QRE + mass. λ selection still uses the no-fine-tune row. India uses the fine-tuned control as its λ = 0 (`mass.lambda0 = "finetune_control"`).
 
 ## Next steps
 
 1. **Teammate:** RUNBOOK steps 0–3 (setup, smoke tests, NZ member study B → A → BGNet retrain).
-2. **Teammate:** RUNBOOK step 4: NZ QRE vs QRE + mass conservation (3–13 h CPU).
+2. **Teammate:** RUNBOOK step 4: NZ QRE vs QRE + mass conservation (3–14 h CPU).
 3. **Teammate:** RUNBOOK step 5 (download ERA5 1990-01 to 2020-01 and IMD 1990–2019). **Multi-year ERA5 is required.** The sample has 31 days, which only shows the code runs.
 4. **Teammate:** RUNBOOK steps 6–9 (day-offset check → India A → λ sweep → India B). Set `members.init` from the NZ member-study result first.
 5. **Kartik:** read the returned results; update the README results sections and this file.

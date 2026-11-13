@@ -360,11 +360,20 @@ Before the India experiment, the new model is compared with the old one on the N
 
 **Outputs** (`<save_dir>/`):
 
-- `comparison.md` / `comparison.json`: one table with BGNet (converged), QRE (λ = 0) and QRE + mass (selected λ). Columns: MSE on [0, 1], [0, 0.2] and [0.9, 1], MAE, RMSE, spatial correlation, area-weighted daily-total error over the land cells, and Weight Network accuracy and collapse. The table also has the mid-term numbers from `results/final_cordex_qre/` as **reference rows**, which used a different split (train 1961–1975, test 1981–2000), the pipeline before the fixes, and 3 repetitions.
+- `comparison.md` / `comparison.json`: one table with BGNet (converged), two λ = 0 rows (explained below) and QRE + mass (selected λ). Columns: MSE on [0, 1], [0, 0.2] and [0.9, 1], MAE, RMSE, spatial correlation, area-weighted daily-total error over the land cells, and Weight Network accuracy and collapse. The table also has the mid-term numbers from `results/final_cordex_qre/` as **reference rows**, which used a different split (train 1961–1975, test 1981–2000), the pipeline before the fixes, and 3 repetitions.
 - `sweep/`: the validation results and the λ selection.
 - `repetition_0.json`: the NZ v2 run, including bagging, probability and BGNet(-).
 - `loss_scales.json`.
 - `plots/`: the same plots as India, labelled "observed (CORDEX)".
+
+**The two λ = 0 rows.** For λ > 0 the mass term is added in an extra fine-tuning stage of the Weight Network (placement `ensemble`). Comparing QRE + mass with the untouched QRE would therefore mix two effects: the mass term, and the extra training. The table separates them:
+
+| Row | What it is | Use it for |
+| --- | --- | --- |
+| QRE (λ = 0, no fine-tune) | The current NZ v2 QRE, exactly (its test MSEs are checked against `run_cordex_v2.py`) | The "new model" result, compared with BGNet and the mid-term rows |
+| QRE (λ = 0, fine-tuned) | The same fine-tuning stage as QRE + mass (same epochs, LR, early stopping, starting Weight Network), with the mass term off | The fair control for QRE + mass: the difference between these two rows is the effect of the mass term alone |
+
+If the two λ = 0 rows differ, that difference comes from the extra Weight Network training, not from mass conservation. λ is still selected against the no-fine-tune row on validation (`selection.*`); the fine-tuned control is reported but not used for the selection. With placement `members` there is no fine-tuning stage, and the two rows are the same model.
 
 **The mid-term model on the v2 split.** The mid-term runner (tag `midterm-eval`) hard-codes its split, so it cannot be rerun on the v2 split with a config alone. `configs/cordex_midterm_on_v2_split.json` is the closest approximation: it runs `run_cordex_v2.py` with every fix switched off and the mid-term hyperparameters. The differences that remain are listed in its `_note`, mainly that the BGNet baseline uses the members' architecture and that BGNet(-) is trained (the mid-term skipped it). It is not run.
 
