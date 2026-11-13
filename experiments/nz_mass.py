@@ -13,7 +13,8 @@ Weight Network fine-tune as lambda > 0, mass term off) is reported next to it,
 so QRE + mass can be compared with a model that had the same extra training. For lambda > 0 the mass term of
 src/mass_conservation.py (the India module: same formula, absolute mode by
 default, placements members / ensemble / both, lambda list) is added; lambda is
-selected on validation only, then the test split is evaluated once.
+selected on validation only, against the fine-tuned lambda = 0 control below
+(the same rule as India), then the test split is evaluated once.
 
 Cell areas come from the real latitude/longitude of the 128 x 128 target grid
 (a regular 1-D lat/lon grid; src/grid_areas.py), restricted to the 2,804 land
@@ -181,7 +182,7 @@ def table_md(comp):
             "extra Weight Network fine-tune as QRE + mass with the mass term off: compare QRE + mass with it to see "
             "the effect of the mass term alone."
             f"\n\nMid-term rows: {comp['midterm_reference']['note']}\n\n"
-            f"λ selected on validation only ({comp['selection']['reason']}). "
+            f"λ selected on validation only, against the fine-tuned λ = 0 control ({comp['selection']['reason']}). "
             "Daily-total errors are area-weighted over the land cells.\n")
     return head + "\n".join(lines) + note
 
@@ -219,15 +220,16 @@ def main():
               f"daily-total MAE {q['all_india_totals']['daily_mae_mm_per_day']:.4f} mm/day, "
               f"WN acc {r['weight_network']['accuracy']:.3f} collapsed={r['weight_network']['collapsed']}", flush=True)
         R.save_json(rows, os.path.join(out, "sweep", "sweep.json"))
-    sel = I.select_lambda(rows, cfg["selection"])
-    R.save_json(sel, os.path.join(out, "sweep", "selection.json"))
-    lam_b = float(sel["selected_lambda"])
-    print(f"  selected lambda_mass = {lam_b:g} ({sel['reason']})", flush=True)
-
-    # fine-tuned lambda = 0 control (not part of the selection; reported next to QRE + mass)
+    # fine-tuned lambda = 0 control: the same-training baseline, used for the selection (as India's lambda = 0)
     memc, omc, info_c = build_control(c, base)
     rc_val, _ = evaluate(c, memc, omc, "val")
     R.save_json({"val": rc_val, "training": I.summary(info_c)}, os.path.join(out, "sweep", "control_lambda0_finetuned.json"))
+    sel_rows = dict(rows, **{"0": {"lambda_mass": 0.0, "val": rc_val}})
+    sel = I.select_lambda(sel_rows, cfg["selection"])
+    sel["baseline"] = "lambda = 0 fine-tuned control (same extra Weight Network training as lambda > 0, mass term off)"
+    R.save_json(sel, os.path.join(out, "sweep", "selection.json"))
+    lam_b = float(sel["selected_lambda"])
+    print(f"  selected lambda_mass = {lam_b:g} ({sel['reason']}; baseline: fine-tuned lambda = 0)", flush=True)
 
     # 3. test, once, after the selection
     mem0, om0, _ = build(c, 0.0, base)

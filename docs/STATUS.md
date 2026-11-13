@@ -73,7 +73,7 @@ All models below are undertrained: members and BGNet ran 10 epochs, the Weight N
 7. **India split:** 1990–2019, train 1990–2010, val 2011–2014, test 2015–2019 (70 / 13.3 / 16.7 %).
 8. **No elevation input for India.** No source is configured, and no data was fabricated.
 9. **No long runs on the laptop.** The teammate runs them following the RUNBOOK.
-10. **NZ mass study reports two λ = 0 rows.** "QRE (λ = 0, no fine-tune)" is the current NZ QRE exactly, as required. "QRE (λ = 0, fine-tuned)" gets the same extra Weight Network fine-tune as λ > 0 with the mass term off, so it is the fair control for QRE + mass. λ selection still uses the no-fine-tune row. India uses the fine-tuned control as its λ = 0 (`mass.lambda0 = "finetune_control"`).
+10. **NZ mass study reports two λ = 0 rows.** "QRE (λ = 0, no fine-tune)" is the current NZ QRE exactly, as required. "QRE (λ = 0, fine-tuned)" gets the same extra Weight Network fine-tune as λ > 0 with the mass term off, so it is the fair control for QRE + mass. λ is selected against the fine-tuned control (same training on both sides), the same rule as India, where λ = 0 is the fine-tuned control (`mass.lambda0 = "finetune_control"`).
 
 ## Next steps
 

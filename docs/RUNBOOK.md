@@ -129,7 +129,7 @@ What to check:
 - **The log:** it must not stop with "lambda = 0 does not reproduce the NZ v2 QRE test MSEs". In `comparison.json`, `lambda0_reproduces_nz_v2_qre_exactly` must be `true`.
 - **`repetition_0.json`:** for each model, `best_epoch` < `epochs`, i.e. it converged rather than hitting the cap. `omega_diagnostics_val.collapsed` must be `false`.
 - **`sweep/sweep.json`:** for each λ, the Weight Network is not collapsed, and the daily-total MAE should fall as λ grows while the MSE barely changes. `sweep/selection.json` gives the selected λ and `tolerance_met`.
-- **`comparison.md`:** the one table, with BGNet, QRE (λ = 0, no fine-tune), QRE (λ = 0, fine-tuned) and QRE + mass on test, and the mid-term rows. Compare QRE + mass with the **fine-tuned** λ = 0 row to see the effect of the mass term alone. The mid-term rows use other test years (1981–2000), so compare them only qualitatively.
+- **`comparison.md`:** the one table, with BGNet, QRE (λ = 0, no fine-tune), QRE (λ = 0, fine-tuned) and QRE + mass on test, and the mid-term rows. Compare QRE + mass with the **fine-tuned** λ = 0 row to see the effect of the mass term alone. λ is selected against that same row on validation: in `sweep/selection.json`, `baseline` must say "fine-tuned", and `val_mse["0"]` must equal the [0, 1] MSE in `sweep/control_lambda0_finetuned.json`. The mid-term rows use other test years (1981–2000), so compare them only qualitatively.
 - **`plots/`:** look at all four PNGs; the maps should show the NZ coastline.
 
 ---

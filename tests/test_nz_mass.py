@@ -126,7 +126,11 @@ def test_nz_mass_smoke_and_lambda0_reproduces_v2_qre(tmp_path):
     assert ctrl["at_best_epoch"]["loss"] == ctrl["at_best_epoch"]["qre_loss"]   # total = QRE term only
     md = open(f"{out}/mass/sanity/comparison.md", encoding="utf-8").read()
     assert "QRE (λ = 0, no fine-tune)" in md and "QRE (λ = 0, fine-tuned)" in md
-    assert os.path.exists(f"{out}/mass/sanity/sweep/control_lambda0_finetuned.json")
+    # the selection compares against the fine-tuned control, not the untouched QRE
+    control = json.load(open(f"{out}/mass/sanity/sweep/control_lambda0_finetuned.json"))
+    selection = json.load(open(f"{out}/mass/sanity/sweep/selection.json"))
+    assert selection["val_mse"]["0"] == control["val"]["qre"]["regime_mse"]["[0.0,1.0]"]["mse"]
+    assert "fine-tuned" in selection["baseline"]
     for key in ("bgnet", "qre_lambda0", "qre_lambda0_finetuned", "qre_mass"):
         r = comp["test"][key]
         assert all(np.isfinite(v) for v in r["mse"].values()) and np.isfinite(r["daily_total_mae_mm_per_day"])
