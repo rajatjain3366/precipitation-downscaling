@@ -19,7 +19,7 @@ git checkout main
 python3.10 -m venv .venv                 # Python 3.10 (3.10.11 used); TF 2.10 needs 3.7-3.10
 source .venv/bin/activate                # Windows PowerShell: .venv\Scripts\Activate.ps1
 pip install -r requirements.txt netCDF4==1.7.4 pytest
-pip install cdsapi                       # only for the ERA5 download (step 4)
+pip install cdsapi                       # only for the ERA5 download (step 5)
 ```
 
 On Windows, use **Git Bash** (then the commands below work as written) or **PowerShell 7** (`pwsh`). Windows PowerShell 5.1 drops the inner quotes of arguments such as `--set 'checkpoints.dir="..."'`. In PowerShell 7, single commands work as written, but the shared flag string `$NZ` used in steps 0b and 1–3 must be an array:
@@ -54,7 +54,7 @@ checkpoints/                       created by the runs (not in git)
 - **ERA5:** **1990-01-01 to 2020-01-01**. The extra January 2020 is only needed if the day-offset check picks offset 1.
   - Variables: specific humidity, temperature, u and v wind, vertical velocity, at **850 hPa**.
   - Area: N 38.5, W 66.5, S 6.5, E 100.
-  - **Daily means preferred.** Use step 4, which also coarsens the data exactly like the sample.
+  - **Daily means preferred.** Use step 5, which also coarsens the data exactly like the sample.
 - **NZ checkpoints:** the NZ member study needs the models already trained on Kartik's laptop (`checkpoints/nz_v2_sanity/rep0/`): `bgnet`, `member_0` to `member_5` and `weight_network_squared_emd`, about 1.1 GB. Ask Kartik for them and unpack them to `checkpoints/nz_v2_sanity/rep0/`. If that isn't possible, run step 0b.
 
 ### 0a. Smoke tests (about 3 min, required)
@@ -63,7 +63,7 @@ checkpoints/                       created by the runs (not in git)
 python tests/run_smoke_tests.py 2>&1 | tee smoke_tests.log
 ```
 
-All 11 lines must say PASS. The India steps need `data/India_sample/`.
+All 12 lines must say PASS. The India steps need `data/India_sample/`.
 
 ### 0b. Only if the NZ checkpoints were not copied: retrain them (about 1.5–2.5 h)
 
@@ -102,11 +102,39 @@ What to check after each step (in `results.json` and the log):
 - **Perfect-Member:** `perfect_member_val_mse` should be well below the 10-epoch members' value of 116.7 ([0, 1]) and ideally close to BGNet's 60.8.
 - **After step 2:** `selection.best_by_perfect_member_val_mse_0_1` gives the chosen set, and `selection.test` its test MSE next to BGNet.
 
-**Decision for India:** if the chosen set is `warm_start`, set `"init": "warm_start"` in `configs/india_v1.json` under `members` before step 6. If it is `scratch`, keep the default.
+**Decision for India:** if the chosen set is `warm_start`, set `"init": "warm_start"` in `configs/india_v1.json` under `members` before step 7. If it is `scratch`, keep the default.
 
 ---
 
-## 4. India data download (network-bound; can run in parallel with steps 1–3)
+## 4. NZ: QRE vs QRE + mass conservation
+
+This step compares the old and new model on NZ before India: BGNet (converged), QRE (λ = 0) and QRE + mass conservation (λ selected on validation), all on the v2 split (test 1994–2000), with the mid-term numbers as reference rows. Run it after steps 1–3 and before the India runs. It trains its own models to convergence, so it does not need the step 1–3 checkpoints.
+
+```bash
+mkdir -p results/fixes_v2/nz_mass
+python experiments/nz_mass.py --set 'checkpoints.dir="checkpoints/nz_mass"' --save-dir results/fixes_v2/nz_mass 2>&1 | tee results/fixes_v2/nz_mass/nz_mass.log
+```
+
+(In PowerShell 7 the command works as written.) Expected CPU time: **3–13 h**, extrapolated from the NZ times measured on Kartik's laptop:
+
+- members: about 2 min per epoch summed over all six, patience 4, continuing while still improving up to 300 epochs, so 1–4 h;
+- Weight Network: about 1.5 min per epoch, patience 15, so 0.5–3.5 h;
+- BGNet: about 2 min per epoch, so 0.5–3 h; BGNet(-) is under 0.5 h;
+- λ sweep: three ensemble fine-tunes of at most 50 epochs each, 0.6–3.6 h in total.
+
+Output: `results/fixes_v2/nz_mass/`. To resume after an interruption, run the same command again.
+
+What to check:
+
+- **The log:** it must not stop with "lambda = 0 does not reproduce the NZ v2 QRE test MSEs". In `comparison.json`, `lambda0_reproduces_nz_v2_qre_exactly` must be `true`.
+- **`repetition_0.json`:** for each model, `best_epoch` < `epochs`, i.e. it converged rather than hitting the cap. `omega_diagnostics_val.collapsed` must be `false`.
+- **`sweep/sweep.json`:** for each λ, the Weight Network is not collapsed, and the daily-total MAE should fall as λ grows while the MSE barely changes. `sweep/selection.json` gives the selected λ and `tolerance_met`.
+- **`comparison.md`:** the one table, with BGNet, QRE (λ = 0) and QRE + mass on test, and the mid-term rows. The mid-term rows use other test years (1981–2000), so compare them only qualitatively.
+- **`plots/`:** look at all four PNGs; the maps should show the NZ coastline.
+
+---
+
+## 5. India data download (network-bound; can run in parallel with steps 1–4)
 
 ```bash
 python scripts/download_era5_india.py --years 1990 2020 --product daily_mean --out data/India 2>&1 | tee era5_download.log
@@ -115,7 +143,7 @@ python scripts/download_era5_india.py --years 1990 2020 --product daily_mean --o
 - **Checks:** before the long download, open the CDS form of "ERA5 pressure levels daily statistics" (`derived-era5-pressure-levels-daily-statistics`), click "Show API request" and compare its keys with `request()` in the script. Also accept the dataset licence on the CDS website.
 - **Size:** one request per month, 361 requests in all. CDS queue times vary from minutes to hours per request. The raw files are roughly 4 GB in total and the coarse files roughly 0.3 GB.
 - **What it does:** it downloads to `data/India/era5_raw/` and writes the coarse files to `data/India/era5/`. Months that are already downloaded or coarsened are skipped.
-- **The sample grid:** it is one **00 UTC snapshot** per day, while the default product above is a **daily mean**. If you want the sample's product instead, use `--product hourly --hours 00:00`. Either way, the day-offset check (step 5) must run on the files you actually downloaded.
+- **The sample grid:** it is one **00 UTC snapshot** per day, while the default product above is a **daily mean**. If you want the sample's product instead, use `--product hourly --hours 00:00`. Either way, the day-offset check (step 6) must run on the files you actually downloaded.
 - **Interrupted download:** run the same command again.
 - **Leftover January 2020:** the script downloads all of 2020 because `--years` takes whole years. Delete the raw and coarse files for February–December 2020 if space matters; they are outside `data.period` and ignored.
 
@@ -123,7 +151,7 @@ IMD files go in `data/India/imd/` by hand, as described in the data folders abov
 
 ---
 
-## 5. India: day-offset check (a few minutes)
+## 6. India: day-offset check (a few minutes)
 
 ```bash
 python experiments/india_day_offset.py --config configs/india_v1.json 2>&1 | tee day_offset.log
@@ -134,36 +162,36 @@ Output: `results/india/qre_mass_v1/day_offset/day_offset.json`. It uses training
 Check:
 
 - `recommended_day_offset` and `score_difference`. Set `"day_offset"` in `configs/india_v1.json` to the recommended value. If the difference is below 0.005, keep 0 and say so in your report.
-- If the loader reports missing days, the downloads are incomplete. Fix that before step 6; don't set `allow_missing_days` without asking.
+- If the loader reports missing days, the downloads are incomplete. Fix that before step 7; don't set `allow_missing_days` without asking.
 
-**After this step, don't edit `configs/india_v1.json` again.** Steps 6–8 reuse each other's checkpoints, and a changed setting makes the loader raise "trained with different settings". That error is intended: it prevents mixing models trained under different configs. If a change is really needed, also set a new `checkpoints.dir` and `save_dir`, and start again from step 6.
+**After this step, don't edit `configs/india_v1.json` again.** Steps 7–9 reuse each other's checkpoints, and a changed setting makes the loader raise "trained with different settings". That error is intended: it prevents mixing models trained under different configs. If a change is really needed, also set a new `checkpoints.dir` and `save_dir`, and start again from step 7.
 
 ---
 
-## 6–8. India experiments
+## 7–9. India experiments
 
 First create the folder for the logs: `mkdir -p results/india/qre_mass_v1`. `tee` does not create folders.
 
 | Step | Command | Expected CPU time | Output (`results/india/qre_mass_v1/`) |
 | --- | --- | --- | --- |
-| 6. Experiment A (λ = 0) | `python experiments/run_india.py --config configs/india_v1.json --stage A 2>&1 \| tee results/india/qre_mass_v1/stage_A.log` | 4–12 h | `data_report.json`, `segmentation.json`, `A/` (metrics, loss scales, training log, plots) |
-| 7. λ sweep (validation only) | `python experiments/run_india.py --config configs/india_v1.json --stage sweep 2>&1 \| tee results/india/qre_mass_v1/stage_sweep.log` | 1–7 h (3 λ > 0, each a short Weight Network fine-tune) | `sweep/sweep.json`, `sweep/selection.json` |
-| 8. Experiment B (selected λ) | `python experiments/run_india.py --config configs/india_v1.json --stage B 2>&1 \| tee results/india/qre_mass_v1/stage_B.log` | 10–30 min (everything is loaded; evaluation and plots only) | `B/`, `comparison.json` |
+| 7. Experiment A (λ = 0) | `python experiments/run_india.py --config configs/india_v1.json --stage A 2>&1 \| tee results/india/qre_mass_v1/stage_A.log` | 4–12 h | `data_report.json`, `segmentation.json`, `A/` (metrics, loss scales, training log, plots) |
+| 8. λ sweep (validation only) | `python experiments/run_india.py --config configs/india_v1.json --stage sweep 2>&1 \| tee results/india/qre_mass_v1/stage_sweep.log` | 1–7 h (3 λ > 0, each a short Weight Network fine-tune) | `sweep/sweep.json`, `sweep/selection.json` |
+| 9. Experiment B (selected λ) | `python experiments/run_india.py --config configs/india_v1.json --stage B 2>&1 \| tee results/india/qre_mass_v1/stage_B.log` | 10–30 min (everything is loaded; evaluation and plots only) | `B/`, `comparison.json` |
 
-(`--stage all` runs 6–8 in one go if you prefer.)
+(`--stage all` runs 7–9 in one go if you prefer.)
 
-**Where step 6's time goes.** These are extrapolated from measured step times of 1.6 s per BGNet step and 1.9 s per Weight Network step at batch 91. With 21 training years, one epoch is 85 steps:
+**Where step 7's time goes.** These are extrapolated from measured step times of 1.6 s per BGNet step and 1.9 s per Weight Network step at batch 91. With 21 training years, one epoch is 85 steps:
 
 - single BGNet: about 2.5 min per epoch, patience 4, at most 100 epochs, so 0.5–4 h;
 - members: about 2.5 min per epoch summed over all six, so 1–4 h;
 - Weight Network: about 3 min per epoch, patience 15, at most 300 epochs. Expect 1.5–5 h; on NZ it was still improving at 30 epochs;
 - ensemble stage with λ = 0: about 3 min per epoch, patience 5, at most 50 epochs, so 0.3–2.5 h.
 
-**RAM:** the ensemble stage keeps all member predictions for the training days in memory, about 1 GB for 21 years. With less than about 8 GB of RAM, add `--set ensemble.precompute_member_predictions=false` to **all** India commands; it is slower. It is part of the checkpoint signature, so use the same value in steps 6–8.
+**RAM:** the ensemble stage keeps all member predictions for the training days in memory, about 1 GB for 21 years. With less than about 8 GB of RAM, add `--set ensemble.precompute_member_predictions=false` to **all** India commands; it is slower. It is part of the checkpoint signature, so use the same value in steps 7–9.
 
 What to check:
 
-- **After step 6:**
+- **After step 7:**
   - **`data_report.json`:**
     - `days.missing_era5_days` and `days.missing_imd_days` should be empty;
     - `era5_unit_mismatches` should be `{}`;
@@ -178,10 +206,10 @@ What to check:
   - **`A/training_log.json`:** for every model, `best_epoch` < `epochs` and `still_improving_at_cap` false.
   - **`A/loss_scales.json`:** the two mass-loss forms on the real data.
   - **`A/plots/`:** look at all four PNGs.
-- **After step 7:**
+- **After step 8:**
   - in `sweep/sweep.json`, for each λ: the Weight Network is not collapsed, the validation MSE barely changes and the daily-total MAE goes down as λ grows;
   - in `sweep/selection.json`: the selected λ and `tolerance_met`.
-- **After step 8:** in `comparison.json`, A against B against BGNet on test. Check that the totals discrepancy is lower for B and how much MSE it costs. Look at the plots in `B/plots/`.
+- **After step 9:** in `comparison.json`, A against B against BGNet on test. Check that the totals discrepancy is lower for B and how much MSE it costs. Look at the plots in `B/plots/`.
 
 ---
 
@@ -190,6 +218,7 @@ What to check:
 Send these folders zipped; they are small, only JSON, PNG and logs:
 
 - `results/fixes_v2/nz_wn/` (member study results and logs)
+- `results/fixes_v2/nz_mass/` (NZ QRE vs QRE + mass conservation, including `nz_mass.log`)
 - `results/india/qre_mass_v1/` (everything, including the `.log` files)
 - `smoke_tests.log`, `day_offset.log`, `era5_download.log`
 - the final `configs/india_v1.json` you used (`results/india/qre_mass_v1/run_*.json` also records it)

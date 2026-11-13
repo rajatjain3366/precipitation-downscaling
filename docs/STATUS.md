@@ -1,4 +1,4 @@
-# Project status (2026-11-02, branch `main`)
+# Project status (2026-11-13, branch `main`)
 
 `fixes-v2` was merged into `main` (PR #2, merge commit `1c0062b`). The code shown at the mid-term is tagged `midterm-eval`.
 
@@ -10,6 +10,13 @@
 - Checkpoint and resume support: `src/checkpoints.py`, with config signatures so a model trained under other settings cannot be loaded by mistake.
 - **Weight Network collapse found and fixed.** The paper's EMD loss (Eq. 6) put every validation day in one interval: argmax histogram [0, 0, 0, 1825, 0, 0]. Cross-entropy, squared EMD and CE + EMD all fix it, with accuracy 0.65–0.66 against a majority-class chance of 0.21. The default is now squared EMD; the three new losses are tied within noise.
 - **Member study implemented** (`experiments/member_study.py`): warm start from BGNet (B), from scratch to convergence (A), and an optional BGNet retrain to convergence. It is sample-tested but **not run on real data**.
+- **NZ: QRE vs QRE + mass conservation implemented** (`experiments/nz_mass.py`, README §9), as the professor asked before the India experiment. It compares BGNet (converged), QRE (λ = 0) and QRE + mass (λ selected on validation) on the v2 split, with the mid-term numbers as reference rows. Details:
+  - **Same models:** it uses the same members, Weight Network, BGNet and seeds as `run_cordex_v2.py`, and the India mass-loss module.
+  - **λ = 0 is exactly the current NZ QRE:** on the fixture its test MSEs equal a separate `run_cordex_v2.py` run to the last digit (tested).
+  - **Cell areas:** computed from the target grid's real 1-D lat/lon (a regular grid, not rotated or projected) on the 2,804 land cells.
+  - **Land mask:** `orog > 0`, since `Static_fields.nc` has no `sftlf`. The README said `sftlf > 0.5`; that was wrong and is corrected. The same mask is used for training, evaluation and the mass loss.
+  - **Status:** smoke-tested on the synthetic fixture; **not run on real data**.
+- **Mid-term settings on the v2 split:** the mid-term runner hard-codes its split, so it cannot be rerun on the v2 split with a config alone. `configs/cordex_midterm_on_v2_split.json` is a labelled approximation using the v2 flags; it is checked on the fixture and not run.
 
 ### India (ERA5 → IMD), QRE with global mass-conservation regularization
 
@@ -17,7 +24,7 @@
 - **Mass-conservation loss**, absolute or relative, applied to members, to a joint ensemble stage, or both. λ is a list, swept in one command and selected on validation only.
 - **Runner** `experiments/run_india.py` with stages data / A / sweep / B / all; every model is checkpointed and resumable.
 - **Supporting scripts:** a day-offset check script and an ERA5 download and coarsening script (not run).
-- **Tests:** 19 India tests plus the existing ones. All 11 smoke-test scripts pass on this laptop (`tests/run_smoke_tests.py`, 2.7 min).
+- **Tests:** 19 India tests and 6 NZ mass-conservation tests plus the existing ones. All 12 smoke-test steps pass on this laptop (`tests/run_smoke_tests.py`).
 - **No India experiment has been run, and no India result exists.** `results/india/smoke/` holds smoke-test output on 31 sample days with a tiny network; it is not a result.
 
 ## Key numbers (NZ, test 1994–2000, one sanity repetition; MSE on [0,1] / [0,0.2] / [0.9,1])
@@ -40,12 +47,13 @@ All models below are undertrained: members and BGNet ran 10 epochs, the Weight N
 | What | Where |
 | --- | --- |
 | How to run everything (for the teammate) | [docs/RUNBOOK.md](RUNBOOK.md) |
-| Method, deviations, results | [README.md](../README.md) (§4 deviations, §5 NZ results, §8 India) |
+| Method, deviations, results | [README.md](../README.md) (§4 deviations, §5 NZ results, §8 India, §9 NZ mass conservation) |
 | NZ v2 configs / outputs | `configs/cordex_v2.json`, `results/fixes_v2/` |
 | NZ loss study | `results/fixes_v2/nz_wn/sanity/weight_network_losses/results.json` |
+| NZ QRE vs QRE + mass conservation | `experiments/nz_mass.py`, `src/grid_areas.py`; outputs will be in `results/fixes_v2/nz_mass/` |
 | India configs | `configs/india_v1.json` (real), `configs/india_smoke.json` (samples) |
 | India code | `src/india_data.py`, `src/mass_conservation.py`, `src/india_metrics.py`, `src/india_plots.py`, `experiments/run_india.py`, `experiments/india_day_offset.py`, `scripts/download_era5_india.py` |
-| Tests | `tests/test_india.py`, `tests/run_smoke_tests.py` |
+| Tests | `tests/test_india.py`, `tests/test_nz_mass.py`, `tests/run_smoke_tests.py` |
 | Saved NZ models (not in git, ~1.2 GB) | `checkpoints/nz_v2_sanity/rep0/` on Kartik's laptop |
 
 ## Decisions made
@@ -65,14 +73,16 @@ All models below are undertrained: members and BGNet ran 10 epochs, the Weight N
 7. **India split:** 1990–2019, train 1990–2010, val 2011–2014, test 2015–2019 (70 / 13.3 / 16.7 %).
 8. **No elevation input for India.** No source is configured, and no data was fabricated.
 9. **No long runs on the laptop.** The teammate runs them following the RUNBOOK.
+10. **NZ mass study, λ = 0 means the original QRE** (`mass.lambda0 = "original"`), so λ = 0 reproduces the current NZ model exactly, as required. The cost is that λ > 0 gets an extra Weight Network fine-tune that λ = 0 doesn't. India keeps the fine-tuned λ = 0 control (`"finetune_control"`), which isolates the mass term instead. Either mode can be selected in either config.
 
 ## Next steps
 
 1. **Teammate:** RUNBOOK steps 0–3 (setup, smoke tests, NZ member study B → A → BGNet retrain).
-2. **Teammate:** RUNBOOK step 4 (download ERA5 1990-01 to 2020-01 and IMD 1990–2019). **Multi-year ERA5 is required.** The sample has 31 days, which only shows the code runs.
-3. **Teammate:** RUNBOOK steps 5–8 (day-offset check → India A → λ sweep → India B). Set `members.init` from the NZ member-study result first.
-4. **Kartik:** read the returned results; update the README results sections and this file.
-5. **Cleanup, on Kartik's go-ahead only.** The candidates are the scratchpad test folders and `data/CORDEX_NZ_sample`, plus these unused NZ files:
+2. **Teammate:** RUNBOOK step 4: NZ QRE vs QRE + mass conservation (3–13 h CPU).
+3. **Teammate:** RUNBOOK step 5 (download ERA5 1990-01 to 2020-01 and IMD 1990–2019). **Multi-year ERA5 is required.** The sample has 31 days, which only shows the code runs.
+4. **Teammate:** RUNBOOK steps 6–9 (day-offset check → India A → λ sweep → India B). Set `members.init` from the NZ member-study result first.
+5. **Kartik:** read the returned results; update the README results sections and this file.
+6. **Cleanup, on Kartik's go-ahead only.** The candidates are the scratchpad test folders and `data/CORDEX_NZ_sample`, plus these unused NZ files:
    - `data/CORDEX_NZ/test/historical/predictors/imperfect` (226 MB)
    - `data/CORDEX_NZ/test/historical/predictors/perfect/EC-Earth3_1981-2000.nc` (113 MB)
 
@@ -97,6 +107,7 @@ All models below are undertrained: members and BGNet ran 10 epochs, the Weight N
   - `tests/test_india.py`
   - `results/india/smoke/` (smoke output only)
   - `docs/RUNBOOK.md`, `docs/STATUS.md`
+  - NZ mass study (2026-11-13): `experiments/nz_mass.py`, `src/grid_areas.py`, `tests/test_nz_mass.py`, `configs/cordex_midterm_on_v2_split.json`
 - **Modified:**
   - `configs/cordex_v2.json`: squared-EMD default and the `member_study` section
   - `src/quantiles.py`: loss kind `squared_emd`
@@ -104,4 +115,5 @@ All models below are undertrained: members and BGNet ran 10 epochs, the Weight N
   - `experiments/run_cordex_v2.py`: `fit(..., metrics=None)`, logging only
   - `src/preprocessing.py`: `split_masks_by_dates`
   - `tests/test_builders.py`, `tests/run_smoke_tests.py`
+  - NZ mass study: `configs/cordex_v2.json` (`mass`, `ensemble`, `selection` sections), `run_cordex_v2.run_repetition(return_models=...)`, `run_india.py` (`mass.lambda0`, elevation input, dataset-aware plot labels), `src/builders.py` (optional `bgnet_minus_padding`)
   - `README.md`

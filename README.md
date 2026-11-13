@@ -24,7 +24,7 @@ The paper used ERA5 predictors and VCSN observations, which were not available t
 | Item | Description |
 | --- | --- |
 | Predictors $X$ | q850, t850, u850, v850 on a 16 × 16 grid (ACCESS-CM2 "perfect" predictors). w850 is not in the benchmark. |
-| Target $Y$ | Daily precipitation `pr` (regional climate model output) on a 128 × 128 grid, flattened to the **2,804** land cells (`sftlf > 0.5`) |
+| Target $Y$ | Daily precipitation `pr` (regional climate model output) on a 128 × 128 grid, flattened to the **2,804** land cells (orography `orog > 0` m in `Static_fields.nc`, which has no `sftlf`; `src/data_adapter_cordex.py:extract_land_mask`). The same mask, in the same row-major cell order, is used for the training targets, every evaluation and the mass-conservation cell areas. |
 | Static input | Surface elevation `orog` from `Static_fields.nc` |
 | Period | 1961–2000 (two files: 1961–1980 and 1981–2000), 365-day calendar |
 
@@ -193,6 +193,7 @@ The legacy runner `experiments/run_cordex_experiment.py` (with `configs/cordex_f
 | `segmentation.method` | `"bayesian_gmm"` | `"legacy"` |
 | `members.validate_on_own_segment` | `true` | `false` |
 | `weight_network.loss` | `"squared_emd"` (also `"cross_entropy"`, `"ce_plus_emd"`) | `"emd"` (paper Eq. 6) |
+| `mass.lambdas` / `mass.lambda0` | `[0, 0.01, 0.1, 1]` / `"original"` (λ = 0 is the v2 QRE) | no mass term: `[0]` |
 | `weight_network.emd_reduction` | `"sum"` | `"mean"` |
 | `architecture.*`, learning rates, decay, patience | paper values where possible | see `configs/cordex_final.json` |
 
@@ -204,6 +205,7 @@ The legacy runner `experiments/run_cordex_experiment.py` (with `configs/cordex_f
 configs/
   cordex_v2.json               v2 configuration (all fixes)
   cordex_final.json            configuration of the first run
+  cordex_midterm_on_v2_split.json  mid-term settings on the v2 split (approximation, not run)
   india_v1.json                India experiment (ERA5 -> IMD, mass conservation)
   india_smoke.json             India smoke test on data/India_sample/
 docs/
@@ -216,12 +218,14 @@ experiments/
   member_study.py              NZ member study: warm start (B) / from scratch (A), BGNet retrain
   run_india.py                 India runner, stages data / A / sweep / B / all
   india_day_offset.py          ERA5 -> IMD day offset check (train + val only)
+  nz_mass.py                   NZ: QRE vs QRE + mass conservation on the v2 models (§9)
 scripts/
   download_era5_india.py       ERA5 CDS download + 4x4 coarsening (not run here)
   data_match_check.py          produced results/baseline_rerun/data_match_check.json
 src/
   data_adapter_cordex.py       NetCDF loading, land mask, elevation, 1961-2000 loader
   india_data.py                IMD / ERA5 loading, grid alignment, day matching, cell areas
+  grid_areas.py                cell areas from 1-D lat/lon centres (NZ target grid)
   mass_conservation.py         mass loss, member loss with mass, joint ensemble stage
   india_metrics.py, india_plots.py   India evaluation and plots
   preprocessing.py             year / date splits, training-split standardization
@@ -339,6 +343,37 @@ python experiments/run_india.py --config configs/india_smoke.json --stage all
 
 ---
 
-## 9. Scope
+## 9. NZ: QRE vs QRE + mass conservation
+
+**Status: implemented and smoke-tested on the synthetic fixture only; not run on the real NZ data.** The run is RUNBOOK step 4.
+
+Before the India experiment, the new model is compared with the old one on the NZ (CORDEX) data. `experiments/nz_mass.py` uses `configs/cordex_v2.json` and the v2 split (train 1961–1988, val 1989–1993, test 1994–2000):
+
+1. **Models:** the members, Weight Network and BGNet are trained or loaded by `run_cordex_v2.run_repetition`, with the same checkpoint names, signatures and seeds as `experiments/run_cordex_v2.py`.
+   - Members and BGNet early-stop with patience 4 and keep training while still improving, up to 300 epochs ("converged").
+   - With `mass.lambda0 = "original"` (the NZ default), **λ = 0 is exactly the current NZ v2 QRE.** The runner checks that its λ = 0 test MSEs equal `run_repetition`'s, and a test compares them with a separate `run_cordex_v2.py` run to the last digit.
+2. **Mass term:** the India module (`src/mass_conservation.py`), with the same formula, absolute mode by default, the same placements (`mass.placement`: `ensemble` default, `members`, `both`) and the λ list `[0, 0.01, 0.1, 1]` with initial-ratio scaling. λ is selected on validation only, with the same rule as India; the test split is evaluated once, afterwards.
+3. **Cell areas:**
+   - **Grid:** the target files carry real 1-D latitude/longitude on a regular lat/lon grid (128 × 128, 0.10733° spacing, uniform to 1.4e-4). It is CCAM output regridded to lat/lon, not a rotated-pole or projected grid. The `lat_bnds`/`lon_bnds` variables named in the file attributes are not in the files.
+   - **Edges and areas:** `src/grid_areas.py` takes cell edges as the midpoints between centres and computes $A_i = R^2\,\Delta\lambda\,(\sin\varphi_\text{north} - \sin\varphi_\text{south})$, about 106 km² per cell.
+   - **Mask:** areas are restricted to the 2,804 land cells (`orog > 0`), in the order of the target columns.
+
+**Outputs** (`<save_dir>/`):
+
+- `comparison.md` / `comparison.json`: one table with BGNet (converged), QRE (λ = 0) and QRE + mass (selected λ). Columns: MSE on [0, 1], [0, 0.2] and [0.9, 1], MAE, RMSE, spatial correlation, area-weighted daily-total error over the land cells, and Weight Network accuracy and collapse. The table also has the mid-term numbers from `results/final_cordex_qre/` as **reference rows**, which used a different split (train 1961–1975, test 1981–2000), the pipeline before the fixes, and 3 repetitions.
+- `sweep/`: the validation results and the λ selection.
+- `repetition_0.json`: the NZ v2 run, including bagging, probability and BGNet(-).
+- `loss_scales.json`.
+- `plots/`: the same plots as India, labelled "observed (CORDEX)".
+
+**The mid-term model on the v2 split.** The mid-term runner (tag `midterm-eval`) hard-codes its split, so it cannot be rerun on the v2 split with a config alone. `configs/cordex_midterm_on_v2_split.json` is the closest approximation: it runs `run_cordex_v2.py` with every fix switched off and the mid-term hyperparameters. The differences that remain are listed in its `_note`, mainly that the BGNet baseline uses the members' architecture and that BGNet(-) is trained (the mid-term skipped it). It is not run.
+
+```powershell
+python experiments/nz_mass.py --set 'checkpoints.dir="checkpoints/nz_mass"' --save-dir results/fixes_v2/nz_mass
+```
+
+---
+
+## 10. Scope
 
 This is QRE implemented on alternative datasets with documented adjustments. It is not a numerical reproduction of the paper's ERA5 → VCSN experiment, and absolute MSE values are not comparable with the paper's tables.
