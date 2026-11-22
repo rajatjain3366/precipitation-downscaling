@@ -75,7 +75,7 @@ All models below are undertrained: members and BGNet ran 10 epochs, the Weight N
 9. **No long runs on the laptop.** The teammate runs them following the RUNBOOK.
 10. **NZ mass study reports two λ = 0 rows.** "QRE (λ = 0, no fine-tune)" is the current NZ QRE exactly, as required. "QRE (λ = 0, fine-tuned)" gets the same extra Weight Network fine-tune as λ > 0 with the mass term off, so it is the fair control for QRE + mass. λ is selected against the fine-tuned control (same training on both sides), the same rule as India, where λ = 0 is the fine-tuned control (`mass.lambda0 = "finetune_control"`).
 11. **India intervals: the paper's published bounds** (0 / 0.166 / 0.392 / 0.61 / 0.812 / 0.923 / 1, `segmentation.method = "fixed"`). The Bayesian GMM on the 3,904 JJAS training totals was unstable (47 of 100 runs degenerate) and gave no extremes member (top interval = top 28 % of days). Training days per member are now 648 / 882 / 851 / 789 / 433 / 301; the extremes member has 301 training, 69 validation and 85 test days. The GMM remains an option. NZ is unchanged (GMM).
-12. **India ERA5 inputs are daily means** over UTC days (all 24 hourly fields), confirmed in the teammate's `data/ERA5/code.py` (`resample('1D').mean()`). The 00:00 timestamps are bin labels and the `stepType: instant` attributes come from the hourly data.
+12. **India ERA5 inputs are daily means** over UTC days (all 24 hourly fields), confirmed in the script that made them, `scripts/download_era5_india_jjas.py` (`resample('1D').mean()`). The 00:00 timestamps are bin labels and the `stepType: instant` attributes come from the hourly data.
 
 ## Next steps
 
@@ -110,7 +110,7 @@ All models below are undertrained: members and BGNet ran 10 epochs, the Weight N
   - `tests/test_india.py`
   - `results/india/smoke/` (smoke output only)
   - `docs/RUNBOOK.md`, `docs/STATUS.md`
-  - `scripts/download_era5_india_jjas.py` (the teammate's ERA5 script, unchanged), `scripts/check_india_data.py`
+  - `scripts/download_era5_india_jjas.py` (the ERA5 JJAS script, unchanged; run on both machines), `scripts/check_india_data.py`
   - NZ mass study (2026-11-13): `experiments/nz_mass.py`, `src/grid_areas.py`, `tests/test_nz_mass.py`, `configs/cordex_midterm_on_v2_split.json`
 - **Modified:**
   - `configs/cordex_v2.json`: squared-EMD default and the `member_study` section

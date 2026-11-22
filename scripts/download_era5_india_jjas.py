@@ -1,9 +1,11 @@
 #!/usr/bin/env python3
 # ---------------------------------------------------------------------------
-# Provenance: copied unchanged from the teammate's data/ERA5/code.py (only this
-# comment block was added). It produced data/India/ERA5_full/era5_{year}_coarse.nc:
-# the default JJAS months (6-9) for 1971-2016, i.e. run as
-#   python download_era5_india_jjas.py --years 1971-2016
+# Provenance: copied unchanged from data/ERA5/code.py (only this comment block
+# was added). This script, with the default JJAS months (6-9), produced the
+# era5_{year}_coarse.nc files on two machines: 1971-1989 and 2009-2016 on
+# Kartik's laptop, 1990-2008 on the teammate's. data/India/ERA5_full is the
+# teammate's complete 1971-2016 copy; the 27 years present on both machines
+# were byte-identical.
 # Each output file holds daily means (resample('1D').mean() over the 24 hourly
 # ERA5 fields of each UTC day), 4x4 block-mean coarsened from 38.5 N / 66.5 E.
 # Not the repository's own scripts/download_era5_india.py (CDS daily statistics).
