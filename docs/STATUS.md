@@ -70,7 +70,7 @@ All models below are undertrained: members and BGNet ran 10 epochs, the Weight N
 4. **λ scaling:** each λ is multiplied by $L_\text{QRE}/L_\text{mass}$ at the start of the stage, so λ = 1 means both terms start equally large.
 5. **λ selection:** the λ > 0 with the lowest validation daily-total MAE among those within 2 % of λ = 0's validation MSE on [0, 1]. Validation only.
 6. **India architecture: kernel 6, "valid"**, as in the paper; 32 × 33 inputs allow it. NZ needed kernel 3. This cuts BGNet from 147 M to 13 M parameters.
-7. **India split:** 1990–2019, train 1990–2010, val 2011–2014, test 2015–2019 (70 / 13.3 / 16.7 %).
+7. **India data and split:** JJAS only, 1971–2016 (the teammate's dataset), split as in the paper's 32 / 6 / 8 years: train 1971–2002, val 2003–2008, test 2009–2016 (3,904 / 732 / 976 days).
 8. **No elevation input for India.** No source is configured, and no data was fabricated.
 9. **No long runs on the laptop.** The teammate runs them following the RUNBOOK.
 10. **NZ mass study reports two λ = 0 rows.** "QRE (λ = 0, no fine-tune)" is the current NZ QRE exactly, as required. "QRE (λ = 0, fine-tuned)" gets the same extra Weight Network fine-tune as λ > 0 with the mass term off, so it is the fair control for QRE + mass. λ is selected against the fine-tuned control (same training on both sides), the same rule as India, where λ = 0 is the fine-tuned control (`mass.lambda0 = "finetune_control"`).
@@ -79,7 +79,7 @@ All models below are undertrained: members and BGNet ran 10 epochs, the Weight N
 
 1. **Teammate:** RUNBOOK steps 0–3 (setup, smoke tests, NZ member study B → A → BGNet retrain).
 2. **Teammate:** RUNBOOK step 4: NZ QRE vs QRE + mass conservation (3–14 h CPU).
-3. **Teammate:** RUNBOOK step 5 (download ERA5 1990-01 to 2020-01 and IMD 1990–2019). **Multi-year ERA5 is required.** The sample has 31 days, which only shows the code runs.
+3. **Teammate:** RUNBOOK step 5: `scripts/check_india_data.py` on the prepared JJAS data (already passes on Kartik's laptop).
 4. **Teammate:** RUNBOOK steps 6–9 (day-offset check → India A → λ sweep → India B). Set `members.init` from the NZ member-study result first.
 5. **Kartik:** read the returned results; update the README results sections and this file.
 6. **Cleanup, on Kartik's go-ahead only.** The candidates are the scratchpad test folders and `data/CORDEX_NZ_sample`, plus these unused NZ files:
@@ -91,11 +91,12 @@ All models below are undertrained: members and BGNet ran 10 epochs, the Weight N
 1. Is **QRE with a global mass-conservation regularization** (the all-India daily total only, with no moisture-flux or other physics) the intended scope for the end evaluation?
 2. **Absolute vs relative** mass loss. We recommend absolute because relative over-weights dry days. Is that acceptable, or should both be reported?
 3. **Placement:** is constraining the ensemble output in a fine-tuning stage acceptable as "QRE + mass conservation", or should the members themselves be trained with it (`"members"`, 4× the cost per λ)?
-4. **ERA5 product:** daily mean (our preference) or the 00 UTC snapshot of the sample? And is the IMD day convention (24 h ending 08:30 IST) to be matched by the empirical offset check, as implemented?
-5. **Period and split:** is 1990–2019 with 21 / 4 / 5 years sufficient, or should a longer record be used?
-6. **Expectations:** the NZ results suggest QRE may not beat a single BGNet on overall MSE, since even the Perfect-Member bound was about 2× BGNet with undertrained members. Is the expected benefit on extremes ([0.9, 1]) only, or overall?
-7. **Elevation:** should an elevation static input be added for India, and if so, from which source?
-8. **Deviations from the paper:** the Weight Network loss change, the NZ kernel 3 and the India kernel 6 are documented in the README. Are these deviations acceptable to report as they are?
+4. **ERA5 product:** the provided files are 00 UTC instantaneous analyses (like the sample), not daily means. Is that acceptable? And is the IMD day convention (24 h ending 08:30 IST) to be matched by the empirical offset check, as implemented?
+5. **Season:** the India data covers June–September only (1971–2016, 32 / 6 / 8 years). Is a monsoon-only experiment what is intended?
+6. **GMM intervals on JJAS:** 47 of 100 Bayesian-GMM runs were degenerate (53 usable; the code needs at least 50). The top interval covers the top 28 % of days (bounds 0 / .090 / .348 / .522 / .605 / .722 / 1), not an extremes interval like the paper's top 7.7 %. Should we keep this, set a `weight_concentration_prior`, or use other intervals for India?
+7. **Expectations:** the NZ results suggest QRE may not beat a single BGNet on overall MSE, since even the Perfect-Member bound was about 2× BGNet with undertrained members. Is the expected benefit on extremes ([0.9, 1]) only, or overall?
+8. **Elevation:** should an elevation static input be added for India, and if so, from which source?
+9. **Deviations from the paper:** the Weight Network loss change, the NZ kernel 3 and the India kernel 6 are documented in the README. Are these deviations acceptable to report as they are?
 
 ## Files added or modified in this phase (since commit `177807b`)
 

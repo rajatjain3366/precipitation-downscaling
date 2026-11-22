@@ -5,24 +5,25 @@
   "n_intervals": 6,
   "data": {
     "data_dir": "data/India",
-    "imd_pattern": "imd/RF25_ind*_rfp25.nc",
+    "imd_pattern": "IMD_jjas/RF25_ind*_jjas.nc",
     "imd_variable": "RAINFALL",
-    "era5_pattern": "era5/*.nc",
+    "era5_pattern": "ERA5_full/era5_*_coarse.nc",
     "era5_variables": ["q", "t", "u", "v", "w"],
     "pressure_level": 850.0,
     "coarsen_factor": 4,
     "aggregation_shift_hours": 0,
     "day_offset": 0,
-    "period": ["1990-01-01", "2019-12-31"],
+    "period": ["1971-06-01", "2016-09-30"],
+    "months": [6, 7, 8, 9],
     "allow_missing_days": false,
     "standardize_predictors": true,
     "use_elevation": false,
     "input_hw": [32, 33]
   },
   "split": {
-    "train": ["1990-01-01", "2010-12-31"],
-    "val": ["2011-01-01", "2014-12-31"],
-    "test": ["2015-01-01", "2019-12-31"]
+    "train": ["1971-01-01", "2002-12-31"],
+    "val": ["2003-01-01", "2008-12-31"],
+    "test": ["2009-01-01", "2016-12-31"]
   },
   "loss": {
     "rain_threshold": 0.0,

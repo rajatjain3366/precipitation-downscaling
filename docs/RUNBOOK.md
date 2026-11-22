@@ -44,17 +44,16 @@ data/
     RF25_ind1990_rfp25.nc
     india_era5_1990_01_coarse_4x.nc
   India/
-    imd/RF25_ind1990_rfp25.nc ... RF25_ind2019_rfp25.nc      IMD, one file per year (30 files)
-    era5_raw/                      ERA5 0.25 deg as downloaded (written by the download script)
-    era5/                          ERA5 4x4-coarsened files: this is what the runner reads
+    ERA5_full/era5_1971_coarse.nc ... era5_2016_coarse.nc    ERA5 4x4-coarsened, JJAS only (46 files)
+    IMD_jjas/RF25_ind1971_jjas.nc ... RF25_ind2016_jjas.nc   IMD rainfall, JJAS only (46 files)
 checkpoints/                       created by the runs (not in git)
 ```
 
-- **IMD:** IMD Pune gridded rainfall, 0.25° × 0.25°, NetCDF, one file per year, **1990–2019**. The file names follow the sample (`RF25_ind{YEAR}_rfp25.nc`) and the variable is `RAINFALL`. Source: the IMD Pune data portal (imdpune.gov.in, "Gridded Rainfall (0.25 x 0.25) NetCDF"). Check the page for the current download link.
-- **ERA5:** **1990-01-01 to 2020-01-01**. The extra January 2020 is only needed if the day-offset check picks offset 1.
-  - Variables: specific humidity, temperature, u and v wind, vertical velocity, at **850 hPa**.
-  - Area: N 38.5, W 66.5, S 6.5, E 100.
-  - **Daily means preferred.** Use step 5, which also coarsens the data exactly like the sample.
+- **India data (already prepared):** the teammate's dataset covers **1971–2016, June–September (JJAS) only**, 122 days per year. The files go in `data/India/ERA5_full/` and `data/India/IMD_jjas/`, as above.
+  - **ERA5:** q, t, u, v, w at 850 hPa, 00 UTC instantaneous analyses (`stepType: instant`), 4 × 4 block means of the 0.25° grid, the same coarsening as the sample.
+  - **IMD:** `RAINFALL` on the same 0.25° grid as the sample, with the same 4,964-cell mask.
+  - **`configs/india_v1.json`** reads them with `data.months = [6, 7, 8, 9]`, so missing-day checks only look inside JJAS.
+  - **Full years** would need `scripts/download_era5_india.py` (step 5, fallback) and IMD's full-year files. That is not planned.
 - **NZ checkpoints:** the NZ member study needs the models already trained on Kartik's laptop (`checkpoints/nz_v2_sanity/rep0/`): `bgnet`, `member_0` to `member_5` and `weight_network_squared_emd`, about 1.1 GB. Ask Kartik for them and unpack them to `checkpoints/nz_v2_sanity/rep0/`. If that isn't possible, run step 0b.
 
 ### 0a. Smoke tests (about 3 min, required)
@@ -134,7 +133,25 @@ What to check:
 
 ---
 
-## 5. India data download (network-bound; can run in parallel with steps 1–4)
+## 5. India data check (a few minutes)
+
+The JJAS data (1971–2016) is already prepared. Check it before anything else:
+
+```bash
+mkdir -p results/india/qre_mass_v1
+python scripts/check_india_data.py --config configs/india_v1.json 2>&1 | tee results/india/qre_mass_v1/data_check.log
+```
+
+Output: `results/india/qre_mass_v1/data_check.json`. `"ok"` must be `true`, which requires all of the following:
+
+- **ERA5:** all 46 files have 122 JJAS days, q/t/u/v/w with the expected units, no NaN and an identical grid.
+- **IMD:** all 46 files have 122 days and the sample's grid. The mask is the same in every year with **4,964** cells, with no NaN inside it.
+- **Grid:** `alignment.input_grid` is `[32, 33]`.
+- **Dates:** `date_matching` shows 0 missing days for both offsets. With offset 1, the 46 days of 30 September are dropped, because each needs ERA5 for 1 October, which is outside the season.
+
+Kartik's run on this data: `"ok": true`. Exact zeros are 44.0 % of the training values, the 99th percentile is 75.4 mm/day and the 99.9th is 163.7 mm/day.
+
+### Fallback only: downloading ERA5 for full years
 
 ```bash
 python scripts/download_era5_india.py --years 1990 2020 --product daily_mean --out data/India 2>&1 | tee era5_download.log
@@ -147,7 +164,7 @@ python scripts/download_era5_india.py --years 1990 2020 --product daily_mean --o
 - **Interrupted download:** run the same command again.
 - **Leftover January 2020:** the script downloads all of 2020 because `--years` takes whole years. Delete the raw and coarse files for February–December 2020 if space matters; they are outside `data.period` and ignored.
 
-IMD files go in `data/India/imd/` by hand, as described in the data folders above.
+Full-year IMD files would also be needed, and the config's `era5_pattern`, `imd_pattern`, `period`, `months` and `split` would have to change. Not planned.
 
 ---
 
@@ -174,20 +191,20 @@ First create the folder for the logs: `mkdir -p results/india/qre_mass_v1`. `tee
 
 | Step | Command | Expected CPU time | Output (`results/india/qre_mass_v1/`) |
 | --- | --- | --- | --- |
-| 7. Experiment A (λ = 0) | `python experiments/run_india.py --config configs/india_v1.json --stage A 2>&1 \| tee results/india/qre_mass_v1/stage_A.log` | 4–12 h | `data_report.json`, `segmentation.json`, `A/` (metrics, loss scales, training log, plots) |
-| 8. λ sweep (validation only) | `python experiments/run_india.py --config configs/india_v1.json --stage sweep 2>&1 \| tee results/india/qre_mass_v1/stage_sweep.log` | 1–7 h (3 λ > 0, each a short Weight Network fine-tune) | `sweep/sweep.json`, `sweep/selection.json` |
+| 7. Experiment A (λ = 0) | `python experiments/run_india.py --config configs/india_v1.json --stage A 2>&1 \| tee results/india/qre_mass_v1/stage_A.log` | 2–7 h | `data_report.json`, `segmentation.json`, `A/` (metrics, loss scales, training log, plots) |
+| 8. λ sweep (validation only) | `python experiments/run_india.py --config configs/india_v1.json --stage sweep 2>&1 \| tee results/india/qre_mass_v1/stage_sweep.log` | 0.5–3.5 h (3 λ > 0, each a short Weight Network fine-tune) | `sweep/sweep.json`, `sweep/selection.json` |
 | 9. Experiment B (selected λ) | `python experiments/run_india.py --config configs/india_v1.json --stage B 2>&1 \| tee results/india/qre_mass_v1/stage_B.log` | 10–30 min (everything is loaded; evaluation and plots only) | `B/`, `comparison.json` |
 
 (`--stage all` runs 7–9 in one go if you prefer.)
 
-**Where step 7's time goes.** These are extrapolated from measured step times of 1.6 s per BGNet step and 1.9 s per Weight Network step at batch 91. With 21 training years, one epoch is 85 steps:
+**Where step 7's time goes.** These are extrapolated from measured step times of 1.6 s per BGNet step and 1.9 s per Weight Network step at batch 91. With 32 JJAS training seasons (3,904 days), one epoch is 43 steps:
 
-- single BGNet: about 2.5 min per epoch, patience 4, at most 100 epochs, so 0.5–4 h;
-- members: about 2.5 min per epoch summed over all six, so 1–4 h;
-- Weight Network: about 3 min per epoch, patience 15, at most 300 epochs. Expect 1.5–5 h; on NZ it was still improving at 30 epochs;
-- ensemble stage with λ = 0: about 3 min per epoch, patience 5, at most 50 epochs, so 0.3–2.5 h.
+- single BGNet: about 1.2 min per epoch, patience 4, at most 100 epochs, so 0.3–2 h;
+- members: about 1.2 min per epoch summed over all six, so 0.5–2 h;
+- Weight Network: about 1.4 min per epoch, patience 15, at most 300 epochs. Expect 0.7–2.5 h; on NZ it was still improving at 30 epochs;
+- ensemble stage with λ = 0: about 1.4 min per epoch, patience 5, at most 50 epochs, so 0.15–1.2 h.
 
-**RAM:** the ensemble stage keeps all member predictions for the training days in memory, about 1 GB for 21 years. With less than about 8 GB of RAM, add `--set ensemble.precompute_member_predictions=false` to **all** India commands; it is slower. It is part of the checkpoint signature, so use the same value in steps 7–9.
+**RAM:** the ensemble stage keeps all member predictions for the training days in memory, about 0.5 GB for the 3,904 training days. With less than about 8 GB of RAM, add `--set ensemble.precompute_member_predictions=false` to **all** India commands; it is slower. It is part of the checkpoint signature, so use the same value in steps 7–9.
 
 What to check:
 
@@ -196,9 +213,9 @@ What to check:
     - `days.missing_era5_days` and `days.missing_imd_days` should be empty;
     - `era5_unit_mismatches` should be `{}`;
     - `input_grid` should be `[32, 33]`, with `dropped_partial_blocks` lat [6.5] and lon [99.75];
-    - `split.*.days` should be about 7670 / 1461 / 1826;
-    - `target_train.fraction_exact_zero` should be large (the sample has 0.67).
-  - **`segmentation.json`:** `n_degenerate_runs` should be small, and every entry of `val_days_per_interval` and `test_days_per_interval` should be above 0.
+    - `split.*.days` should be 3904 / 732 / 976 (train 1971–2002, val 2003–2008, test 2009–2016, JJAS);
+    - `target_train.fraction_exact_zero` should be about 0.44 (JJAS).
+  - **`segmentation.json`:** every entry of `val_days_per_interval` and `test_days_per_interval` should be above 0. Kartik's data-stage run gave 47 of 100 degenerate GMM runs and a top interval covering the top 28 % of days (see STATUS); report if yours differs.
   - **`A/metrics.json`:**
     - `val.weight_network.collapsed` must be **false** (no interval gets more than 70 % of days), and `accuracy` should be clearly above the largest share in `true_histogram`;
     - compare `qre` with `bgnet` on `regime_mse`, and on `all_india_totals.daily_mae_mm_per_day` and `total_relative_discrepancy`;
@@ -244,7 +261,7 @@ Run **exactly the same command** again.
 
 The code was only run on CPU with TensorFlow 2.10. Kaggle images ship a newer TensorFlow whose default Keras is Keras 3, and this code uses `tf.keras` (Keras 2). Try in this order, and run the smoke tests before any long run:
 
-1. **Make a dataset:** create a Kaggle Dataset with `data/India/` (the coarse `era5/` files and `imd/`) and, for the smoke tests, `data/India_sample/`. Add the NZ data and NZ checkpoints as a second dataset if you run the NZ study there.
+1. **Make a dataset:** create a Kaggle Dataset with `data/India/` (`ERA5_full/` and `IMD_jjas/`) and, for the smoke tests, `data/India_sample/`. Add the NZ data and NZ checkpoints as a second dataset if you run the NZ study there.
 2. **Notebook:** use a GPU accelerator with Internet on.
 
    ```bash

@@ -1,0 +1,112 @@
+{
+  "config": "configs/india_v1.json",
+  "months": [
+    6,
+    7,
+    8,
+    9
+  ],
+  "era5": {
+    "files": 46,
+    "years": [
+      1971,
+      2016
+    ],
+    "days_per_file": 122,
+    "sizes": {
+      "time": 122,
+      "lat": 33,
+      "lon": 34
+    },
+    "latitude_order": [
+      "ascending"
+    ],
+    "hours_utc": [
+      0
+    ],
+    "lat_range": [
+      6.5,
+      38.125
+    ],
+    "lon_range": [
+      66.875,
+      99.75
+    ],
+    "problems": []
+  },
+  "imd": {
+    "files": 46,
+    "years": [
+      1971,
+      2016
+    ],
+    "grid": [
+      129,
+      135
+    ],
+    "valid_cells": 4964,
+    "sample_valid_cells": 4964,
+    "mask_equals_sample": true,
+    "rain_all_years": {
+      "values": 27857968,
+      "fraction_exact_zero": 0.4398582480962,
+      "fraction_in_0_0.1": 0.0,
+      "mean_mm_per_day": 6.970901966094971,
+      "p99_mm_per_day": 75.78257240295409,
+      "p99_9_mm_per_day": 164.4408029937801,
+      "max_mm_per_day": 939.4461669921875
+    },
+    "rain_train_years": {
+      "values": 19379456,
+      "fraction_exact_zero": 0.44047629613545397,
+      "fraction_in_0_0.1": 0.0,
+      "mean_mm_per_day": 6.961233139038086,
+      "p99_mm_per_day": 75.38999710082993,
+      "p99_9_mm_per_day": 163.69690338135388,
+      "max_mm_per_day": 939.4461669921875
+    },
+    "problems": []
+  },
+  "alignment": {
+    "input_grid": [
+      32,
+      33
+    ],
+    "dropped_lat": [
+      6.5
+    ],
+    "dropped_lon": [
+      99.75
+    ]
+  },
+  "date_matching": {
+    "0": {
+      "matched_days": 5612,
+      "missing_imd_days": 0,
+      "missing_era5_days": 0,
+      "season_edge_dropped": 0,
+      "season_edge_examples": []
+    },
+    "1": {
+      "matched_days": 5566,
+      "missing_imd_days": 0,
+      "missing_era5_days": 0,
+      "season_edge_dropped": 46,
+      "season_edge_examples": [
+        {
+          "imd_day": "1971-09-30",
+          "era5_day_needed": "1971-10-01"
+        },
+        {
+          "imd_day": "1972-09-30",
+          "era5_day_needed": "1972-10-01"
+        },
+        {
+          "imd_day": "1973-09-30",
+          "era5_day_needed": "1973-10-01"
+        }
+      ]
+    }
+  },
+  "ok": true
+}

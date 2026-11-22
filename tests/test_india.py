@@ -308,3 +308,38 @@ def test_india_runner_resumes_from_checkpoints(tmp_path):
     after = {p: os.path.getmtime(os.path.join(dp, p)) for dp, _, fs in os.walk(ck) for p in fs}
     assert after == files  # nothing retrained or rewritten
     assert json.load(open(os.path.join(out, "A", "metrics.json"))) == m1
+
+
+# real JJAS data (two seasons), only if data/India/ERA5_full and IMD_jjas are present -----------
+REAL_INDIA = os.path.join(WORKSPACE_ROOT, "data", "India")
+needs_real = pytest.mark.skipif(not (os.path.isdir(os.path.join(REAL_INDIA, "ERA5_full"))
+                                     and os.path.isdir(os.path.join(REAL_INDIA, "IMD_jjas"))),
+                                reason="real India JJAS data not present")
+
+
+@needs_real
+@pytest.mark.parametrize("offset", [0, 1])
+def test_real_two_seasons_load(offset):
+    with open(os.path.join(WORKSPACE_ROOT, "configs", "india_v1.json")) as f:
+        d = json.load(f)["data"]
+    d = dict(d, data_dir=REAL_INDIA, era5_pattern="ERA5_full/era5_199[01]_coarse.nc",
+             imd_pattern="IMD_jjas/RF25_ind199[01]_jjas.nc", period=["1990-06-01", "1991-09-30"], day_offset=offset)
+    out = load_india(d, verbose=False)
+    n = 2 * 122 - (2 if offset == 1 else 0)          # offset 1: 30 September has no ERA5 1 October
+    assert out["x"].shape == (n, 32, 33, 5) and out["y"].shape == (n, 4964)
+    months = out["dates"].astype("datetime64[M]").astype(int) % 12 + 1
+    assert set(months) == {6, 7, 8, 9} and str(out["dates"][0]) == "1990-06-01"
+    assert out["report"]["days"]["missing_imd_days"] == [] and out["report"]["days"]["missing_era5_days"] == []
+    assert len(out["report"]["days"]["season_edge_dropped"]) == (2 if offset == 1 else 0)
+    assert out["mask"].sum() == 4964 and not np.isnan(out["y"]).any() and not np.isnan(out["x"]).any()
+    assert np.all(np.diff(out["era5_lat"]) > 0)       # ascending after load whatever the file order
+
+
+def test_months_restrict_completeness_check():
+    jjas = np.concatenate([np.arange(np.datetime64(f"{y}-06-01"), np.datetime64(f"{y}-10-01")) for y in (1990, 1991)])
+    _, _, rep = match_days(jjas, jjas, 0, ["1990-06-01", "1991-09-30"], [6, 7, 8, 9])
+    assert rep["missing_imd_days"] == [] and rep["matched_days"] == 244   # Oct-May are not "missing"
+    _, _, rep = match_days(jjas, jjas, 0, ["1990-06-01", "1991-09-30"], None)
+    assert len(rep["missing_imd_days"]) == 365 - 122                       # without months they would be
+    _, _, rep = match_days(np.delete(jjas, 10), jjas, 0, ["1990-06-01", "1991-09-30"], [6, 7, 8, 9])
+    assert rep["missing_imd_days"] == ["1990-06-11"]                        # a gap inside the season is

@@ -262,7 +262,8 @@ The same QRE code as the NZ v2 pipeline is used: train-only normalization, $p\al
 | Grid alignment | ERA5 latitude flipped to ascending. Each ERA5 coordinate is checked to be the mean of exactly 4 IMD coordinates, with the blocks contiguous. The partial last row (6.5° N) and column (99.75° E) are dropped, which gives **32 × 33** inputs. |
 | Mask | IMD NaN cells are outside India. The mask is computed once and checked to be constant over time. NaN is never replaced by zero; only valid cells are used everywhere. |
 | Days | ERA5 day $D$ + `data.day_offset` (0 or 1) predicts IMD day $D$ (IMD days are 24 h accumulations ending 08:30 IST). `experiments/india_day_offset.py` picks the offset by predictor–rainfall correlation on train + val days. Missing days are listed in `data_report.json` and are an error unless `data.allow_missing_days` is set. |
-| Period, split | 1990–2019; train 1990–2010, val 2011–2014, test 2015–2019 (21 / 4 / 5 years = 70 / 13.3 / 16.7 %), configurable date ranges |
+| Period, season, split | **1971–2016, June–September (JJAS) only**, 122 days per year (`data.months = [6, 7, 8, 9]`). Each day is predicted independently, so the gaps between seasons don't matter, and completeness is checked only within JJAS. Split as in the paper's 32 / 6 / 8 years: train 1971–2002 (3,904 days), val 2003–2008 (732), test 2009–2016 (976). Normalization, GMM intervals and all thresholds come from the JJAS training days only. |
+| Data files | `data/India/ERA5_full/era5_{year}_coarse.nc`, 00 UTC instantaneous analyses, latitude stored ascending (the loader detects the order); `data/India/IMD_jjas/RF25_ind{year}_jjas.nc`. Checked file by file with `scripts/check_india_data.py`: all 46 + 46 files pass, with the same 4,964-cell mask as the sample. In the training values, 44.0 % are exact zeros, the 99th percentile is 75.4 mm/day and the 99.9th is 163.7 mm/day. |
 | Rain threshold | $y > 0$: IMD is gauge-based with true zeros (sample: 67.2 % of valid values are exactly 0, none in (0, 0.1)) |
 | Elevation | Not used (`data.use_elevation = false`). No elevation source is configured for India. |
 
@@ -295,7 +296,7 @@ $L_\text{total} = L_\text{QRE} + \lambda_\text{mass} L_\text{mass}$, where $L_\t
 
 | `mass.placement` | What is trained with the mass term | CPU cost of the λ sweep | Trade-offs |
 | --- | --- | --- | --- |
-| `"ensemble"` (**default**) | A joint fine-tuning stage of $g(x)=\sum_i \omega_i(x) f_i(x)$, starting from experiment A's Weight Network. Members are frozen by default, with their predictions precomputed; `ensemble.train_members = true` also fine-tunes them, keeping each member's NLL on its own days. | One short Weight Network fine-tune per λ; members and Weight Network are reused from A | Constrains exactly the quantity that is evaluated, the ensemble output. A and B differ only in this stage, because λ = 0 runs the same stage as the control. With frozen members it can only reweight members, so it fixes totals only as far as the members bracket the truth. Precomputed member predictions need about 1 GB of RAM for 21 training years. |
+| `"ensemble"` (**default**) | A joint fine-tuning stage of $g(x)=\sum_i \omega_i(x) f_i(x)$, starting from experiment A's Weight Network. Members are frozen by default, with their predictions precomputed; `ensemble.train_members = true` also fine-tunes them, keeping each member's NLL on its own days. | One short Weight Network fine-tune per λ; members and Weight Network are reused from A | Constrains exactly the quantity that is evaluated, the ensemble output. A and B differ only in this stage, because λ = 0 runs the same stage as the control. With frozen members it can only reweight members, so it fixes totals only as far as the members bracket the truth. Precomputed member predictions need about 0.5 GB of RAM for the 3,904 training days. |
 | `"members"` | Each member's training: NLL + λ·L_mass on its $p\alpha\beta$ | A full set of 6 members per λ | Changes the members themselves, but each member only sees its own intensity segment. The ensemble total is not constrained directly, since the Weight Network mixes the members afterwards. |
 | `"both"` | Both of the above, with the same λ | As `"members"` plus the ensemble stage | The strongest constraint and the most expensive. Hardest to attribute. |
 
@@ -326,7 +327,7 @@ $L_\text{total} = L_\text{QRE} + \lambda_\text{mass} L_\text{mass}$, where $L_\t
 | Weight Network loss | EMD, Eq. 6 | Squared EMD on CDFs | Eq. 6 collapsed on NZ (§4) |
 | Loss | BG NLL / EMD | + λ·L_mass (global mass conservation) | Extension of this project |
 | Elevation input | yes | no | No India elevation source configured |
-| Split | 32 / 6 / 8 years | 21 / 4 / 5 years (1990–2019) | Data planned for download |
+| Split, season | 32 / 6 / 8 years, all days | 32 / 6 / 8 years (1971–2016), **JJAS only** | The provided ERA5 and IMD data cover the monsoon season only |
 
 Measured on this laptop's CPU (batch 91, India sizes): one BGNet training step takes 1.6 s and one Weight Network step 1.9 s. With kernel 3 "same" it would be 3.5 s and 2.7 s. Expected run times are in the RUNBOOK.
 

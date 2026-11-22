@@ -14,7 +14,8 @@ the convention; experiments/india_day_offset.py measures which offset fits
 better. Sub-daily ERA5 (hourly / 6-hourly) is averaged to daily means first,
 optionally shifted (aggregation_shift_hours = 3 groups 03 UTC .. 02 UTC, the
 IMD window); each window is labelled by its start date, and day_offset is
-applied to these labels.
+applied to these labels. data.months (e.g. [6, 7, 8, 9]) restricts the dataset
+to a season; completeness is then checked only within those months.
 
 IMD cells that are NaN are outside India; the mask is computed once, checked
 to be constant over time, and NaN is never replaced by zero: targets are
@@ -240,23 +241,42 @@ def cell_areas_km2(lat, lon, res_lat=None, res_lon=None):
 # -----------------------------------------------------------------------------
 # Day matching
 # -----------------------------------------------------------------------------
-def match_days(imd_dates, era5_dates, day_offset, period=None):
+def month_of(dates):
+    """Calendar month (1-12) of datetime64 dates."""
+    return np.asarray(dates).astype("datetime64[M]").astype(int) % 12 + 1
+
+
+def match_days(imd_dates, era5_dates, day_offset, period=None, months=None):
     """
-    Pairs IMD day D with ERA5 day D + day_offset. Returns (imd_index, era5_index, report);
-    the report lists every IMD day in `period` that is missing, and every IMD day whose
-    ERA5 day is missing.
+    Pairs IMD day D with ERA5 day D + day_offset. Returns (imd_index, era5_index, report).
+
+    months (e.g. [6, 7, 8, 9] for JJAS): only IMD days in these months are used, and
+    completeness is checked only within them, so the gap between seasons is not "missing".
+    Season edges: if D + day_offset falls outside the months (offset 1: 30 September needs
+    1 October), that ERA5 day is not part of the dataset; such days are dropped and listed
+    under season_edge_dropped, not counted as missing.
+    The report lists every IMD day in `period` (and `months`) that is missing, and every
+    IMD day whose ERA5 day is missing inside the season.
     """
     imd_dates = np.asarray(imd_dates).astype("datetime64[D]")
     era5_dates = np.asarray(era5_dates).astype("datetime64[D]")
     sel = np.ones(len(imd_dates), bool)
-    report = {"day_offset": int(day_offset)}
+    report = {"day_offset": int(day_offset), "months": list(months) if months else None}
+    if months:
+        sel &= np.isin(month_of(imd_dates), months)
     if period is not None:
         start, end = np.datetime64(period[0], "D"), np.datetime64(period[1], "D")
-        sel = (imd_dates >= start) & (imd_dates <= end)
+        sel &= (imd_dates >= start) & (imd_dates <= end)
         wanted = np.arange(start, end + np.timedelta64(1, "D"), dtype="datetime64[D]")
+        if months:
+            wanted = wanted[np.isin(month_of(wanted), months)]
         report["missing_imd_days"] = [str(d) for d in np.setdiff1d(wanted, imd_dates)]
     imd_idx = np.flatnonzero(sel)
     need = imd_dates[imd_idx] + np.timedelta64(int(day_offset), "D")
+    edge = ~np.isin(month_of(need), months) if months else np.zeros(len(need), bool)
+    report["season_edge_dropped"] = [{"imd_day": str(d), "era5_day_needed": str(n)}
+                                     for d, n in zip(imd_dates[imd_idx][edge], need[edge])]
+    imd_idx, need = imd_idx[~edge], need[~edge]
     pos = np.searchsorted(era5_dates, need)
     found = (pos < len(era5_dates)) & (era5_dates[np.minimum(pos, len(era5_dates) - 1)] == need)
     report["missing_era5_days"] = [{"imd_day": str(d), "era5_day_needed": str(n)}
@@ -275,7 +295,8 @@ def load_india(dcfg, verbose=True):
     era = load_era5(list_files(dcfg["data_dir"], dcfg["era5_pattern"]), dcfg["era5_variables"],
                     dcfg["pressure_level"], dcfg["aggregation_shift_hours"])
     align = block_alignment(era["lat"], era["lon"], imd["lat"], imd["lon"], dcfg["coarsen_factor"])
-    imd_idx, era_idx, days = match_days(imd["dates"], era["dates"], dcfg["day_offset"], dcfg.get("period"))
+    imd_idx, era_idx, days = match_days(imd["dates"], era["dates"], dcfg["day_offset"], dcfg.get("period"),
+                                        dcfg.get("months"))
     n_missing = len(days["missing_era5_days"]) + len(days.get("missing_imd_days", []))
     if n_missing and not dcfg["allow_missing_days"]:
         raise ValueError(f"{n_missing} missing days (IMD: {days.get('missing_imd_days', [])[:10]}, "
