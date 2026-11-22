@@ -50,7 +50,7 @@ checkpoints/                       created by the runs (not in git)
 ```
 
 - **India data (already prepared):** the teammate's dataset covers **1971–2016, June–September (JJAS) only**, 122 days per year. The files go in `data/India/ERA5_full/` and `data/India/IMD_jjas/`, as above.
-  - **ERA5:** q, t, u, v, w at 850 hPa, 00 UTC instantaneous analyses (`stepType: instant`), 4 × 4 block means of the 0.25° grid, the same coarsening as the sample.
+  - **ERA5:** q, t, u, v, w at 850 hPa, daily means of all 24 hourly ERA5 fields of each UTC day, made by the teammate's script `data/ERA5/code.py` (`resample('1D').mean()`, then 4 × 4 block means). The 00:00 timestamps are the resample bin labels; the GRIB `stepType: instant` attributes are carried over from the hourly data. The UTC day differs from the IMD day (24 h ending 08:30 IST = 03 UTC); the day-offset check measures which pairing fits better. The coarsening (4 × 4 blocks from 38.5° N, 66.5° E) is the same as the sample's.
   - **IMD:** `RAINFALL` on the same 0.25° grid as the sample, with the same 4,964-cell mask.
   - **`configs/india_v1.json`** reads them with `data.months = [6, 7, 8, 9]`, so missing-day checks only look inside JJAS.
   - **Full years** would need `scripts/download_era5_india.py` (step 5, fallback) and IMD's full-year files. That is not planned.
@@ -215,7 +215,7 @@ What to check:
     - `input_grid` should be `[32, 33]`, with `dropped_partial_blocks` lat [6.5] and lon [99.75];
     - `split.*.days` should be 3904 / 732 / 976 (train 1971–2002, val 2003–2008, test 2009–2016, JJAS);
     - `target_train.fraction_exact_zero` should be about 0.44 (JJAS).
-  - **`segmentation.json`:** every entry of `val_days_per_interval` and `test_days_per_interval` should be above 0. Kartik's data-stage run gave 47 of 100 degenerate GMM runs and a top interval covering the top 28 % of days (see STATUS); report if yours differs.
+  - **`segmentation.json`:** `method` is `"fixed"` with the paper's bounds, and `train_days_per_interval` should be 648 / 882 / 851 / 789 / 433 / 301 (val 117 / 149 / 167 / 148 / 82 / 69, test 185 / 220 / 196 / 181 / 109 / 85), as in Kartik's data-stage run.
   - **`A/metrics.json`:**
     - `val.weight_network.collapsed` must be **false** (no interval gets more than 70 % of days), and `accuracy` should be clearly above the largest share in `true_histogram`;
     - compare `qre` with `bgnet` on `regime_mse`, and on `all_india_totals.daily_mae_mm_per_day` and `total_relative_discrepancy`;

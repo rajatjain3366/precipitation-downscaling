@@ -179,7 +179,15 @@ def derive_segmentation(cfg, data):
 
     s = data["split"]
     train_totals = daily_totals(s["train"]["y"])
-    if scfg.get("intervals_file"):
+    if scfg["method"] == "fixed":
+        # given quantile bounds (e.g. the paper's Table 1); thresholds still come from the training totals
+        bounds = [float(b) for b in scfg["fixed_bounds"]]
+        if len(bounds) != N + 1 or bounds[0] != 0.0 or bounds[-1] != 1.0 or np.any(np.diff(bounds) <= 0):
+            raise ValueError(f"segmentation.fixed_bounds must be {N + 1} increasing values from 0 to 1, got {bounds}")
+        seg = {"method": "fixed", "bounds": bounds}
+    elif scfg["method"] != "bayesian_gmm":
+        raise ValueError(f"segmentation.method must be 'bayesian_gmm', 'fixed' or 'legacy', got {scfg['method']!r}")
+    elif scfg.get("intervals_file"):
         with open(os.path.join(WORKSPACE_ROOT, scfg["intervals_file"])) as f:
             seg = json.load(f)
         if len(seg["bounds"]) != N + 1:
@@ -194,7 +202,8 @@ def derive_segmentation(cfg, data):
                "seed": scfg["seed"], "bounds": bounds,
                "per_run_bounds": per_run, "per_run_bound_std": np.std(per_run, axis=0).tolist(),
                "seconds": time.time() - t0}
-    seg["method"] = "bayesian_gmm"
+    if seg["method"] != "fixed":
+        seg["method"] = "bayesian_gmm"
     seg["thresholds_daily_total_mm"] = bounds_to_thresholds(train_totals, seg["bounds"])
     seg["paper_bounds"] = PAPER_BOUNDS_N6 if N == 6 else None
     for name in ("train", "val", "test"):

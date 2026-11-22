@@ -74,6 +74,8 @@ All models below are undertrained: members and BGNet ran 10 epochs, the Weight N
 8. **No elevation input for India.** No source is configured, and no data was fabricated.
 9. **No long runs on the laptop.** The teammate runs them following the RUNBOOK.
 10. **NZ mass study reports two λ = 0 rows.** "QRE (λ = 0, no fine-tune)" is the current NZ QRE exactly, as required. "QRE (λ = 0, fine-tuned)" gets the same extra Weight Network fine-tune as λ > 0 with the mass term off, so it is the fair control for QRE + mass. λ is selected against the fine-tuned control (same training on both sides), the same rule as India, where λ = 0 is the fine-tuned control (`mass.lambda0 = "finetune_control"`).
+11. **India intervals: the paper's published bounds** (0 / 0.166 / 0.392 / 0.61 / 0.812 / 0.923 / 1, `segmentation.method = "fixed"`). The Bayesian GMM on the 3,904 JJAS training totals was unstable (47 of 100 runs degenerate) and gave no extremes member (top interval = top 28 % of days). Training days per member are now 648 / 882 / 851 / 789 / 433 / 301; the extremes member has 301 training, 69 validation and 85 test days. The GMM remains an option. NZ is unchanged (GMM).
+12. **India ERA5 inputs are daily means** over UTC days (all 24 hourly fields), confirmed in the teammate's `data/ERA5/code.py` (`resample('1D').mean()`). The 00:00 timestamps are bin labels and the `stepType: instant` attributes come from the hourly data.
 
 ## Next steps
 
@@ -91,12 +93,11 @@ All models below are undertrained: members and BGNet ran 10 epochs, the Weight N
 1. Is **QRE with a global mass-conservation regularization** (the all-India daily total only, with no moisture-flux or other physics) the intended scope for the end evaluation?
 2. **Absolute vs relative** mass loss. We recommend absolute because relative over-weights dry days. Is that acceptable, or should both be reported?
 3. **Placement:** is constraining the ensemble output in a fine-tuning stage acceptable as "QRE + mass conservation", or should the members themselves be trained with it (`"members"`, 4× the cost per λ)?
-4. **ERA5 product:** the provided files are 00 UTC instantaneous analyses (like the sample), not daily means. Is that acceptable? And is the IMD day convention (24 h ending 08:30 IST) to be matched by the empirical offset check, as implemented?
+4. **IMD day convention:** the ERA5 inputs are daily means over UTC days; is matching the IMD day (24 h ending 08:30 IST) by the empirical offset check, as implemented, acceptable?
 5. **Season:** the India data covers June–September only (1971–2016, 32 / 6 / 8 years). Is a monsoon-only experiment what is intended?
-6. **GMM intervals on JJAS:** 47 of 100 Bayesian-GMM runs were degenerate (53 usable; the code needs at least 50). The top interval covers the top 28 % of days (bounds 0 / .090 / .348 / .522 / .605 / .722 / 1), not an extremes interval like the paper's top 7.7 %. Should we keep this, set a `weight_concentration_prior`, or use other intervals for India?
-7. **Expectations:** the NZ results suggest QRE may not beat a single BGNet on overall MSE, since even the Perfect-Member bound was about 2× BGNet with undertrained members. Is the expected benefit on extremes ([0.9, 1]) only, or overall?
-8. **Elevation:** should an elevation static input be added for India, and if so, from which source?
-9. **Deviations from the paper:** the Weight Network loss change, the NZ kernel 3 and the India kernel 6 are documented in the README. Are these deviations acceptable to report as they are?
+6. **Expectations:** the NZ results suggest QRE may not beat a single BGNet on overall MSE, since even the Perfect-Member bound was about 2× BGNet with undertrained members. Is the expected benefit on extremes ([0.9, 1]) only, or overall?
+7. **Elevation:** should an elevation static input be added for India, and if so, from which source?
+8. **Deviations from the paper:** the Weight Network loss change, the NZ kernel 3 and the India kernel 6 are documented in the README. Are these deviations acceptable to report as they are?
 
 ## Files added or modified in this phase (since commit `177807b`)
 

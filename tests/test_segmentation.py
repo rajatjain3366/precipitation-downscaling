@@ -96,3 +96,22 @@ def test_gmm_raises_when_components_collapse():
     totals = np.random.default_rng(0).normal(1000.0, 10.0, 400)  # one Gaussian: DP prior prunes components
     with pytest.raises(ValueError, match="non-increasing"):
         gmm_quantile_bounds(totals, 6, n_runs=4, base_seed=0)
+
+
+def test_fixed_bounds_mode_uses_training_quantiles(tmp_path):
+    """segmentation.method = "fixed": given bounds, thresholds from the training totals only."""
+    sys.path.insert(0, os.path.join(WORKSPACE_ROOT, "experiments"))
+    import run_cordex_v2 as R
+    rng = np.random.default_rng(0)
+    y = {n: rng.gamma(0.5, 4.0, (k, 20)) for n, k in (("train", 400), ("val", 80), ("test", 90))}
+    bounds = [0.0, 0.166, 0.392, 0.61, 0.812, 0.923, 1.0]
+    cfg = {"segmentation": {"method": "fixed", "fixed_bounds": bounds}, "n_intervals": 6, "save_dir": str(tmp_path)}
+    seg = R.derive_segmentation(cfg, {"split": {n: {"y": v} for n, v in y.items()}})
+    tot = y["train"].sum(axis=1)
+    assert seg["method"] == "fixed" and seg["bounds"] == bounds
+    np.testing.assert_allclose(seg["thresholds_daily_total_mm"], [np.quantile(tot, q) for q in bounds[1:-1]])
+    assert sum(seg["train_days_per_interval"]) == 400
+    assert abs(seg["train_days_per_interval"][-1] - 0.077 * 400) <= 2      # top 7.7 % of training days
+    with pytest.raises(ValueError):
+        R.derive_segmentation({"segmentation": {"method": "fixed", "fixed_bounds": [0, 0.5, 1]}, "n_intervals": 6,
+                               "save_dir": str(tmp_path)}, {"split": {n: {"y": v} for n, v in y.items()}})
