@@ -2,6 +2,8 @@
 
 This file lists every long training run in order: the exact command, the expected time, where the outputs go, what to check afterwards and what to send back. The code is finished and tested on small samples, so nothing here should need code changes. If something fails, send the console log instead of fixing it.
 
+**One command for steps 0–9:** `python scripts/run_lab.py` runs the steps below in order. It skips finished steps when restarted, writes each step's log, and applies the two manual decisions (`members.init` after step 3, `day_offset` after step 6) by the rules given here. Setup, data, GPU and copying results back are covered in [LAB_SETUP.md](LAB_SETUP.md). The commands below are what it runs.
+
 **Time estimates:**
 
 - They are measured or extrapolated on the author's laptop CPU (TensorFlow 2.10 CPU build), which was running on battery and so possibly throttled.

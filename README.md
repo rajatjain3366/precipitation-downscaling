@@ -210,6 +210,7 @@ configs/
   india_smoke.json             India smoke test on data/India_sample/
 docs/
   RUNBOOK.md                   every long run, in order, for running on another machine
+  LAB_SETUP.md                 lab PC setup, data, GPU check, scripts/run_lab.py, copying results back
   STATUS.md                    what is done, key numbers, next steps, open questions
 experiments/
   run_cordex_v2.py             v2 pipeline (train-only statistics, flags for every fix)
@@ -220,6 +221,7 @@ experiments/
   india_day_offset.py          ERA5 -> IMD day offset check (train + val only)
   nz_mass.py                   NZ: QRE vs QRE + mass conservation on the v2 models (§9)
 scripts/
+  run_lab.py                   runs every RUNBOOK training step in order (resumable, logs to logs/)
   download_era5_india.py       ERA5 CDS download + 4x4 coarsening (not run here)
   download_era5_india_jjas.py  the script that made data/India/ERA5_full (JJAS, run on two machines)
   slice_imd_jjas.py            the script that made data/India/IMD_jjas (JJAS cut of IMD yearly files)
@@ -251,7 +253,7 @@ results/
 
 ## 8. India: QRE with global mass-conservation regularization
 
-**Status: implemented and tested on the sample files only. No India experiment has been run, and no India result exists yet.** The long runs are listed in [docs/RUNBOOK.md](docs/RUNBOOK.md).
+**Status: implemented and tested on the sample files only. No India experiment has been run, and no India result exists yet.** The long runs are listed in [docs/RUNBOOK.md](docs/RUNBOOK.md) and run in one go by `scripts/run_lab.py` ([docs/LAB_SETUP.md](docs/LAB_SETUP.md)).
 
 The same QRE code as the NZ v2 pipeline is used: train-only normalization, $p\alpha\beta$ predictions, one builder for members and BGNet, interval bounds fixed once on training totals (for India the paper's published bounds, see below), training thresholds for validation and test labels, members early-stopped on their own validation interval, the squared-EMD Weight Network and checkpoints. Everything is new code (`experiments/run_india.py`, `configs/india_*.json`, `results/india/`). The NZ code, configs and outputs are unchanged. There is one addition: a constraint on the all-India daily rainfall total. It does not model moisture-flux convergence or any other physics.
 

@@ -46,7 +46,7 @@ All models below are undertrained: members and BGNet ran 10 epochs, the Weight N
 
 | What | Where |
 | --- | --- |
-| How to run everything (for the teammate) | [docs/RUNBOOK.md](RUNBOOK.md) |
+| How to run everything | [docs/RUNBOOK.md](RUNBOOK.md); on the lab PC, [docs/LAB_SETUP.md](LAB_SETUP.md) and `python scripts/run_lab.py` |
 | Method, deviations, results | [README.md](../README.md) (§4 deviations, §5 NZ results, §8 India, §9 NZ mass conservation) |
 | NZ v2 configs / outputs | `configs/cordex_v2.json`, `results/fixes_v2/` |
 | NZ loss study | `results/fixes_v2/nz_wn/sanity/weight_network_losses/results.json` |
@@ -72,18 +72,17 @@ All models below are undertrained: members and BGNet ran 10 epochs, the Weight N
 6. **India architecture: kernel 6, "valid"**, as in the paper; 32 × 33 inputs allow it. NZ needed kernel 3. This cuts BGNet from 147 M to 13 M parameters.
 7. **India data and split:** JJAS only, 1971–2016 (the teammate's dataset), split as in the paper's 32 / 6 / 8 years: train 1971–2002, val 2003–2008, test 2009–2016 (3,904 / 732 / 976 days).
 8. **No elevation input for India.** No source is configured, and no data was fabricated.
-9. **No long runs on the laptop.** The teammate runs them following the RUNBOOK.
+9. **No long runs on the laptop.** They run on the college lab PC with `scripts/run_lab.py`, following the RUNBOOK (decided 2026-11-23; before that, the teammate was to run them).
 10. **NZ mass study reports two λ = 0 rows.** "QRE (λ = 0, no fine-tune)" is the current NZ QRE exactly, as required. "QRE (λ = 0, fine-tuned)" gets the same extra Weight Network fine-tune as λ > 0 with the mass term off, so it is the fair control for QRE + mass. λ is selected against the fine-tuned control (same training on both sides), the same rule as India, where λ = 0 is the fine-tuned control (`mass.lambda0 = "finetune_control"`).
 11. **India intervals: the paper's published bounds** (0 / 0.166 / 0.392 / 0.61 / 0.812 / 0.923 / 1, `segmentation.method = "fixed"`). The Bayesian GMM on the 3,904 JJAS training totals was unstable (47 of 100 runs degenerate) and gave no extremes member (top interval = top 28 % of days). Training days per member are now 648 / 882 / 851 / 789 / 433 / 301; the extremes member has 301 training, 69 validation and 85 test days. The GMM remains an option. NZ is unchanged (GMM).
 12. **India ERA5 inputs are daily means** over UTC days (all 24 hourly fields), confirmed in the script that made them, `scripts/download_era5_india_jjas.py` (`resample('1D').mean()`). The 00:00 timestamps are bin labels and the `stepType: instant` attributes come from the hourly data.
 
 ## Next steps
 
-1. **Teammate:** RUNBOOK steps 0–3 (setup, smoke tests, NZ member study B → A → BGNet retrain).
-2. **Teammate:** RUNBOOK step 4: NZ QRE vs QRE + mass conservation (3–14 h CPU).
-3. **Teammate:** RUNBOOK step 5: `scripts/check_india_data.py` on the prepared JJAS data (already passes on Kartik's laptop).
-4. **Teammate:** RUNBOOK steps 6–9 (day-offset check → India A → λ sweep → India B). Set `members.init` from the NZ member-study result first.
-5. **Kartik:** read the returned results; update the README results sections and this file.
+1. **Kartik, lab PC:** set up as in `docs/LAB_SETUP.md` (Python 3.10.11 venv, data, GPU check) and run the smoke tests.
+2. **Kartik, lab PC:** `python scripts/run_lab.py --dry-run`, then `python scripts/run_lab.py`. This runs RUNBOOK steps 0–9 in order: NZ member study B → A → BGNet retrain, NZ QRE vs QRE + mass, India data check, day-offset check, India A → λ sweep → B. It sets `members.init` and `day_offset` by the RUNBOOK rules (`logs/decisions.json`). About 9–32 h on a CPU.
+3. **Kartik, lab PC:** check `logs/summary.txt` and the RUNBOOK checks, and copy the results back (`docs/LAB_SETUP.md` §6).
+4. **Kartik:** read the returned results; update the README results sections and this file.
 
 Cleanup is done (2026-11-23): `_to_delete/` (old ERA5 files, 1.22 GB), the empty `data/India/raw_temp/` and the scratchpad test folders were removed. Kept on purpose, not cleanup candidates: `data/CORDEX_NZ_sample` (the smoke suite regenerates it) and the unused NZ predictors `data/CORDEX_NZ/test/historical/predictors/imperfect` (226 MB) and `.../perfect/EC-Earth3_1981-2000.nc` (113 MB), which were slow to download.
 
@@ -110,6 +109,7 @@ Cleanup is done (2026-11-23): `_to_delete/` (old ERA5 files, 1.22 GB), the empty
   - `docs/RUNBOOK.md`, `docs/STATUS.md`
   - `scripts/download_era5_india_jjas.py` (the ERA5 JJAS script, unchanged; run on both machines), `scripts/slice_imd_jjas.py` (the teammate's IMD JJAS script, unchanged), `scripts/check_india_data.py`
   - NZ mass study (2026-11-13): `experiments/nz_mass.py`, `src/grid_areas.py`, `tests/test_nz_mass.py`, `configs/cordex_midterm_on_v2_split.json`
+  - Lab runs (2026-11-23): `scripts/run_lab.py`, `docs/LAB_SETUP.md`, `tests/test_run_lab.py`
 - **Modified:**
   - `configs/cordex_v2.json`: squared-EMD default and the `member_study` section
   - `src/quantiles.py`: loss kind `squared_emd`

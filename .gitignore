@@ -64,3 +64,5 @@ checkpoints/
 _to_delete/
 # Smoke-suite output (timings change on every run; the reference copy is results/india/smoke/)
 results/india/smoke_run/
+# scripts/run_lab.py: step logs, finished-step markers, decisions and summary (machine-specific)
+logs/

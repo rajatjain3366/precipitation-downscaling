@@ -188,6 +188,8 @@ def table_md(comp):
 
 
 def main():
+    # the table printed at the end contains "λ"; on Windows a piped stdout (tee, tests) is cp1252 and would fail
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
     args = R.parse_args()
     cfg = R.load_config(args)
     if cfg["checkpoints"]["dir"] is None:
