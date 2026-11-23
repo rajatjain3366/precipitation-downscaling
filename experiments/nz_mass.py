@@ -52,6 +52,7 @@ from src.quantiles import bin_y_var, ynetwork  # noqa: E402
 from src.segmentation import daily_totals, partition_indices  # noqa: E402
 
 MIDTERM_DIR = os.path.join(WORKSPACE_ROOT, "results", "final_cordex_qre")
+LAMBDA0_REL_TOL = 1e-5  # lambda = 0 vs the NZ v2 QRE test MSEs: exact on a CPU, float noise allowed on a GPU
 
 
 class NZContext:
@@ -241,15 +242,21 @@ def main():
     rb, gb = evaluate(c, memb, omb, "test")
     bg = R.predict(BGCallWrapper(base["bgnet"], mean_mode=c.mode), c.X["test"])
     bg_m = M.evaluate(c.Y["test"], bg, c.train_totals, c.labels["test"], c.N, c.data["areas"], c.mass.eps)
-    lambda0_exact = None
+    lambda0_exact, lambda0_rel = None, None
     if I.skip_lambda0_stage(cfg, 0.0):
-        lambda0_exact = R.regime_mse(c.Y["test"], g0, c.train_totals) == log["metrics"]["test"]["qre"]
-        if not lambda0_exact:
-            raise AssertionError("lambda = 0 does not reproduce the NZ v2 QRE test MSEs")
+        mine, theirs = R.regime_mse(c.Y["test"], g0, c.train_totals), log["metrics"]["test"]["qre"]
+        lambda0_exact = mine == theirs
+        # exact on a CPU; on a GPU cuDNN may pick other kernels between the two evaluations, so allow float noise
+        lambda0_rel = max(abs(mine[k]["mse"] - theirs[k]["mse"]) / max(abs(theirs[k]["mse"]), 1e-12)
+                          if mine[k]["days"] == theirs[k]["days"] else float("inf") for k in theirs)
+        if lambda0_rel > LAMBDA0_REL_TOL:
+            raise AssertionError(f"lambda = 0 does not reproduce the NZ v2 QRE test MSEs "
+                                 f"(max relative difference {lambda0_rel:.3g} > {LAMBDA0_REL_TOL:g})")
     comp = {"split": {"train": cfg["data"]["train_years"], "val": cfg["data"]["val_years"],
                       "test": cfg["data"]["test_years"]},
             "selected_lambda": lam_b, "selection": sel, "placement": mcfg["placement"], "mass_mode": mcfg["mode"],
             "lambda0_reproduces_nz_v2_qre_exactly": lambda0_exact,
+            "lambda0_max_relative_difference": lambda0_rel,
             "test": {"bgnet": row(bg_m), "qre_lambda0": row(r0["qre"], r0["weight_network"]),
                      "qre_lambda0_finetuned": row(rc["qre"], rc["weight_network"]),
                      "qre_mass": row(rb["qre"], rb["weight_network"]),

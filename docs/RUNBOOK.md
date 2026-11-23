@@ -2,12 +2,14 @@
 
 This file lists every long training run in order: the exact command, the expected time, where the outputs go, what to check afterwards and what to send back. The code is finished and tested on small samples, so nothing here should need code changes. If something fails, send the console log instead of fixing it.
 
-**One command for steps 0–9:** `python scripts/run_lab.py` runs the steps below in order. It skips finished steps when restarted, writes each step's log, and applies the two manual decisions (`members.init` after step 3, `day_offset` after step 6) by the rules given here. Setup, data, GPU and copying results back are covered in [LAB_SETUP.md](LAB_SETUP.md). The commands below are what it runs.
+**One command for steps 0–9:** `python scripts/run_lab.py` runs the steps below in order. It skips finished steps when restarted, writes each step's log, and applies the two manual decisions (`members.init` after step 3, `day_offset` after step 6) by the rules given here. It stops if TensorFlow sees no GPU, unless `--allow-cpu` is given. Setup (Linux, Miniconda with CUDA 11.2 / cuDNN 8.1, no admin rights), data, the GPU check, running in tmux and copying results back are covered in [LAB_SETUP.md](LAB_SETUP.md). The commands below are what it runs.
 
 **Time estimates:**
 
 - They are measured or extrapolated on the author's laptop CPU (TensorFlow 2.10 CPU build), which was running on battery and so possibly throttled.
-- On another CPU they can differ by 2× either way. A GPU should be much faster, but that has not been measured.
+- On another CPU they can differ by 2× either way.
+- **GPU:** the lab PC runs use an NVIDIA GPU (`scripts/run_lab.py` stops without one unless `--allow-cpu`). GPU times have never been measured for this code, so treat the times below as CPU times only. The models are small (16 × 16 and 32 × 33 inputs, batch 91), and part of each epoch is data handling on the CPU, so the speed-up may be much smaller than for large networks. The actual duration of every step is in `logs/summary.txt`; please report it.
+- **GPU results are not bit-identical** to CPU runs, nor between two GPU runs. They should be close but will not match Kartik's numbers to the last digit (see LAB_SETUP.md §5).
 - "Expected" assumes early stopping ends training before the epoch cap; "worst case" means every model runs to its cap.
 
 ---
@@ -128,7 +130,7 @@ Output: `results/fixes_v2/nz_mass/`. To resume after an interruption, run the sa
 
 What to check:
 
-- **The log:** it must not stop with "lambda = 0 does not reproduce the NZ v2 QRE test MSEs". In `comparison.json`, `lambda0_reproduces_nz_v2_qre_exactly` must be `true`.
+- **The log:** it must not stop with "lambda = 0 does not reproduce the NZ v2 QRE test MSEs". In `comparison.json`, `lambda0_reproduces_nz_v2_qre_exactly` must be `true` on a CPU. On a GPU it may be `false` (floating-point noise between two evaluations); then `lambda0_max_relative_difference` must be at most 1e-5, which the run itself enforces.
 - **`repetition_0.json`:** for each model, `best_epoch` < `epochs`, i.e. it converged rather than hitting the cap. `omega_diagnostics_val.collapsed` must be `false`.
 - **`sweep/sweep.json`:** for each λ, the Weight Network is not collapsed, and the daily-total MAE should fall as λ grows while the MSE barely changes. `sweep/selection.json` gives the selected λ and `tolerance_met`.
 - **`comparison.md`:** the one table, with BGNet, QRE (λ = 0, no fine-tune), QRE (λ = 0, fine-tuned) and QRE + mass on test, and the mid-term rows. Compare QRE + mass with the **fine-tuned** λ = 0 row to see the effect of the mass term alone. λ is selected against that same row on validation: in `sweep/selection.json`, `baseline` must say "fine-tuned", and `val_mse["0"]` must equal the [0, 1] MSE in `sweep/control_lambda0_finetuned.json`. The mid-term rows use other test years (1981–2000), so compare them only qualitatively.

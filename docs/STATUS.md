@@ -79,8 +79,8 @@ All models below are undertrained: members and BGNet ran 10 epochs, the Weight N
 
 ## Next steps
 
-1. **Kartik, lab PC:** set up as in `docs/LAB_SETUP.md` (Python 3.10.11 venv, data, GPU check) and run the smoke tests.
-2. **Kartik, lab PC:** `python scripts/run_lab.py --dry-run`, then `python scripts/run_lab.py`. This runs RUNBOOK steps 0–9 in order: NZ member study B → A → BGNet retrain, NZ QRE vs QRE + mass, India data check, day-offset check, India A → λ sweep → B. It sets `members.init` and `day_offset` by the RUNBOOK rules (`logs/decisions.json`). About 9–32 h on a CPU.
+1. **Kartik, lab PC (Linux, NVIDIA GPU, no admin):** set up as in `docs/LAB_SETUP.md`: Miniconda in `~/miniconda3`, env `qre` with Python 3.10 and CUDA 11.2 / cuDNN 8.1 from conda-forge, `LD_LIBRARY_PATH`, the data, then `python scripts/run_lab.py --check-gpu` (must show a GPU) and the smoke tests.
+2. **Kartik, lab PC:** inside tmux, `python scripts/run_lab.py --dry-run`, then `python scripts/run_lab.py` (stops if TensorFlow sees no GPU, unless `--allow-cpu`). This runs RUNBOOK steps 0–9 in order: NZ member study B → A → BGNet retrain, NZ QRE vs QRE + mass, India data check, day-offset check, India A → λ sweep → B. It sets `members.init` and `day_offset` by the RUNBOOK rules (`logs/decisions.json`). About 9–32 h on a CPU; GPU time not measured. GPU results are not bit-identical to the laptop's CPU results.
 3. **Kartik, lab PC:** check `logs/summary.txt` and the RUNBOOK checks, and copy the results back (`docs/LAB_SETUP.md` §6).
 4. **Kartik:** read the returned results; update the README results sections and this file.
 

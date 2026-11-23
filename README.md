@@ -358,7 +358,7 @@ Before the India experiment, the new model is compared with the old one on the N
 
 1. **Models:** the members, Weight Network and BGNet are trained or loaded by `run_cordex_v2.run_repetition`, with the same checkpoint names, signatures and seeds as `experiments/run_cordex_v2.py`.
    - Members and BGNet early-stop with patience 4 and keep training while still improving, up to 300 epochs ("converged").
-   - With `mass.lambda0 = "original"` (the NZ default), **λ = 0 is exactly the current NZ v2 QRE.** The runner checks that its λ = 0 test MSEs equal `run_repetition`'s, and a test compares them with a separate `run_cordex_v2.py` run to the last digit.
+   - With `mass.lambda0 = "original"` (the NZ default), **λ = 0 is exactly the current NZ v2 QRE.** The runner checks that its λ = 0 test MSEs equal `run_repetition`'s: exactly on a CPU, and within a relative difference of 1e-5 on a GPU, where cuDNN may pick other kernels between the two evaluations. A test compares them with a separate `run_cordex_v2.py` run to the last digit (CPU).
 2. **Mass term:** the India module (`src/mass_conservation.py`), with the same formula, absolute mode by default, the same placements (`mass.placement`: `ensemble` default, `members`, `both`) and the λ list `[0, 0.01, 0.1, 1]` with initial-ratio scaling. λ is selected on validation only, with the same rule as India; the test split is evaluated once, afterwards.
 3. **Cell areas:**
    - **Grid:** the target files carry real 1-D latitude/longitude on a regular lat/lon grid (128 × 128, 0.10733° spacing, uniform to 1.4e-4). It is CCAM output regridded to lat/lon, not a rotated-pole or projected grid. The `lat_bnds`/`lon_bnds` variables named in the file attributes are not in the files.

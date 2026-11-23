@@ -93,6 +93,23 @@ def test_exit_zero_without_outputs_is_a_failure(tmp_path):
     assert "exit code 0 but missing" in json.loads((tmp_path / "logs" / "summary.json").read_text())["steps"][0]["detail"]
 
 
+@pytest.mark.parametrize("gpus", [0, None])  # None: TensorFlow could not be imported
+def test_no_gpu_stops_unless_allow_cpu(tmp_path, monkeypatch, capsys, gpus):
+    monkeypatch.setattr(L, "gpu_check", lambda logs=None: gpus)
+    steps = make_steps(writer("a"))
+    assert L.main([], root=tmp_path, steps=steps, py=sys.executable) == 2
+    assert "STOPPED: TensorFlow sees no GPU" in capsys.readouterr().out
+    assert not (tmp_path / "out").exists() and not (tmp_path / "logs" / "a.log").exists()
+    assert L.main(["--allow-cpu"], root=tmp_path, steps=steps, py=sys.executable) == 0
+    assert (tmp_path / "out" / "a.txt").exists()
+
+
+def test_gpu_seen_runs(tmp_path, monkeypatch):
+    monkeypatch.setattr(L, "gpu_check", lambda logs=None: 1)
+    assert L.main([], root=tmp_path, steps=make_steps(writer("a")), py=sys.executable) == 0
+    assert json.loads((tmp_path / "logs" / "summary.json").read_text())["gpus"] == 1
+
+
 def test_dry_run_writes_nothing(tmp_path, capsys):
     steps = make_steps(writer("a"), writer("b"))
     assert run(tmp_path, steps, "--dry-run") == 0

@@ -112,6 +112,7 @@ def test_nz_mass_smoke_and_lambda0_reproduces_v2_qre(tmp_path):
 
     # lambda = 0 is the NZ v2 QRE, to the last digit
     assert comp["lambda0_reproduces_nz_v2_qre_exactly"] is True
+    assert comp["lambda0_max_relative_difference"] == 0.0
     assert comp["test"]["qre_lambda0"]["mse"] == {k: v["mse"] for k, v in v2["metrics"]["test"]["qre"].items()}
     assert sweep["0"]["val"]["qre"]["regime_mse"] == v2["metrics"]["val"]["qre"]
     assert sweep["0"]["training"]["ensemble_stage"] is None            # no extra training at lambda = 0

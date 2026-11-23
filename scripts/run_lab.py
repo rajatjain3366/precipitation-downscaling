@@ -17,6 +17,11 @@ Usage:
   python scripts/run_lab.py --dry-run       # print the plan and the commands only
   python scripts/run_lab.py --from-step 7   # start at step 7 (number or name)
   python scripts/run_lab.py --check-gpu     # only print whether TensorFlow sees a GPU
+  python scripts/run_lab.py --allow-cpu     # run even without a GPU
+
+GPU: at startup the runner checks whether TensorFlow sees a GPU (logs/gpu_check.log)
+and stops if it does not, unless --allow-cpu is given. TF 2.10 needs CUDA 11.2 and
+cuDNN 8.1 on the library path; see docs/LAB_SETUP.md.
 
 Resuming: a step counts as finished when this runner recorded it as finished
 (logs/<step>.done) and its expected outputs are still there; finished steps are
@@ -283,24 +288,55 @@ def pick_step(value, steps):
                      + ", ".join(s.name for s in steps))
 
 
+def nvidia_smi():
+    """'name, driver version' per GPU from nvidia-smi, or why it could not be read."""
+    try:
+        p = subprocess.run(["nvidia-smi", "--query-gpu=name,driver_version", "--format=csv,noheader"],
+                           capture_output=True, text=True, timeout=60)
+        return p.stdout.strip() or p.stderr.strip() or f"nvidia-smi exit code {p.returncode}"
+    except (OSError, subprocess.SubprocessError) as e:
+        return f"not available ({e.__class__.__name__})"
+
+
+def library_path_hint():
+    """On Linux with a conda env: is $CONDA_PREFIX/lib on LD_LIBRARY_PATH (where TF 2.10 finds CUDA 11.2 / cuDNN 8.1)?"""
+    prefix = os.environ.get("CONDA_PREFIX")
+    if not sys.platform.startswith("linux") or not prefix:
+        return None
+    lib = os.path.normpath(os.path.join(prefix, "lib"))
+    on_path = any(os.path.normpath(p) == lib for p in os.environ.get("LD_LIBRARY_PATH", "").split(":") if p)
+    return None if on_path else (f"$CONDA_PREFIX/lib ({lib}) is not on LD_LIBRARY_PATH; run\n"
+                                 "   export LD_LIBRARY_PATH=$CONDA_PREFIX/lib/:$LD_LIBRARY_PATH")
+
+
 def gpu_check(logs=None):
-    code = ("import os; os.environ.setdefault('TF_CPP_MIN_LOG_LEVEL', '2'); import tensorflow as tf; "
+    # log level 1 keeps TensorFlow's warnings, which name any CUDA library it could not load
+    code = ("import os; os.environ.setdefault('TF_CPP_MIN_LOG_LEVEL', '1'); import tensorflow as tf; "
             "g = tf.config.list_physical_devices('GPU'); "
             "print('TensorFlow', tf.__version__, '| built with CUDA:', tf.test.is_built_with_cuda()); "
             "print('GPUs seen by TensorFlow:', len(g)); [print('  ', d.name, d.device_type) for d in g]")
     print("== GPU check", flush=True)
+    lines = [f"nvidia-smi: {nvidia_smi()}"]
+    n = None
     try:
         p = subprocess.run([PY, "-c", code], capture_output=True, text=True, timeout=600)
-        out = (p.stdout + (p.stderr if p.returncode else "")).strip()
-        n = None
+        lines.append(p.stdout.strip())
         for line in p.stdout.splitlines():
             if line.startswith("GPUs seen by TensorFlow:"):
                 n = int(line.split(":")[1])
+        if p.returncode:
+            lines.append(p.stderr.strip()[-3000:])
+        elif not n:
+            missing = [l.strip() for l in p.stderr.splitlines() if "dynamic library" in l or "Cannot dlopen" in l]
+            lines += ["TensorFlow could not load:"] + [f"   {l}" for l in missing] if missing else []
     except (OSError, subprocess.SubprocessError) as e:
-        out, n = f"GPU check failed: {e}", None
-    msg = out + "\n" + ("-> TensorFlow sees a GPU; training will use it." if n else
-                        "-> TensorFlow sees NO GPU; training runs on the CPU (see docs/LAB_SETUP.md, GPU)."
-                        if n == 0 else "-> could not import TensorFlow; is the venv active?")
+        lines.append(f"GPU check failed: {e}")
+    if not n and library_path_hint():
+        lines.append("! " + library_path_hint())
+    lines.append("-> TensorFlow sees a GPU; training will use it." if n else
+                 "-> TensorFlow sees NO GPU (docs/LAB_SETUP.md, 'If no GPU is shown')." if n == 0 else
+                 "-> could not import TensorFlow; is the environment active?")
+    msg = "\n".join(l for l in lines if l)
     print(msg, flush=True)
     if logs is not None:
         logs.mkdir(parents=True, exist_ok=True)
@@ -367,9 +403,10 @@ def parse_args(argv):
     p.add_argument("--dry-run", action="store_true", help="only print the plan and the commands; run and write nothing")
     p.add_argument("--force", action="store_true",
                    help="rerun the selected steps even if finished (models still load from their checkpoints)")
-    p.add_argument("--check-gpu", action="store_true", help="only run the GPU check")
-    p.add_argument("--no-gpu-check", action="store_true", help="skip the GPU check at the start")
-    p.add_argument("--require-gpu", action="store_true", help="stop if TensorFlow sees no GPU")
+    p.add_argument("--check-gpu", action="store_true", help="only run the GPU check (exit code 0 if a GPU is seen)")
+    p.add_argument("--allow-cpu", action="store_true",
+                   help="run even if TensorFlow sees no GPU (by default the runner stops)")
+    p.add_argument("--no-gpu-check", action="store_true", help=argparse.SUPPRESS)  # tests only: no check, no stop
     p.add_argument("--members-init", choices=["auto", "scratch", "warm_start"], default="auto",
                    help="members.init for steps 7-9 (default: the set selected in step 2)")
     p.add_argument("--day-offset", choices=["auto", "0", "1"], default="auto",
@@ -397,7 +434,9 @@ def main(argv=None, root=ROOT, steps=None, py=None):
         raise SystemExit("--from-step is after --to-step: nothing to run")
 
     if args.dry_run:
-        print(f"DRY RUN: nothing is run or written. Repository: {root}\nPython: {py}\n")
+        print(f"DRY RUN: nothing is run or written. Repository: {root}\nPython: {py}\n"
+              f"A real run first checks the GPU and stops if TensorFlow sees none"
+              f"{' (--allow-cpu given: it would run on the CPU)' if args.allow_cpu else ', unless --allow-cpu'}.\n")
         dec_shown = False
         for s in steps:
             if s not in selected:
@@ -434,9 +473,13 @@ def main(argv=None, root=ROOT, steps=None, py=None):
     gpus = None
     if not args.no_gpu_check:
         gpus = gpu_check(logs)
-        if args.require_gpu and not gpus:
-            print("--require-gpu: stopping, TensorFlow sees no GPU", flush=True)
+        if not gpus and not args.allow_cpu:
+            print("\nSTOPPED: TensorFlow sees no GPU, so nothing was run. Check that the conda environment is active "
+                  "and LD_LIBRARY_PATH includes $CONDA_PREFIX/lib (docs/LAB_SETUP.md, 'If no GPU is shown'), then "
+                  "run `python scripts/run_lab.py --check-gpu`. To run on the CPU anyway, add --allow-cpu.", flush=True)
             return 2
+        if not gpus:
+            print("! --allow-cpu: running on the CPU (RUNBOOK times are CPU times)", flush=True)
 
     # refuse to start if a step that will run lacks its data
     todo = [s for s in selected if args.force or not finished(s, root, logs)[0]]
