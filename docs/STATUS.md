@@ -83,9 +83,8 @@ All models below are undertrained: members and BGNet ran 10 epochs, the Weight N
 2. **Teammate:** RUNBOOK step 4: NZ QRE vs QRE + mass conservation (3–14 h CPU).
 3. **Teammate:** RUNBOOK step 5: `scripts/check_india_data.py` on the prepared JJAS data (already passes on Kartik's laptop).
 4. **Teammate:** RUNBOOK steps 6–9 (day-offset check → India A → λ sweep → India B). Set `members.init` from the NZ member-study result first.
-5. **Kartik:** get the script that cut the IMD files to JJAS from the teammate and add it to `scripts/` (ERA5's is `scripts/download_era5_india_jjas.py`).
-6. **Kartik:** read the returned results; update the README results sections and this file.
-7. **Cleanup, on Kartik's go-ahead only.** The candidates are the scratchpad test folders and `data/CORDEX_NZ_sample`, plus these unused NZ files:
+5. **Kartik:** read the returned results; update the README results sections and this file.
+6. **Cleanup, on Kartik's go-ahead only.** The candidates are the scratchpad test folders and `data/CORDEX_NZ_sample`, plus these unused NZ files:
    - `data/CORDEX_NZ/test/historical/predictors/imperfect` (226 MB)
    - `data/CORDEX_NZ/test/historical/predictors/perfect/EC-Earth3_1981-2000.nc` (113 MB)
 
@@ -110,7 +109,7 @@ All models below are undertrained: members and BGNet ran 10 epochs, the Weight N
   - `tests/test_india.py`
   - `results/india/smoke/` (smoke output only)
   - `docs/RUNBOOK.md`, `docs/STATUS.md`
-  - `scripts/download_era5_india_jjas.py` (the ERA5 JJAS script, unchanged; run on both machines), `scripts/check_india_data.py`
+  - `scripts/download_era5_india_jjas.py` (the ERA5 JJAS script, unchanged; run on both machines), `scripts/slice_imd_jjas.py` (the teammate's IMD JJAS script, unchanged), `scripts/check_india_data.py`
   - NZ mass study (2026-11-13): `experiments/nz_mass.py`, `src/grid_areas.py`, `tests/test_nz_mass.py`, `configs/cordex_midterm_on_v2_split.json`
 - **Modified:**
   - `configs/cordex_v2.json`: squared-EMD default and the `member_study` section
