@@ -1,0 +1,24 @@
+{
+  "selected_lambda": 1.0,
+  "tolerance_met": true,
+  "reason": "lowest val daily_mae_mm_per_day with val MSE[0.0,1.0] within 2% of lambda=0",
+  "rule": {
+    "mse_regime": "[0.0,1.0]",
+    "mse_tolerance": 0.02,
+    "total_metric": "daily_mae_mm_per_day"
+  },
+  "val_mse": {
+    "0": 58.20460510253906,
+    "0.01": 58.33423614501953,
+    "0.1": 58.15204620361328,
+    "1": 58.14213562011719
+  },
+  "val_daily_mae_mm_per_day": {
+    "0": 1.1125188420569283,
+    "0.01": 1.1179392153060752,
+    "0.1": 1.1091478142019782,
+    "1": 1.1038994999833893
+  },
+  "val_totals_improved_vs_lambda0": true,
+  "baseline": "lambda = 0 fine-tuned control (same extra Weight Network training as lambda > 0, mass term off)"
+}

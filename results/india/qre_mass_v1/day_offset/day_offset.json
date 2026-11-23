@@ -1,0 +1,85 @@
+{
+  "days_used": 4598,
+  "first_day": "1971-06-01",
+  "last_day": "2008-09-29",
+  "splits_used": [
+    "train",
+    "val"
+  ],
+  "offsets": {
+    "0": {
+      "per_variable": {
+        "q": {
+          "domain_corr": 0.6670679526753357,
+          "local_mean_abs_corr": 0.21056363740384523,
+          "local_mean_corr": 0.20992476504307342,
+          "cells_used": 4954
+        },
+        "t": {
+          "domain_corr": -0.12467462492132383,
+          "local_mean_abs_corr": 0.15920022536801767,
+          "local_mean_corr": -0.1494742134620739,
+          "cells_used": 4954
+        },
+        "u": {
+          "domain_corr": 0.3923672737532265,
+          "local_mean_abs_corr": 0.1281574610722057,
+          "local_mean_corr": 0.027383830940350712,
+          "cells_used": 4954
+        },
+        "v": {
+          "domain_corr": 0.5166522892178397,
+          "local_mean_abs_corr": 0.10971989866559932,
+          "local_mean_corr": 0.020042868771556616,
+          "cells_used": 4954
+        },
+        "w": {
+          "domain_corr": -0.6039454292948707,
+          "local_mean_abs_corr": 0.20353898993021396,
+          "local_mean_corr": -0.19304628977022928,
+          "cells_used": 4954
+        }
+      },
+      "score_mean_local_abs_corr": 0.16223604248797638,
+      "missing_era5_days": []
+    },
+    "1": {
+      "per_variable": {
+        "q": {
+          "domain_corr": 0.6465705378996941,
+          "local_mean_abs_corr": 0.16329933220570136,
+          "local_mean_corr": 0.1619993788638197,
+          "cells_used": 4954
+        },
+        "t": {
+          "domain_corr": -0.12752286574839966,
+          "local_mean_abs_corr": 0.14758386680778118,
+          "local_mean_corr": -0.14006558591595675,
+          "cells_used": 4954
+        },
+        "u": {
+          "domain_corr": 0.3960973503689777,
+          "local_mean_abs_corr": 0.11973287513498844,
+          "local_mean_corr": 0.047052182800532645,
+          "cells_used": 4954
+        },
+        "v": {
+          "domain_corr": 0.37348000481802646,
+          "local_mean_abs_corr": 0.08375663204389425,
+          "local_mean_corr": 0.05793679342779022,
+          "cells_used": 4954
+        },
+        "w": {
+          "domain_corr": -0.5344983716305757,
+          "local_mean_abs_corr": 0.12032133994881991,
+          "local_mean_corr": -0.10374949023922338,
+          "cells_used": 4954
+        }
+      },
+      "score_mean_local_abs_corr": 0.12693880922823703,
+      "missing_era5_days": []
+    }
+  },
+  "recommended_day_offset": 0,
+  "score_difference": 0.03529723325973935
+}

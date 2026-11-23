@@ -1,0 +1,10 @@
+{
+  "members_init": "warm_start",
+  "day_offset": 0,
+  "india_set": [],
+  "why": {
+    "members_init": "step 2 selected 'warm_start' (results/fixes_v2/nz_wn/sanity/member_study/results.json)",
+    "day_offset": "recommended 0, score_difference 0.0353 (results/india/qre_mass_v1/day_offset/day_offset.json)"
+  },
+  "decided_at": "2026-11-23T17:55:59"
+}

@@ -1,0 +1,422 @@
+{
+  "bgnet_val_mse": {
+    "[0.0,1.0]": {
+      "mse": 60.81964111328125,
+      "days": 1825
+    },
+    "[0.0,0.2]": {
+      "mse": 2.421895742416382,
+      "days": 349
+    },
+    "[0.9,1.0]": {
+      "mse": 229.91136169433594,
+      "days": 200
+    }
+  },
+  "sanity_10_epoch": {
+    "own_interval_val": [
+      {
+        "interval": 0,
+        "val_days": 234,
+        "member_mse": 1.1408181190490723,
+        "bgnet_mse": 1.2685565948486328,
+        "ratio": 0.8993040781008256,
+        "bgnet_converged_mse": 1.0697182416915894,
+        "ratio_converged": 1.0664659857020384
+      },
+      {
+        "interval": 1,
+        "val_days": 384,
+        "member_mse": 8.750754356384277,
+        "bgnet_mse": 10.741994857788086,
+        "ratio": 0.8146302872263866,
+        "bgnet_converged_mse": 8.377212524414062,
+        "ratio_converged": 1.0445902298505125
+      },
+      {
+        "interval": 2,
+        "val_days": 388,
+        "member_mse": 31.21503448486328,
+        "bgnet_mse": 29.397735595703125,
+        "ratio": 1.0618176486159627,
+        "bgnet_converged_mse": 25.430965423583984,
+        "ratio_converged": 1.2274419773271883
+      },
+      {
+        "interval": 3,
+        "val_days": 320,
+        "member_mse": 77.15129852294922,
+        "bgnet_mse": 58.07035827636719,
+        "ratio": 1.3285831328226432,
+        "bgnet_converged_mse": 51.068206787109375,
+        "ratio_converged": 1.5107501002448305
+      },
+      {
+        "interval": 4,
+        "val_days": 260,
+        "member_mse": 170.16094970703125,
+        "bgnet_mse": 96.35671997070312,
+        "ratio": 1.7659479251552772,
+        "bgnet_converged_mse": 78.95809173583984,
+        "ratio_converged": 2.155079308100775
+      },
+      {
+        "interval": 5,
+        "val_days": 239,
+        "member_mse": 537.1336059570312,
+        "bgnet_mse": 215.6173858642578,
+        "ratio": 2.4911423714931056,
+        "bgnet_converged_mse": 175.8452606201172,
+        "ratio_converged": 3.0545810791990244
+      }
+    ],
+    "perfect_member_val_mse": {
+      "[0.0,1.0]": {
+        "mse": 116.7363510131836,
+        "days": 1825
+      },
+      "[0.0,0.2]": {
+        "mse": 1.8930317163467407,
+        "days": 349
+      },
+      "[0.9,1.0]": {
+        "mse": 585.102294921875,
+        "days": 200
+      }
+    }
+  },
+  "warm_start": {
+    "own_interval_val": [
+      {
+        "interval": 0,
+        "val_days": 234,
+        "member_mse": 0.8734315633773804,
+        "bgnet_mse": 1.2685565948486328,
+        "ratio": 0.6885239231140494,
+        "bgnet_converged_mse": 1.0697182416915894,
+        "ratio_converged": 0.8165061876445027,
+        "epochs": 36,
+        "best_epoch": 32,
+        "still_improving_at_cap": false,
+        "seconds": 14.851798295974731,
+        "seconds_per_epoch": 0.4125499725341797
+      },
+      {
+        "interval": 1,
+        "val_days": 384,
+        "member_mse": 7.509583950042725,
+        "bgnet_mse": 10.741994857788086,
+        "ratio": 0.6990865336896134,
+        "bgnet_converged_mse": 8.377212524414062,
+        "ratio_converged": 0.8964299196370187,
+        "epochs": 42,
+        "best_epoch": 38,
+        "still_improving_at_cap": false,
+        "seconds": 23.61694097518921,
+        "seconds_per_epoch": 0.5623081354867845
+      },
+      {
+        "interval": 2,
+        "val_days": 388,
+        "member_mse": 24.843767166137695,
+        "bgnet_mse": 29.397735595703125,
+        "ratio": 0.8450911834777147,
+        "bgnet_converged_mse": 25.430965423583984,
+        "ratio_converged": 0.9769101075139783,
+        "epochs": 36,
+        "best_epoch": 32,
+        "still_improving_at_cap": false,
+        "seconds": 20.10460114479065,
+        "seconds_per_epoch": 0.5584611627790663
+      },
+      {
+        "interval": 3,
+        "val_days": 320,
+        "member_mse": 48.14653778076172,
+        "bgnet_mse": 58.07035827636719,
+        "ratio": 0.829106952494141,
+        "bgnet_converged_mse": 51.068206787109375,
+        "ratio_converged": 0.942788885881046,
+        "epochs": 47,
+        "best_epoch": 43,
+        "still_improving_at_cap": false,
+        "seconds": 23.866472244262695,
+        "seconds_per_epoch": 0.5077972919382947
+      },
+      {
+        "interval": 4,
+        "val_days": 260,
+        "member_mse": 83.32074737548828,
+        "bgnet_mse": 96.35671997070312,
+        "ratio": 0.8647113289122089,
+        "bgnet_converged_mse": 78.95809173583984,
+        "ratio_converged": 1.0552527998554477,
+        "epochs": 51,
+        "best_epoch": 47,
+        "still_improving_at_cap": false,
+        "seconds": 21.266635417938232,
+        "seconds_per_epoch": 0.4169928653567445
+      },
+      {
+        "interval": 5,
+        "val_days": 239,
+        "member_mse": 184.4164581298828,
+        "bgnet_mse": 215.6173858642578,
+        "ratio": 0.8552949354741849,
+        "bgnet_converged_mse": 175.8452606201172,
+        "ratio_converged": 1.0487428406062203,
+        "epochs": 32,
+        "best_epoch": 28,
+        "still_improving_at_cap": false,
+        "seconds": 12.268752574920654,
+        "seconds_per_epoch": 0.38339853286743164
+      }
+    ],
+    "perfect_member_val_mse": {
+      "[0.0,1.0]": {
+        "mse": 51.43741989135742,
+        "days": 1825
+      },
+      "[0.0,0.2]": {
+        "mse": 1.5805240869522095,
+        "days": 349
+      },
+      "[0.9,1.0]": {
+        "mse": 196.42999267578125,
+        "days": 200
+      }
+    },
+    "settings": {
+      "learning_rate": 5e-05,
+      "patience": 4,
+      "max_epochs": 100,
+      "max_epochs_hard": 100
+    },
+    "init": "rep0/bgnet",
+    "training_seconds": 115.97520065307617,
+    "wall_seconds_this_call": 3.6552176475524902
+  },
+  "scratch": {
+    "own_interval_val": [
+      {
+        "interval": 0,
+        "val_days": 234,
+        "member_mse": 0.9020385146141052,
+        "bgnet_mse": 1.2685565948486328,
+        "ratio": 0.7110747114295981,
+        "bgnet_converged_mse": 1.0697182416915894,
+        "ratio_converged": 0.8432486980755556,
+        "epochs": 51,
+        "best_epoch": 47,
+        "still_improving_at_cap": false,
+        "seconds": 20.09887671470642,
+        "seconds_per_epoch": 0.39409563588161095
+      },
+      {
+        "interval": 1,
+        "val_days": 384,
+        "member_mse": 7.62191104888916,
+        "bgnet_mse": 10.741994857788086,
+        "ratio": 0.7095433529614079,
+        "bgnet_converged_mse": 8.377212524414062,
+        "ratio_converged": 0.9098385682201932,
+        "epochs": 46,
+        "best_epoch": 42,
+        "still_improving_at_cap": false,
+        "seconds": 26.09543013572693,
+        "seconds_per_epoch": 0.5672919698383497
+      },
+      {
+        "interval": 2,
+        "val_days": 388,
+        "member_mse": 25.628009796142578,
+        "bgnet_mse": 29.397735595703125,
+        "ratio": 0.8717681575409657,
+        "bgnet_converged_mse": 25.430965423583984,
+        "ratio_converged": 1.0077482065378398,
+        "epochs": 58,
+        "best_epoch": 54,
+        "still_improving_at_cap": false,
+        "seconds": 31.84435534477234,
+        "seconds_per_epoch": 0.549040621724622
+      },
+      {
+        "interval": 3,
+        "val_days": 320,
+        "member_mse": 50.73629379272461,
+        "bgnet_mse": 58.07035827636719,
+        "ratio": 0.873703818930504,
+        "bgnet_converged_mse": 51.068206787109375,
+        "ratio_converged": 0.9935005942979664,
+        "epochs": 53,
+        "best_epoch": 49,
+        "still_improving_at_cap": false,
+        "seconds": 27.351853847503662,
+        "seconds_per_epoch": 0.5160727231007702
+      },
+      {
+        "interval": 4,
+        "val_days": 260,
+        "member_mse": 90.74297332763672,
+        "bgnet_mse": 96.35671997070312,
+        "ratio": 0.9417399570598372,
+        "bgnet_converged_mse": 78.95809173583984,
+        "ratio_converged": 1.149254893738112,
+        "epochs": 73,
+        "best_epoch": 69,
+        "still_improving_at_cap": false,
+        "seconds": 30.083678245544434,
+        "seconds_per_epoch": 0.4121051945098459
+      },
+      {
+        "interval": 5,
+        "val_days": 239,
+        "member_mse": 205.1379852294922,
+        "bgnet_mse": 215.6173858642578,
+        "ratio": 0.9513981648893427,
+        "bgnet_converged_mse": 175.8452606201172,
+        "ratio_converged": 1.1665823946922107,
+        "epochs": 86,
+        "best_epoch": 82,
+        "still_improving_at_cap": false,
+        "seconds": 29.96486234664917,
+        "seconds_per_epoch": 0.34842864302701726
+      }
+    ],
+    "perfect_member_val_mse": {
+      "[0.0,1.0]": {
+        "mse": 55.85661697387695,
+        "days": 1825
+      },
+      "[0.0,0.2]": {
+        "mse": 1.6746059656143188,
+        "days": 349
+      },
+      "[0.9,1.0]": {
+        "mse": 216.66635131835938,
+        "days": 200
+      }
+    },
+    "settings": {
+      "patience": 4,
+      "max_epochs": 100,
+      "max_epochs_hard": 100
+    },
+    "init": "random",
+    "training_seconds": 165.43905663490295,
+    "wall_seconds_this_call": 3.045015335083008
+  },
+  "selection": {
+    "best_by_perfect_member_val_mse_0_1": "warm_start",
+    "weight_network": "rep0/weight_network_squared_emd (reused)",
+    "qre_val_mse_scratch": {
+      "[0.0,1.0]": {
+        "mse": 58.28816223144531,
+        "days": 1825
+      },
+      "[0.0,0.2]": {
+        "mse": 1.775612235069275,
+        "days": 349
+      },
+      "[0.9,1.0]": {
+        "mse": 221.97181701660156,
+        "days": 200
+      }
+    },
+    "qre_val_mse_warm_start": {
+      "[0.0,1.0]": {
+        "mse": 53.61258316040039,
+        "days": 1825
+      },
+      "[0.0,0.2]": {
+        "mse": 1.7056286334991455,
+        "days": 349
+      },
+      "[0.9,1.0]": {
+        "mse": 202.19058227539062,
+        "days": 200
+      }
+    },
+    "test": {
+      "qre_warm_start_squared_emd": {
+        "[0.0,1.0]": {
+          "mse": 52.03202819824219,
+          "days": 2555
+        },
+        "[0.0,0.2]": {
+          "mse": 2.1342599391937256,
+          "days": 485
+        },
+        "[0.9,1.0]": {
+          "mse": 190.4635009765625,
+          "days": 253
+        }
+      },
+      "perfect_member": {
+        "[0.0,1.0]": {
+          "mse": 50.30990219116211,
+          "days": 2555
+        },
+        "[0.0,0.2]": {
+          "mse": 1.8895896673202515,
+          "days": 485
+        },
+        "[0.9,1.0]": {
+          "mse": 187.4296417236328,
+          "days": 253
+        }
+      },
+      "bgnet": {
+        "[0.0,1.0]": {
+          "mse": 60.60047149658203,
+          "days": 2555
+        },
+        "[0.0,0.2]": {
+          "mse": 2.8556909561157227,
+          "days": 485
+        },
+        "[0.9,1.0]": {
+          "mse": 231.79043579101562,
+          "days": 253
+        }
+      },
+      "bgnet_converged": {
+        "[0.0,1.0]": {
+          "mse": 50.873291015625,
+          "days": 2555
+        },
+        "[0.0,0.2]": {
+          "mse": 2.2966463565826416,
+          "days": 485
+        },
+        "[0.9,1.0]": {
+          "mse": 186.33338928222656,
+          "days": 253
+        }
+      }
+    }
+  },
+  "bgnet_converged_training": {
+    "epochs": 43,
+    "best_epoch": 39,
+    "best_val_loss": 1.8210699558258057,
+    "still_improving_at_cap": false,
+    "final_epoch_cap": 100,
+    "seconds": 103.82365250587463,
+    "seconds_per_epoch": 2.41450356882672
+  },
+  "bgnet_converged_val_mse": {
+    "[0.0,1.0]": {
+      "mse": 50.538272857666016,
+      "days": 1825
+    },
+    "[0.0,0.2]": {
+      "mse": 1.8467745780944824,
+      "days": 349
+    },
+    "[0.9,1.0]": {
+      "mse": 187.31396484375,
+      "days": 200
+    }
+  }
+}

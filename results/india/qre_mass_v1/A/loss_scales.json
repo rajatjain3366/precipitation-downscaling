@@ -1,0 +1,39 @@
+{
+  "train": {
+    "zero": {
+      "mass_relative": 0.9810324907302856,
+      "mass_absolute_mm_per_day": 6.999587059020996
+    },
+    "train_climatology": {
+      "mass_relative": 0.5811601877212524,
+      "mass_absolute_mm_per_day": 2.5502798557281494
+    },
+    "qre_A": {
+      "mass_relative": 0.10580712556838989,
+      "mass_absolute_mm_per_day": 0.6699754595756531
+    },
+    "bgnet": {
+      "mass_relative": 0.11067909747362137,
+      "mass_absolute_mm_per_day": 0.7152975797653198
+    }
+  },
+  "val": {
+    "zero": {
+      "mass_relative": 0.981275737285614,
+      "mass_absolute_mm_per_day": 7.195596694946289
+    },
+    "train_climatology": {
+      "mass_relative": 0.5799684524536133,
+      "mass_absolute_mm_per_day": 2.5970473289489746
+    },
+    "qre_A": {
+      "mass_relative": 0.1403030902147293,
+      "mass_absolute_mm_per_day": 0.902554452419281
+    },
+    "bgnet": {
+      "mass_relative": 0.14279486238956451,
+      "mass_absolute_mm_per_day": 0.9274079203605652
+    }
+  },
+  "eps_mm_per_day": 0.1
+}

@@ -1,0 +1,6 @@
+2026-11-23T17:45:01
+nvidia-smi: NVIDIA RTX 4000 Ada Generation, 595.99.02
+TensorFlow 2.10.1 | built with CUDA: True
+GPUs seen by TensorFlow: 1
+   /physical_device:GPU:0 GPU
+-> TensorFlow sees a GPU; training will use it.

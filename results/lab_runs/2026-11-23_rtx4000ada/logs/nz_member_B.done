@@ -1,0 +1,21 @@
+{
+  "finished_at": "2026-11-23T17:28:55",
+  "seconds": 127.51458549499512,
+  "command": [
+    "/home/aidslab/miniconda3/envs/qre/bin/python",
+    "experiments/member_study.py",
+    "--sanity",
+    "--set",
+    "segmentation.intervals_file=\"results/fixes_v2/dry_run/segmentation.json\"",
+    "--set",
+    "sanity.members_max_epochs=10",
+    "--set",
+    "sanity.weight_network_max_epochs=30",
+    "--set",
+    "checkpoints.dir=\"checkpoints/nz_v2_sanity\"",
+    "--save-dir",
+    "results/fixes_v2/nz_wn",
+    "--set",
+    "member_study.variants=[\"warm_start\"]"
+  ]
+}

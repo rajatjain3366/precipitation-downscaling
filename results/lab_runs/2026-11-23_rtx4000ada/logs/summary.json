@@ -1,0 +1,77 @@
+{
+  "started": "2026-11-23T17:45:00",
+  "written": "2026-11-23T18:00:05",
+  "gpus": 1,
+  "steps": [
+    {
+      "step": 0,
+      "name": "nz_checkpoints",
+      "title": "NZ base models (RUNBOOK 0b, only if not copied)",
+      "status": "already done",
+      "detail": "outputs present"
+    },
+    {
+      "step": 1,
+      "name": "nz_member_B",
+      "title": "NZ member study B: warm-started members",
+      "status": "already done",
+      "detail": "finished 2026-11-23T17:28:55 in 0h02m08s"
+    },
+    {
+      "step": 2,
+      "name": "nz_member_A",
+      "title": "NZ member study A: members from scratch + selection",
+      "status": "already done",
+      "detail": "finished 2026-11-23T17:31:57 in 0h03m03s"
+    },
+    {
+      "step": 3,
+      "name": "nz_member_bgnet",
+      "title": "NZ member study: BGNet retrained to convergence",
+      "status": "already done",
+      "detail": "finished 2026-11-23T17:34:00 in 0h02m03s"
+    },
+    {
+      "step": 4,
+      "name": "nz_mass",
+      "title": "NZ: QRE vs QRE + mass conservation",
+      "status": "finished",
+      "detail": "in 0h10m50s"
+    },
+    {
+      "step": 5,
+      "name": "india_data_check",
+      "title": "India data check",
+      "status": "finished",
+      "detail": "in 0h00m02s"
+    },
+    {
+      "step": 6,
+      "name": "india_day_offset",
+      "title": "India day-offset check",
+      "status": "finished",
+      "detail": "in 0h00m06s"
+    },
+    {
+      "step": 7,
+      "name": "india_A",
+      "title": "India experiment A (lambda = 0)",
+      "status": "finished",
+      "detail": "in 0h02m36s"
+    },
+    {
+      "step": 8,
+      "name": "india_sweep",
+      "title": "India lambda sweep (validation only)",
+      "status": "finished",
+      "detail": "in 0h01m17s"
+    },
+    {
+      "step": 9,
+      "name": "india_B",
+      "title": "India experiment B (selected lambda)",
+      "status": "finished",
+      "detail": "in 0h00m13s"
+    }
+  ]
+}
