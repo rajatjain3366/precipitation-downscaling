@@ -84,9 +84,8 @@ All models below are undertrained: members and BGNet ran 10 epochs, the Weight N
 3. **Teammate:** RUNBOOK step 5: `scripts/check_india_data.py` on the prepared JJAS data (already passes on Kartik's laptop).
 4. **Teammate:** RUNBOOK steps 6–9 (day-offset check → India A → λ sweep → India B). Set `members.init` from the NZ member-study result first.
 5. **Kartik:** read the returned results; update the README results sections and this file.
-6. **Cleanup, on Kartik's go-ahead only.** The candidates are the scratchpad test folders and `data/CORDEX_NZ_sample`, plus these unused NZ files:
-   - `data/CORDEX_NZ/test/historical/predictors/imperfect` (226 MB)
-   - `data/CORDEX_NZ/test/historical/predictors/perfect/EC-Earth3_1981-2000.nc` (113 MB)
+
+Cleanup is done (2026-11-23): `_to_delete/` (old ERA5 files, 1.22 GB), the empty `data/India/raw_temp/` and the scratchpad test folders were removed. Kept on purpose, not cleanup candidates: `data/CORDEX_NZ_sample` (the smoke suite regenerates it) and the unused NZ predictors `data/CORDEX_NZ/test/historical/predictors/imperfect` (226 MB) and `.../perfect/EC-Earth3_1981-2000.nc` (113 MB), which were slow to download.
 
 ## Open questions for the professor
 
