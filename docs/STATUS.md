@@ -110,6 +110,7 @@ Cleanup is done (2026-11-23): `_to_delete/` (old ERA5 files, 1.22 GB), the empty
   - `scripts/download_era5_india_jjas.py` (the ERA5 JJAS script, unchanged; run on both machines), `scripts/slice_imd_jjas.py` (the teammate's IMD JJAS script, unchanged), `scripts/check_india_data.py`
   - NZ mass study (2026-11-13): `experiments/nz_mass.py`, `src/grid_areas.py`, `tests/test_nz_mass.py`, `configs/cordex_midterm_on_v2_split.json`
   - Lab runs (2026-11-23): `scripts/run_lab.py`, `docs/LAB_SETUP.md`, `tests/test_run_lab.py`
+  - GPU fixes from the first lab-PC test (2026-11-23): `src/gpu_setup.py` (memory growth, `GPU_RTOL`), `tests/conftest.py`, `tests/gpu_tol.py`, `tests/test_gpu_tol.py`
 - **Modified:**
   - `configs/cordex_v2.json`: squared-EMD default and the `member_study` section
   - `src/quantiles.py`: loss kind `squared_emd`

@@ -93,6 +93,15 @@ def test_exit_zero_without_outputs_is_a_failure(tmp_path):
     assert "exit code 0 but missing" in json.loads((tmp_path / "logs" / "summary.json").read_text())["steps"][0]["detail"]
 
 
+def test_steps_get_gpu_memory_growth(tmp_path, monkeypatch):
+    monkeypatch.delenv("TF_FORCE_GPU_ALLOW_GROWTH", raising=False)
+    s = writer("a", text="x")
+    s.args = lambda d: ["-c", "import os, pathlib; p = pathlib.Path('out/a.txt'); p.parent.mkdir(exist_ok=True); "
+                              "p.write_text(os.environ.get('TF_FORCE_GPU_ALLOW_GROWTH', 'unset'))"]
+    assert run(tmp_path, make_steps(s)) == 0
+    assert (tmp_path / "out" / "a.txt").read_text() == "true"
+
+
 @pytest.mark.parametrize("gpus", [0, None])  # None: TensorFlow could not be imported
 def test_no_gpu_stops_unless_allow_cpu(tmp_path, monkeypatch, capsys, gpus):
     monkeypatch.setattr(L, "gpu_check", lambda logs=None: gpus)

@@ -18,6 +18,8 @@ WORKSPACE_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 if WORKSPACE_ROOT not in sys.path:
     sys.path.insert(0, WORKSPACE_ROOT)
 
+from gpu_tol import assert_close, on_gpu  # noqa: E402  (exact on CPU, rtol 1e-5 on GPU)
+from src.gpu_setup import GPU_RTOL  # noqa: E402
 from src.grid_areas import EARTH_RADIUS_KM, cell_areas_from_centres, cell_edges  # noqa: E402
 from src.india_data import cell_areas_km2  # noqa: E402
 
@@ -97,7 +99,7 @@ def test_nz_mass_smoke_and_lambda0_reproduces_v2_qre(tmp_path):
              "--set", "sanity.weight_network_max_epochs=1", "--set", "mass.lambdas=[0,0.5]",
              "--set", "ensemble.max_epochs=2", "--set", "ensemble.max_epochs_hard=2",
              "--set", f'checkpoints.dir="{ck}"']
-    env = dict(os.environ, TF_CPP_MIN_LOG_LEVEL="2")
+    env = dict(os.environ, TF_CPP_MIN_LOG_LEVEL="2", TF_FORCE_GPU_ALLOW_GROWTH="true")
 
     def run(script, save):
         p = subprocess.run([sys.executable, os.path.join(WORKSPACE_ROOT, "experiments", script)] + flags
@@ -110,11 +112,15 @@ def test_nz_mass_smoke_and_lambda0_reproduces_v2_qre(tmp_path):
     comp = json.load(open(f"{out}/mass/sanity/comparison.json"))
     sweep = json.load(open(f"{out}/mass/sanity/sweep/sweep.json"))
 
-    # lambda = 0 is the NZ v2 QRE, to the last digit
-    assert comp["lambda0_reproduces_nz_v2_qre_exactly"] is True
-    assert comp["lambda0_max_relative_difference"] == 0.0
-    assert comp["test"]["qre_lambda0"]["mse"] == {k: v["mse"] for k, v in v2["metrics"]["test"]["qre"].items()}
-    assert sweep["0"]["val"]["qre"]["regime_mse"] == v2["metrics"]["val"]["qre"]
+    # lambda = 0 is the NZ v2 QRE, to the last digit on a CPU (on a GPU: up to float noise, rtol 1e-5)
+    if on_gpu():
+        assert comp["lambda0_max_relative_difference"] <= GPU_RTOL
+    else:
+        assert comp["lambda0_reproduces_nz_v2_qre_exactly"] is True
+        assert comp["lambda0_max_relative_difference"] == 0.0
+    assert_close(comp["test"]["qre_lambda0"]["mse"], {k: v["mse"] for k, v in v2["metrics"]["test"]["qre"].items()},
+                 "lambda = 0 test MSE vs run_cordex_v2")
+    assert_close(sweep["0"]["val"]["qre"]["regime_mse"], v2["metrics"]["val"]["qre"], "lambda = 0 val MSE vs run_cordex_v2")
     assert sweep["0"]["training"]["ensemble_stage"] is None            # no extra training at lambda = 0
     # lambda > 0 trained the ensemble stage with a positive effective lambda, both loss terms logged
     stage = sweep["0.5"]["training"]["ensemble_stage"]

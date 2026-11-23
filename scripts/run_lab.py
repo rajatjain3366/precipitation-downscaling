@@ -288,6 +288,13 @@ def pick_step(value, steps):
                      + ", ".join(s.name for s in steps))
 
 
+def child_env():
+    """Environment of every step: unbuffered UTF-8 output, and TensorFlow allocating GPU memory as needed
+    (TF_FORCE_GPU_ALLOW_GROWTH, unless already set) so that no process reserves the whole GPU."""
+    return dict(os.environ, PYTHONUNBUFFERED="1", PYTHONIOENCODING="utf-8",
+                TF_FORCE_GPU_ALLOW_GROWTH=os.environ.get("TF_FORCE_GPU_ALLOW_GROWTH", "true"))
+
+
 def nvidia_smi():
     """'name, driver version' per GPU from nvidia-smi, or why it could not be read."""
     try:
@@ -319,7 +326,7 @@ def gpu_check(logs=None):
     lines = [f"nvidia-smi: {nvidia_smi()}"]
     n = None
     try:
-        p = subprocess.run([PY, "-c", code], capture_output=True, text=True, timeout=600)
+        p = subprocess.run([PY, "-c", code], capture_output=True, text=True, timeout=600, env=child_env())
         lines.append(p.stdout.strip())
         for line in p.stdout.splitlines():
             if line.startswith("GPUs seen by TensorFlow:"):
@@ -351,7 +358,7 @@ def run_step(step, cmd, root, logs):
         t.parent.mkdir(parents=True, exist_ok=True)
     files = [open(t, "a", encoding="utf-8") for t in targets]
     header = f"\n===== {now()}  step {step.num} {step.name}\n$ {show(cmd)}\n"
-    env = dict(os.environ, PYTHONUNBUFFERED="1", PYTHONIOENCODING="utf-8")
+    env = child_env()
     try:
         for f in files:
             f.write(header)

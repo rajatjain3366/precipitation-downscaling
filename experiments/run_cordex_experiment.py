@@ -34,6 +34,10 @@ for p in [SRC_DIR, WORKSPACE_ROOT]:
     if p not in sys.path:
         sys.path.insert(0, p)
 
+from src.gpu_setup import enable_memory_growth  # noqa: E402
+
+enable_memory_growth()
+
 from src.data_adapter_cordex import load_cordex_dataset
 from src.ConvolutionalNetworks import BGNet, BGCallWrapper
 from src.GammaLoss import GammaLoss

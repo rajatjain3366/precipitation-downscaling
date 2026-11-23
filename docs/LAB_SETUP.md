@@ -86,13 +86,33 @@ Work through these in order and rerun `python scripts/run_lab.py --check-gpu` af
 4. **GPU hidden.** `echo $CUDA_VISIBLE_DEVICES` should print nothing or GPU numbers such as `0`. `-1` or an empty-but-set value hides all GPUs; `unset CUDA_VISIBLE_DEVICES` fixes it.
 5. **No GPU in `nvidia-smi` at all:** the driver or the GPU is the problem, not this setup. Ask the lab admin.
 
+If TensorFlow sees the GPU, but training or the smoke tests fail with **`CUDNN_STATUS_INTERNAL_ERROR`** or **`CUDNN_STATUS_EXECUTION_FAILED`** (often in `bg_net/conv2d`):
+
+6. **GPU memory held by another process.** By default TensorFlow reserves all GPU memory, so a second process, such as the training subprocess of a test, finds none left.
+   - The code now sets `TF_FORCE_GPU_ALLOW_GROWTH=true` itself (`src/gpu_setup.py`; also `run_lab.py`, the smoke runner and the tests), so each process takes only what it needs. Check that nothing sets it to `false`: `echo $TF_FORCE_GPU_ALLOW_GROWTH` should print `true` or nothing.
+   - `nvidia-smi` lists the processes using the GPU and their memory. Other users' jobs can fill it too; then choose a free GPU with `CUDA_VISIBLE_DEVICES`, or wait.
+7. **cuDNN 8.1 on an Ada GPU** (RTX 40 series, RTX 4000/6000 Ada, L4, L40; compute capability 8.9). TensorFlow 2.10 was built against CUDA 11.2 and cuDNN 8.1, which predate Ada. It loads the libraries by major version only (`libcudart.so.11.0`, `libcudnn.so.8`), so the last 11.x / 8.x releases, CUDA 11.8 and cuDNN 8.9, which support Ada, can replace them. Try them in a copy of the environment, so the working one stays as it is:
+
+   ```bash
+   conda create -n qre118 --clone qre
+   conda activate qre118
+   conda install -c conda-forge cudatoolkit=11.8 "cudnn=8.9.*=*cuda11*"
+   export LD_LIBRARY_PATH=$CONDA_PREFIX/lib/:$LD_LIBRARY_PATH
+   python scripts/run_lab.py --check-gpu
+   python tests/run_smoke_tests.py 2>&1 | tee smoke_tests.log
+   ```
+
+   - The `*cuda11*` part selects a cuDNN build for CUDA 11; the cuDNN 8.9 builds for CUDA 12 would not load. If conda cannot find it, `conda search -c conda-forge cudnn` lists the builds; choose an 8.9 one with `cuda11` in its build string.
+   - From then on, use `qre118` instead of `qre` everywhere (also inside tmux).
+   - In the report, give the versions actually used: `conda list | grep -E "cudatoolkit|cudnn"`.
+
 If none of this helps, run on the CPU with `--allow-cpu`. All RUNBOOK estimates are CPU times. Send `logs/gpu_check.log` with the results.
 
-**Very new GPUs** (newer than TensorFlow 2.10, which dates from 2022) may make the first start take several minutes while TensorFlow compiles its GPU code. This happens once per process, not per epoch.
+**Very new GPUs** (newer than TensorFlow 2.10, which dates from 2022) may make the first start take several minutes while TensorFlow compiles its GPU code. This happens once per process, not per epoch. If cuDNN errors appear on such a GPU, see item 7.
 
 ### 1.6 Sharing the GPU
 
-TensorFlow reserves all GPU memory by default. On a shared PC, set `export TF_FORCE_GPU_ALLOW_GROWTH=true` before starting, so that others can still use the GPU. `nvidia-smi` shows who else is using it. On a PC with several GPUs, choose one with, for example, `export CUDA_VISIBLE_DEVICES=1`.
+TensorFlow reserves all GPU memory by default. The code turns that off with `TF_FORCE_GPU_ALLOW_GROWTH=true` (see item 6), so each run takes only the memory it needs and others can still use the GPU. Exporting it yourself, as in 4.2, does no harm. `nvidia-smi` shows who else is using it. On a PC with several GPUs, choose one with, for example, `export CUDA_VISIBLE_DEVICES=1`.
 
 ---
 
@@ -119,9 +139,22 @@ precipitation-downscaling/
     nz_v2_sanity/rep0/             optional: the NZ base models from Kartik's laptop (about 1.1 GB)
 ```
 
-- **How to copy:** use a USB drive, or `scp` / `rsync` over the network.
-  - From the Windows laptop, PowerShell has `scp`: `scp -r data\India <user>@<lab-pc>:~/precipitation-downscaling/data/`.
-  - From Linux: `rsync -av --progress data/ <user>@<lab-pc>:~/precipitation-downscaling/data/`.
+- **What to copy:** all of these, using a USB drive or `scp` / `rsync` over the network:
+  - `data/CORDEX_NZ/` (the five files above)
+  - **`data/India_sample/`**: the smoke tests need it (`test_india.py` and the India runner and day-offset smoke steps), even though no training uses it
+  - `data/India/ERA5_full/` and `data/India/IMD_jjas/`
+  - `checkpoints/nz_v2_sanity/rep0/`, if available
+- **From the Windows laptop** (PowerShell has `scp`), first `ssh <user>@<lab-pc> "mkdir -p ~/precipitation-downscaling/data/India ~/precipitation-downscaling/checkpoints/nz_v2_sanity"`, then:
+
+  ```powershell
+  scp -r data\CORDEX_NZ data\India_sample <user>@<lab-pc>:~/precipitation-downscaling/data/
+  scp -r data\India\ERA5_full data\India\IMD_jjas <user>@<lab-pc>:~/precipitation-downscaling/data/India/
+  scp -r checkpoints
+z_v2_sanityep0 <user>@<lab-pc>:~/precipitation-downscaling/checkpoints/nz_v2_sanity/
+  ```
+
+- **From Linux:** `rsync -av --progress data/CORDEX_NZ data/India_sample <user>@<lab-pc>:~/precipitation-downscaling/data/`, and likewise for `data/India/ERA5_full`, `data/India/IMD_jjas` and the checkpoints.
+- **Check on the lab PC:** `ls data/India_sample data/India/ERA5_full | head` and `ls data/India/IMD_jjas | wc -l` (46).
 - **NZ data:** from Kartik's copy, or downloaded as in README §2. The other files in Kartik's `data/CORDEX_NZ/` (the `imperfect` predictors, `EC-Earth3_1981-2000.nc`) are not used and need not be copied.
 - **NZ checkpoints:** copy `checkpoints/nz_v2_sanity/rep0/` if you can. It must contain `bgnet`, `member_0` to `member_5` and `weight_network_squared_emd`, each as a `.json` and a `.weights.h5` file. If it is missing or incomplete, `run_lab.py` retrains these models first (step 0), and the member-study numbers will differ slightly from Kartik's.
 - **Already in git:** the NZ segmentation that steps 0–3 need (`results/fixes_v2/dry_run/segmentation.json`) and the mid-term reference results (`results/final_cordex_qre/`).
@@ -137,6 +170,10 @@ python tests/run_smoke_tests.py 2>&1 | tee smoke_tests.log
 ```
 
 All 12 lines must say PASS. If any fails, don't start the long runs; send `smoke_tests.log`. On the GPU this is also the first test that the code runs there at all.
+
+- **India steps:** they need `data/India_sample/` (section 2).
+- **Comparisons on a GPU:** the tests that compare two evaluations of the same model (for example "λ = 0 reproduces the original objective") are exact on a CPU and use a relative tolerance of 1e-5 on a GPU (`tests/gpu_tol.py`), as `nz_mass.py` does.
+- **cuDNN errors:** see 1.5, items 6 and 7.
 
 ---
 

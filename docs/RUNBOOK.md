@@ -67,7 +67,7 @@ checkpoints/                       created by the runs (not in git)
 python tests/run_smoke_tests.py 2>&1 | tee smoke_tests.log
 ```
 
-All 12 lines must say PASS. The India steps need `data/India_sample/`.
+All 12 lines must say PASS. The India steps need `data/India_sample/`. On a GPU, see LAB_SETUP.md §1.5 for cuDNN errors.
 
 ### 0b. Only if the NZ checkpoints were not copied: retrain them (about 1.5–2.5 h)
 

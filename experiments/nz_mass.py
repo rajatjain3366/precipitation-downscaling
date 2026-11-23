@@ -46,13 +46,14 @@ import run_india as I  # noqa: E402
 from src import india_metrics as M  # noqa: E402
 from src.ConvolutionalNetworks import BGCallWrapper  # noqa: E402
 from src.GammaLoss import GammaLoss  # noqa: E402
+from src.gpu_setup import GPU_RTOL  # noqa: E402
 from src.grid_areas import cell_areas_from_centres  # noqa: E402
 from src.mass_conservation import MassConservation  # noqa: E402
 from src.quantiles import bin_y_var, ynetwork  # noqa: E402
 from src.segmentation import daily_totals, partition_indices  # noqa: E402
 
 MIDTERM_DIR = os.path.join(WORKSPACE_ROOT, "results", "final_cordex_qre")
-LAMBDA0_REL_TOL = 1e-5  # lambda = 0 vs the NZ v2 QRE test MSEs: exact on a CPU, float noise allowed on a GPU
+LAMBDA0_REL_TOL = GPU_RTOL  # lambda = 0 vs the NZ v2 QRE test MSEs: exact on a CPU, float noise allowed on a GPU
 
 
 class NZContext:

@@ -42,7 +42,8 @@ FAIL_MARKERS = ("FAILED", "FAIL:", "RESULT: FAIL", "Traceback")
 
 
 def main():
-    env = dict(os.environ, TF_CPP_MIN_LOG_LEVEL="2")
+    # memory growth: each step is its own TensorFlow process; none may reserve the whole GPU
+    env = dict(os.environ, TF_CPP_MIN_LOG_LEVEL="2", TF_FORCE_GPU_ALLOW_GROWTH="true")
     results = []
     for step in STEPS:
         script = next((s for s in step if s.endswith(".py")), step[-1])

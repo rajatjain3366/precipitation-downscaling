@@ -33,6 +33,10 @@ for p in [WORKSPACE_ROOT, SCRIPT_DIR]:
     if p not in sys.path:
         sys.path.insert(0, p)
 
+from src.gpu_setup import enable_memory_growth  # noqa: E402
+
+enable_memory_growth()  # before any TensorFlow op; also used by run_india, member_study, nz_mass, india_day_offset
+
 from src.data_adapter_cordex import load_cordex_full_period
 from src.preprocessing import (ChannelStandardizer, channel_stats, looks_standardized,
                                split_masks_by_years, time_to_years)

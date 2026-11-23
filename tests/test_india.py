@@ -17,6 +17,7 @@ WORKSPACE_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 if WORKSPACE_ROOT not in sys.path:
     sys.path.insert(0, WORKSPACE_ROOT)
 
+from gpu_tol import assert_arrays_close, assert_close  # noqa: E402  (exact on CPU, rtol 1e-5 on GPU)
 from src.builders import build_bgnet, build_omega  # noqa: E402
 from src.GammaLoss import GammaLoss  # noqa: E402
 from src.india_data import (EARTH_RADIUS_KM, block_alignment, cell_areas_km2, check_units, coarsen_blocks,  # noqa: E402
@@ -264,10 +265,11 @@ def test_training_step_ensemble_placement(syn, train_members):
 
 
 def test_lambda_zero_reproduces_original_objective(syn):
-    # members: NLL + 0 * mass is exactly the NLL
+    # members: NLL + 0 * mass is exactly the NLL (on a GPU: up to float noise, rtol 1e-5)
     m = _member(syn)
     p = m(syn["x"])
-    assert float(MemberLossWithMass(syn["nll"], syn["mass"], 0.0)(syn["y"], p)) == float(syn["nll"](syn["y"], p))
+    assert_close(float(MemberLossWithMass(syn["nll"], syn["mass"], 0.0)(syn["y"], p)), float(syn["nll"](syn["y"], p)),
+                 "member loss")
     # ensemble stage: loss and gradients are exactly those of the Weight Network loss alone
     om = _omega(syn)
     wn = weight_network_loss(syn["cfg"]["weight_network"], N_SYN)
@@ -280,9 +282,10 @@ def test_lambda_zero_reproduces_original_objective(syn):
     with tf.GradientTape() as t2:
         ref = wn(lab, om(syn["x"], training=False))
     g2 = t2.gradient(ref, om.trainable_variables)
-    assert float(total) == float(ref) and float(mass) > 0
-    for a, b in zip(g1, g2):
-        np.testing.assert_array_equal(a.numpy(), b.numpy())
+    assert_close(float(total), float(ref), "ensemble loss")
+    assert float(mass) > 0
+    for i, (a, b) in enumerate(zip(g1, g2)):
+        assert_arrays_close(a.numpy(), b.numpy(), f"gradient {i}")
     # and lambda > 0 does change the gradient
     joint.lam = 1.0
     with tf.GradientTape() as t3:
@@ -297,7 +300,7 @@ def test_india_runner_resumes_from_checkpoints(tmp_path):
     out, ck = (tmp_path / "out").as_posix(), (tmp_path / "ck").as_posix()
     cmd = [sys.executable, os.path.join(WORKSPACE_ROOT, "experiments", "run_india.py"), "--config", SMOKE_CFG,
            "--stage", "A", "--save-dir", out, "--set", f'checkpoints.dir="{ck}"']
-    env = dict(os.environ, TF_CPP_MIN_LOG_LEVEL="2")
+    env = dict(os.environ, TF_CPP_MIN_LOG_LEVEL="2", TF_FORCE_GPU_ALLOW_GROWTH="true")
     first = subprocess.run(cmd, capture_output=True, text=True, env=env, cwd=WORKSPACE_ROOT)
     assert first.returncode == 0, first.stdout[-2000:] + first.stderr[-2000:]
     m1 = json.load(open(os.path.join(out, "A", "metrics.json")))
@@ -307,7 +310,7 @@ def test_india_runner_resumes_from_checkpoints(tmp_path):
     assert "loaded bgnet from checkpoint" in second.stdout and "loaded ensemble_lam0/omega" in second.stdout
     after = {p: os.path.getmtime(os.path.join(dp, p)) for dp, _, fs in os.walk(ck) for p in fs}
     assert after == files  # nothing retrained or rewritten
-    assert json.load(open(os.path.join(out, "A", "metrics.json"))) == m1
+    assert_close(json.load(open(os.path.join(out, "A", "metrics.json"))), m1, "A/metrics.json")
 
 
 # real JJAS data (two seasons), only if data/India/ERA5_full and IMD_jjas are present -----------
