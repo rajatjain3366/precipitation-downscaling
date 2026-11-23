@@ -25,6 +25,17 @@ Stages (--stage):
   B      experiment B (selected lambda): test metrics, plots, comparison with A
   all    A, sweep, B
 
+Studies after the first lab run (experiments/mass_study.py; config section "study"):
+  members     member study: members from scratch and warm-started from BGNet,
+              selected on Perfect-Member validation MSE [0,1] (as for NZ);
+              writes member_study/results.json and selection.json
+  placements  mass term in each placement (study.placements) with study.lambdas,
+              each against its own lambda = 0 control; (placement, lambda)
+              selected on validation only, test once (placements/)
+  repeats     study.repetitions repetitions of BGNet, QRE, control and QRE + mass
+              at the selected placement and lambda: mean +- std, paired Wilcoxon
+              tests (repetitions/)
+
 Every model is checkpointed in checkpoints.dir; rerunning a stage loads what
 exists, so an interrupted run continues with the model it was training.
 
@@ -72,7 +83,8 @@ PLACEMENTS = ("members", "ensemble", "both")
 def parse_args(argv=None):
     p = argparse.ArgumentParser(description="India QRE with global mass-conservation regularization")
     p.add_argument("--config", default="configs/india_v1.json")
-    p.add_argument("--stage", choices=["data", "A", "sweep", "B", "all"], default="all")
+    p.add_argument("--stage", choices=["data", "A", "sweep", "B", "all", "members", "placements", "repeats"],
+                   default="all")
     p.add_argument("--save-dir", default=None)
     p.add_argument("--set", action="append", default=[], metavar="KEY.PATH=JSON",
                    help="override a config value, e.g. --set mass.placement='\"both\"'")
@@ -234,7 +246,9 @@ def get_members(c, lam_m, bgnet):
         extra = {"interval": list(c.q_ranges[i]), "thresholds": c.thr, "init": init,
                  "lambda_mass": lam_m, "mass": mass_settings(cfg) if lam_m else None}
         if init == "warm_start":
-            extra["init_from"] = checkpoints.signature(bgnet_cfg(cfg), "bgnet", c.seed)
+            # the BGNet the members start from; a context may name its own (NZ: the 10-epoch BGNet)
+            extra["init_from"] = (getattr(c, "warm_start_signature", None)
+                                  or checkpoints.signature(bgnet_cfg(cfg), "bgnet", c.seed))
 
         def build():
             m = build_bgnet(mcfg, c.D, c.data["aux"])
@@ -559,12 +573,112 @@ def print_summary(name, res):
                   f"daily-total MAE {b['daily_total_mae_mm_per_day']:.4f} mm/day", flush=True)
 
 
+# -----------------------------------------------------------------------------
+# Studies after the first lab run: member study, placements, repetitions
+# -----------------------------------------------------------------------------
+def stage_members(c):
+    """Members from scratch and warm-started from BGNet; select on Perfect-Member validation MSE [0,1]."""
+    import mass_study as S
+    study, ck = c.cfg["study"], c.cfg["checkpoints"]["dir"]
+    out = os.path.join(c.out, "member_study")
+    print("== India member study ==", flush=True)
+    bgnet, _ = get_bgnet(c)
+    bg_val = R.predict(BGCallWrapper(bgnet, mean_mode=c.mode), c.X["val"])
+    ev = lambda pred: M.evaluate(c.Y["val"], pred, c.train_totals, c.labels["val"], c.N, c.data["areas"],
+                                 c.cfg["mass"]["eps_mm_per_day"])
+    res = {"bgnet_val": compact(ev(bg_val)), "rule": "lowest Perfect-Member validation MSE [0,1] (as the NZ member study)"}
+    for init in study["member_inits"]:
+        cm = S.view(c, ckdir=os.path.join(ck, "member_study", init), init=init)
+        members, infos = get_members(cm, 0.0, bgnet)
+        F = member_preds(cm, members, c.X["val"])
+        pm = ev(np.einsum("tn,tnd->td", c.L["val"], F))
+        own = []
+        for i, idx in enumerate(c.val_parts):
+            mem = float(np.mean((F[idx, i] - c.Y["val"][idx]) ** 2))
+            bg = float(np.mean((bg_val[idx] - c.Y["val"][idx]) ** 2))
+            own.append({"interval": i, "val_days": int(len(idx)), "member_mse": mem, "bgnet_mse": bg, "ratio": mem / bg,
+                        "best_epoch": infos[i].get("best_epoch"), "epochs": infos[i].get("epochs")})
+        res[init] = {"perfect_member_val": compact(pm), "own_interval_val": own,
+                     "training": [summary(i) for i in infos]}
+        print(f"  {init}: Perfect-Member val MSE {r3(v['mse'] for v in pm['regime_mse'].values())}, "
+              f"member/BGNet own-interval ratio {[round(o['ratio'], 3) for o in own]}, "
+              f"best_epoch {[o['best_epoch'] for o in own]}", flush=True)
+        R.save_json(res, os.path.join(out, "results.json"))
+    pm01 = {i: res[i]["perfect_member_val"]["mse"]["[0.0,1.0]"] for i in study["member_inits"]}
+    best = min(pm01, key=pm01.get)
+    sel = {"selected_init": best, "rule": res["rule"], "perfect_member_val_mse_0_1": pm01}
+    R.save_json(sel, os.path.join(out, "selection.json"))
+    print(f"  selected member init: {best}", flush=True)
+    return sel
+
+
+def selected_init(c):
+    v = c.cfg["study"].get("member_init", "auto")
+    if v != "auto":
+        return v
+    path = os.path.join(c.out, "member_study", "selection.json")
+    if not os.path.exists(path):
+        raise FileNotFoundError(f"{path} missing; run --stage members first (or set study.member_init)")
+    with open(path) as f:
+        return json.load(f)["selected_init"]
+
+
+def rep_base(c, init):
+    """
+    Models of repetition k (seed base_seed + 1000 k). k = 0: BGNet and Weight Network of experiment A
+    (checkpoints.dir), members of the member study, mass models in placements/<placement>; k >= 1:
+    everything in repetitions/rep<k>/.
+    """
+    import mass_study as S
+    ck = c.cfg["checkpoints"]["dir"]
+
+    def models(k):
+        if k == 0:
+            ctx, mem_ctx = S.view(c, init=init), S.view(c, ckdir=os.path.join(ck, "member_study", init), init=init)
+            mass_root = os.path.join(ck, "placements")
+        else:
+            d = os.path.join(ck, "repetitions", f"rep{k}")
+            ctx = mem_ctx = S.view(c, ckdir=d, seed=c.seed + 1000 * k, init=init)
+            mass_root = os.path.join(d, "placements")
+        bgnet, _ = get_bgnet(ctx)
+        omega, _ = get_omega(ctx)
+        members, _ = get_members(mem_ctx, 0.0, bgnet)
+        return {"ctx": ctx, "base": {"members": members, "omega": omega, "bgnet": bgnet, "warm_bgnet": bgnet},
+                "mass_dir": lambda p: os.path.join(mass_root, p)}
+    return models
+
+
+def stage_placements(c):
+    import mass_study as S
+    init = selected_init(c)
+    print(f"== placement study (members: {init}) ==", flush=True)
+    return S.placement_study(c, rep_base(c, init)(0), c.cfg["study"], os.path.join(c.out, "placements"))
+
+
+def stage_repeats(c):
+    import mass_study as S
+    init = selected_init(c)
+    placement, lam = S.read_selection(os.path.join(c.out, "placements"))
+    print(f"== repetitions: {placement}, lambda {lam:g}, members {init} ==", flush=True)
+    return S.repetitions(c, rep_base(c, init), c.cfg["study"], os.path.join(c.out, "repetitions"), placement, lam)
+
+
 def main(argv=None):
+    # the study tables contain "λ"; on Windows a piped stdout (tee, tests) is cp1252 and would fail
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
     args = parse_args(argv)
     cfg = load_config(args)
     os.makedirs(cfg["save_dir"], exist_ok=True)
     R.save_json({"config": cfg, "stage": args.stage, "argv": sys.argv}, os.path.join(cfg["save_dir"], f"run_{args.stage}.json"))
+    if args.stage in ("members", "placements", "repeats") and "study" not in cfg:
+        raise ValueError(f"--stage {args.stage} needs a 'study' section in the config")
     c = Context(cfg)
+    if args.stage == "members":
+        stage_members(c)
+    elif args.stage == "placements":
+        stage_placements(c)
+    elif args.stage == "repeats":
+        stage_repeats(c)
     if args.stage in ("A", "all"):
         stage_A(c)
     if args.stage in ("sweep", "all"):

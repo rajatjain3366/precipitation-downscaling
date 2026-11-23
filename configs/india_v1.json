@@ -116,5 +116,13 @@
   },
   "checkpoints": {
     "dir": "checkpoints/india/qre_mass_v1"
+  },
+  "study": {
+    "_comment": "run_india.py --stage members / placements / repeats: member study, mass placements x lambdas, repetitions",
+    "member_inits": ["scratch", "warm_start"],
+    "member_init": "auto",
+    "placements": ["ensemble", "members", "both"],
+    "lambdas": [0, 0.1, 1, 3, 10],
+    "repetitions": 10
   }
 }

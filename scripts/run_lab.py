@@ -11,6 +11,11 @@ Steps (docs/RUNBOOK.md):
   7  india_A           India experiment A (lambda = 0)
   8  india_sweep       India lambda sweep (validation only)
   9  india_B           India experiment B (selected lambda)
+ 10  india_member_study  India member study: scratch vs warm start, selected on validation
+ 11  nz_placements     NZ mass placements x lambdas on the member-study models (step 2 set, step 3 BGNet)
+ 12  india_placements  India mass placements x lambdas (members from step 10)
+ 13  nz_repetitions    NZ: 10 repetitions of BGNet / QRE / control / QRE + mass, Wilcoxon tests
+ 14  india_repetitions India: the same
 
 Usage:
   python scripts/run_lab.py                 # run everything not finished yet
@@ -33,8 +38,8 @@ are not enough, because some (e.g. results/india/qre_mass_v1/data_check.json)
 are committed from the author's laptop and must be redone on this machine.
 
 The RUNBOOK's two manual decisions are applied automatically, by the RUNBOOK's
-rules, and passed to steps 7-9 as --set overrides (configs/india_v1.json is not
-edited):
+rules, and passed to the India steps 7-9 (and 10, 12, 14) as --set overrides
+(configs/india_v1.json is not edited):
   members.init     the member set chosen in step 2 (selection.best_by_perfect_member_val_mse_0_1)
   data.day_offset  recommended_day_offset from step 6, or 0 if score_difference < 0.005
 They are saved in logs/decisions.json the first time step 7, 8 or 9 runs and
@@ -129,10 +134,28 @@ class Step:
     args: Callable[[dict], List[str]]        # decisions -> argv (without the interpreter)
     runbook_log: Optional[str]               # the log path the RUNBOOK uses, relative to the repo
     outputs: Callable[[Path], Optional[str]]  # None when complete, else what is missing
-    estimate: str
+    estimate: str                            # CPU estimate (RUNBOOK)
     needs_marker: bool = True                # False: outputs alone mean finished (step 0)
     needs_decisions: bool = False            # True: gets the members.init / day_offset overrides
     data: List[str] = field(default_factory=list)  # data folders it needs
+    gpu_estimate: Optional[str] = None       # GPU estimate (lab PC, RTX 4000 Ada)
+
+
+NZ_STUDY = "results/fixes_v2/nz_wn/sanity/mass_study"
+# GPU estimates for steps 10-14 (RTX 4000 Ada), built from the measured times of the first lab run
+# (results/lab_runs/2026-11-23_rtx4000ada/logs/summary.txt): NZ warm-start member set 2m08s, scratch set
+# 3m03s, converged BGNet 2m03s, nz_mass 10m50s; India A 2m36s (BGNet 66 epochs x 1.1 s, Weight Network
+# 40 x 1.0 s, warm-start members 6-11 epochs x 0.3-0.6 s, ensemble stage 7 x 1.2 s), sweep 1m17s for three
+# ensemble stages, B 13 s. The dry run also prints each finished step's measured duration.
+GPU_EST = {
+    "india_member_study": "2-5 min (warm start ~20 s; from scratch ~1-3 min)",
+    "nz_placements": "20-40 min (5 ensemble stages ~1 min each; 'members' and 'both' each retrain 6 members "
+                     "x 4 lambdas at ~2-3 min per set)",
+    "india_placements": "5-25 min (ensemble stages ~25 s each; members per lambda ~20 s warm, 1-3 min scratch)",
+    "nz_repetitions": "1-1.5 h (9 new repetitions of ~6-9 min: BGNet 10 epochs, Weight Network, converged BGNet "
+                      "~2 min, members ~2-3 min, control and mass model)",
+    "india_repetitions": "30-70 min (9 new repetitions of ~3-8 min)",
+}
 
 
 def india_sets(dec):
@@ -183,6 +206,35 @@ STEPS = [
          lambda d: ["experiments/run_india.py"] + INDIA_CFG + ["--stage", "B"] + india_sets(d),
          f"{INDIA_OUT}/stage_B.log", files_exist(f"{INDIA_OUT}/B/metrics.json", f"{INDIA_OUT}/comparison.json"),
          "10-30 min", needs_decisions=True, data=["data/India/ERA5_full", "data/India/IMD_jjas"]),
+    # --- studies after the first lab run (experiments/mass_study.py; config section "study") ---
+    Step(10, "india_member_study", "India member study: scratch vs warm start (Perfect-Member val MSE)",
+         lambda d: ["experiments/run_india.py"] + INDIA_CFG + ["--stage", "members"] + india_sets(d),
+         f"{INDIA_OUT}/stage_members.log",
+         files_exist(f"{INDIA_OUT}/member_study/results.json", f"{INDIA_OUT}/member_study/selection.json"),
+         "1-4 h", needs_decisions=True, data=["data/India/ERA5_full", "data/India/IMD_jjas"],
+         gpu_estimate=GPU_EST["india_member_study"]),
+    Step(11, "nz_placements", "NZ: mass placements x lambdas on the member-study models",
+         lambda d: ["experiments/nz_mass.py", "--stage", "placements"] + NZ_FLAGS,
+         "results/fixes_v2/nz_wn/nz_placements.log",
+         files_exist(f"{NZ_STUDY}/placements/selection.json", f"{NZ_STUDY}/placements/comparison.json"),
+         "10-40 h", data=["data/CORDEX_NZ"], gpu_estimate=GPU_EST["nz_placements"]),
+    Step(12, "india_placements", "India: mass placements x lambdas",
+         lambda d: ["experiments/run_india.py"] + INDIA_CFG + ["--stage", "placements"] + india_sets(d),
+         f"{INDIA_OUT}/stage_placements.log",
+         files_exist(f"{INDIA_OUT}/placements/selection.json", f"{INDIA_OUT}/placements/comparison.json"),
+         "5-20 h", needs_decisions=True, data=["data/India/ERA5_full", "data/India/IMD_jjas"],
+         gpu_estimate=GPU_EST["india_placements"]),
+    Step(13, "nz_repetitions", "NZ: repetitions of the final comparison (mean +- std, Wilcoxon)",
+         lambda d: ["experiments/nz_mass.py", "--stage", "repeats"] + NZ_FLAGS,
+         "results/fixes_v2/nz_wn/nz_repetitions.log",
+         files_exist(f"{NZ_STUDY}/repetitions/summary.json", f"{NZ_STUDY}/repetitions/summary.md"),
+         "30-100 h", data=["data/CORDEX_NZ"], gpu_estimate=GPU_EST["nz_repetitions"]),
+    Step(14, "india_repetitions", "India: repetitions of the final comparison (mean +- std, Wilcoxon)",
+         lambda d: ["experiments/run_india.py"] + INDIA_CFG + ["--stage", "repeats"] + india_sets(d),
+         f"{INDIA_OUT}/stage_repeats.log",
+         files_exist(f"{INDIA_OUT}/repetitions/summary.json", f"{INDIA_OUT}/repetitions/summary.md"),
+         "20-70 h", needs_decisions=True, data=["data/India/ERA5_full", "data/India/IMD_jjas"],
+         gpu_estimate=GPU_EST["india_repetitions"]),
 ]
 
 
@@ -405,7 +457,7 @@ def write_summary(rows, logs, started, gpus):
 # ----------------------------------------------------------------------------- main
 def parse_args(argv):
     p = argparse.ArgumentParser(description="Run every RUNBOOK training step in order (see the module docstring).")
-    p.add_argument("--from-step", default=None, help="first step to consider (number 0-9 or name); earlier steps are not run")
+    p.add_argument("--from-step", default=None, help="first step to consider (number 0-14 or name); earlier steps are not run")
     p.add_argument("--to-step", default=None, help="last step to consider (number or name)")
     p.add_argument("--dry-run", action="store_true", help="only print the plan and the commands; run and write nothing")
     p.add_argument("--force", action="store_true",
@@ -465,7 +517,10 @@ def main(argv=None, root=ROOT, steps=None, py=None):
                     dec_shown = True
             missing_data = [d for d in s.data if not (root / d).is_dir()]
             print(f"[{s.num}] {s.name}: {s.title}  -- {state}")
-            print(f"    estimate: {s.estimate}")
+            print(f"    estimate: CPU {s.estimate}" + (f"; GPU {s.gpu_estimate}" if s.gpu_estimate else ""))
+            marker = jload(logs / f"{s.name}.done")
+            if marker and "seconds" in marker:
+                print(f"    measured: {fmt_seconds(marker['seconds'])} (finished {marker.get('finished_at')})")
             print(f"    $ {show([py] + s.args(dec))}")
             print(f"    log: {args.logs}/{s.name}.log" + (f" and {s.runbook_log}" if s.runbook_log else ""))
             if missing_data:
@@ -524,7 +579,8 @@ def main(argv=None, root=ROOT, steps=None, py=None):
                 print(f"\n   decisions (logs/decisions.json): members.init={dec['members_init']}, "
                       f"data.day_offset={dec['day_offset']}, extra={dec['india_set']}", flush=True)
             cmd = [py] + s.args(dec)
-            print(f"\n== [{s.num}] {s.name}: {s.title}  (estimate {s.estimate})\n$ {show(cmd)}", flush=True)
+            est = f"CPU {s.estimate}" + (f", GPU {s.gpu_estimate}" if s.gpu_estimate else "")
+            print(f"\n== [{s.num}] {s.name}: {s.title}  (estimate {est})\n$ {show(cmd)}", flush=True)
             if s.needs_marker:
                 (logs / f"{s.name}.done").unlink(missing_ok=True)
             t0 = time.time()

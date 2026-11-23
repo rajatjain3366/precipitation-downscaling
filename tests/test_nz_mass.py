@@ -19,7 +19,6 @@ if WORKSPACE_ROOT not in sys.path:
     sys.path.insert(0, WORKSPACE_ROOT)
 
 from gpu_tol import assert_close, on_gpu  # noqa: E402  (exact on CPU, rtol 1e-5 on GPU)
-from src.gpu_setup import GPU_RTOL  # noqa: E402
 from src.grid_areas import EARTH_RADIUS_KM, cell_areas_from_centres, cell_edges  # noqa: E402
 from src.india_data import cell_areas_km2  # noqa: E402
 
@@ -114,7 +113,7 @@ def test_nz_mass_smoke_and_lambda0_reproduces_v2_qre(tmp_path):
 
     # lambda = 0 is the NZ v2 QRE, to the last digit on a CPU (on a GPU: up to float noise, rtol 1e-5)
     if on_gpu():
-        assert comp["lambda0_max_relative_difference"] <= GPU_RTOL
+        assert comp["lambda0_max_relative_difference"] <= 1e-3   # nz_mass.LAMBDA0_REL_TOL
     else:
         assert comp["lambda0_reproduces_nz_v2_qre_exactly"] is True
         assert comp["lambda0_max_relative_difference"] == 0.0

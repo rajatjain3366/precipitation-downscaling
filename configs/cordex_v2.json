@@ -106,5 +106,13 @@
   "sanity": {
     "members_max_epochs": 2,
     "weight_network_max_epochs": 2
+  },
+  "study": {
+    "_comment": "nz_mass.py --stage placements / repeats (run with the member study's --sanity flags): member-study models, mass placements x lambdas, repetitions",
+    "member_set": "auto",
+    "member_study_results": "results/fixes_v2/nz_wn/sanity/member_study/results.json",
+    "placements": ["ensemble", "members", "both"],
+    "lambdas": [0, 0.1, 1, 3, 10],
+    "repetitions": 10
   }
 }

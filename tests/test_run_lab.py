@@ -131,7 +131,8 @@ def test_real_steps_dry_run_lists_every_runbook_step(tmp_path, capsys):
     assert L.main(["--dry-run"], root=tmp_path) == 0
     out = capsys.readouterr().out
     names = ["nz_checkpoints", "nz_member_B", "nz_member_A", "nz_member_bgnet", "nz_mass", "india_data_check",
-             "india_day_offset", "india_A", "india_sweep", "india_B"]
+             "india_day_offset", "india_A", "india_sweep", "india_B", "india_member_study", "nz_placements",
+             "india_placements", "nz_repetitions", "india_repetitions"]
     assert [s.name for s in L.STEPS] == names
     pos = [out.index(f"] {n}:") for n in names]
     assert pos == sorted(pos)

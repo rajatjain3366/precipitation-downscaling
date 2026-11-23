@@ -35,6 +35,9 @@ STEPS = [
      "--save-dir", INDIA_SMOKE_OUT],
     # NZ mass conservation (needs the fixture above): cell areas, mask, lambda = 0 / lambda > 0 smoke run
     ["-m", "pytest", "-q", os.path.join(TESTS_DIR, "test_nz_mass.py")],
+    # post-lab studies (member study, placements, repetitions): statistics and selection unit tests only;
+    # the slow integration runs:  python -m pytest -m slow tests/test_mass_study.py
+    ["-m", "pytest", "-q", "-m", "not slow", os.path.join(TESTS_DIR, "test_mass_study.py")],
 ]
 
 # Scripts that catch their own exceptions and only print FAIL lines

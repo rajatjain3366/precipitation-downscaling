@@ -8,7 +8,7 @@ This file lists every long training run in order: the exact command, the expecte
 
 - They are measured or extrapolated on the author's laptop CPU (TensorFlow 2.10 CPU build), which was running on battery and so possibly throttled.
 - On another CPU they can differ by 2× either way.
-- **GPU:** the lab PC runs use an NVIDIA GPU (`scripts/run_lab.py` stops without one unless `--allow-cpu`). GPU times have never been measured for this code, so treat the times below as CPU times only. The models are small (16 × 16 and 32 × 33 inputs, batch 91), and part of each epoch is data handling on the CPU, so the speed-up may be much smaller than for large networks. The actual duration of every step is in `logs/summary.txt`; please report it.
+- **GPU:** the lab PC runs use an NVIDIA GPU (`scripts/run_lab.py` stops without one unless `--allow-cpu`). On the lab's RTX 4000 Ada, steps 1–9 took about 25 min in all (measured times in §10–14). The times below are CPU times. The models are small (16 × 16 and 32 × 33 inputs, batch 91), and part of each epoch is data handling on the CPU, so the speed-up may be much smaller than for large networks. The actual duration of every step is in `logs/summary.txt`; please report it.
 - **GPU results are not bit-identical** to CPU runs, nor between two GPU runs. They should be close but will not match Kartik's numbers to the last digit (see LAB_SETUP.md §5).
 - "Expected" assumes early stopping ends training before the epoch cap; "worst case" means every model runs to its cap.
 
@@ -67,7 +67,7 @@ checkpoints/                       created by the runs (not in git)
 python tests/run_smoke_tests.py 2>&1 | tee smoke_tests.log
 ```
 
-All 12 lines must say PASS. The India steps need `data/India_sample/`. On a GPU, see LAB_SETUP.md §1.5 for cuDNN errors.
+All 13 lines must say PASS. The India steps need `data/India_sample/`. On a GPU, see LAB_SETUP.md §1.5 for cuDNN errors.
 
 ### 0b. Only if the NZ checkpoints were not copied: retrain them (about 1.5–2.5 h)
 
@@ -235,13 +235,87 @@ What to check:
 
 ---
 
+## 10–14. Studies after the first lab run
+
+The first lab run (steps 0–9 on the RTX 4000 Ada in about 25 min) showed:
+
+- **NZ step 4 used different models:** it trains its own v2 models (members from scratch, its own BGNet), not the member-study models of steps 1–3.
+- **India members and BGNet:** the India members were near-copies of BGNet.
+- **λ:** no λ changed anything.
+
+Steps 10–14 address this. `python scripts/run_lab.py` runs them after step 9; each is resume-safe. Code: `experiments/mass_study.py`. Settings: the `study` section of `configs/india_v1.json` and `configs/cordex_v2.json`.
+
+| Step | Command (run_lab adds the India decisions / NZ member-study flags) | Output |
+| --- | --- | --- |
+| 10. India member study | `python experiments/run_india.py --config configs/india_v1.json --stage members` | `results/india/qre_mass_v1/member_study/` |
+| 11. NZ placements | `python experiments/nz_mass.py --stage placements` + the step 1–3 flags (`$NZ`) | `results/fixes_v2/nz_wn/sanity/mass_study/placements/` |
+| 12. India placements | `python experiments/run_india.py --config configs/india_v1.json --stage placements` | `results/india/qre_mass_v1/placements/` |
+| 13. NZ repetitions | `python experiments/nz_mass.py --stage repeats` + `$NZ` | `results/fixes_v2/nz_wn/sanity/mass_study/repetitions/` |
+| 14. India repetitions | `python experiments/run_india.py --config configs/india_v1.json --stage repeats` | `results/india/qre_mass_v1/repetitions/` |
+
+**GPU estimates** (RTX 4000 Ada), built from the measured times of the first lab run (below):
+
+| Step | GPU estimate |
+| --- | --- |
+| 10 | 2–5 min |
+| 11 | 20–40 min |
+| 12 | 5–25 min |
+| 13 | 1–1.5 h |
+| 14 | 30–70 min |
+
+**Measured on the lab GPU** (RTX 4000 Ada, 2026-11-23; `results/lab_runs/2026-11-23_rtx4000ada/logs/summary.txt`):
+
+| Step | Time |
+| --- | --- |
+| 1 | 2 min 08 s |
+| 2 | 3 min 03 s |
+| 3 | 2 min 03 s |
+| 4 | 10 min 50 s |
+| 5 | 2 s |
+| 6 | 6 s |
+| 7 | 2 min 36 s |
+| 8 | 1 min 17 s |
+| 9 | 13 s |
+
+That is about 25 min in all (step 0 was copied), against 9–32 h estimated on a CPU.
+
+`python scripts/run_lab.py --dry-run` prints them, and also each finished step's measured duration.
+
+**Before step 10, on the lab PC:** run `python -m pytest -m slow tests/test_mass_study.py`. It is the integration test of these stages on the samples: about 10 min on a laptop CPU, which is why the smoke suite skips it.
+
+**What each step does:**
+
+- **Step 10, India member study.** Members are trained from scratch and warm-started from BGNet, in `checkpoints/india/qre_mass_v1/member_study/<init>/`. The set with the lower Perfect-Member validation MSE [0, 1] is selected, as for NZ. `results.json` has, per set, each member's own-interval validation MSE against BGNet and its `best_epoch` / `epochs`. A ratio near 1 with `best_epoch` = 1–2 means the members barely moved from BGNet.
+- **Steps 11 / 12, placements.** The mass term is tried in `"ensemble"`, `"members"` and `"both"` with λ ∈ {0, 0.1, 1, 3, 10}. λ multiplies the initial L_QRE / L_mass ratio, as before.
+  - **Controls:** each placement has its own λ = 0 control. For `"ensemble"` and `"both"` it is the fine-tuned control: the same ensemble stage with the mass term off. For `"members"` it is the QRE itself.
+  - **Selection,** validation only, across all (placement, λ > 0) pairs: among those whose val MSE [0, 1] is within 2 % of their own control, the lowest val daily-total MAE wins. If none qualifies, the pair with the lowest MSE relative to its control is chosen, and `tolerance_met` is false.
+  - **Test:** evaluated once, for the selected pair.
+  - **Outputs:** `<placement>/sweep.json`, `selection.json`, `comparison.json` / `.md` and `plots/`.
+- **Step 11 uses the member-study models.** These are the member set selected in step 2, the converged BGNet of step 3 as the baseline, the 10-epoch BGNet as the warm start, and the squared-EMD Weight Network. They are loaded with their exact checkpoint signatures; that's why the NZ steps run with the step 1–3 flags. `comparison.json` → `member_study_check` compares the QRE and BGNet test MSEs with the member study's. The relative difference must be ≤ 1e-3; above that, the run fails after writing its outputs.
+- **Steps 13 / 14, repetitions.** There are `study.repetitions` = 10 repetitions with seed `base_seed + 1000 k`, of BGNet, QRE, the control and QRE + mass at the selected placement and λ.
+  - **Repetition 0:** the placement study's models, loaded.
+  - **Repetitions 1–9:** the same recipe trained again. NZ: in `checkpoints/nz_v2_sanity/rep<k>/`. India: in `checkpoints/india/qre_mass_v1/repetitions/rep<k>/`.
+  - **Resume:** each repetition's test metrics are saved in `rep_<k>.json`, and a rerun skips finished repetitions.
+  - **Output:** `summary.json` / `summary.md` give the mean ± std (ddof 1), and paired two-sided Wilcoxon signed-rank tests at 5 %: QRE vs BGNet, QRE + mass vs QRE, and QRE + mass vs the control.
+  - **Why at least 6 repetitions:** with 5 or fewer pairs, even all differences of one sign give p ≥ 0.0625, so the tests are reported as n/a.
+
+**What to check:**
+
+- **Step 10:** `member_study/selection.json`, the selected init. In `results.json`, the own-interval ratios and best epochs of both sets.
+- **Steps 11 / 12:** in `selection.json`, the selected placement and λ, and `tolerance_met`. In `candidates`, how the totals error moves with λ in each placement. In `comparison.md`, the test table.
+- **Step 11:** `member_study_check` ≤ 1e-3 for both `qre` and `bgnet`.
+- **Steps 13 / 14:** the `summary.md` table and tests. Is QRE vs BGNet significant, and in which direction? Is QRE + mass vs the control?
+
+---
+
 ## Sending results back
 
 Send these folders zipped; they are small, only JSON, PNG and logs:
 
 - `results/fixes_v2/nz_wn/` (member study results and logs)
 - `results/fixes_v2/nz_mass/` (NZ QRE vs QRE + mass conservation, including `nz_mass.log`)
-- `results/india/qre_mass_v1/` (everything, including the `.log` files)
+- `results/india/qre_mass_v1/` (everything, including the `.log` files; with steps 10–14 also `member_study/`, `placements/`, `repetitions/`)
+- `results/fixes_v2/nz_wn/` also holds steps 11 and 13 (`sanity/mass_study/`)
 - `smoke_tests.log`, `day_offset.log`, `era5_download.log`
 - the final `configs/india_v1.json` you used (`results/india/qre_mass_v1/run_*.json` also records it)
 - the machine: CPU or GPU model, RAM and OS

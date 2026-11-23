@@ -219,7 +219,9 @@ experiments/
   member_study.py              NZ member study: warm start (B) / from scratch (A), BGNet retrain
   run_india.py                 India runner, stages data / A / sweep / B / all
   india_day_offset.py          ERA5 -> IMD day offset check (train + val only)
-  nz_mass.py                   NZ: QRE vs QRE + mass conservation on the v2 models (§9)
+  nz_mass.py                   NZ: QRE vs QRE + mass conservation on the v2 models (§9); --stage placements /
+                               repeats on the member-study models
+  mass_study.py                India member study, mass placements x lambdas, repetitions + Wilcoxon (§8, §9)
 scripts/
   run_lab.py                   runs every RUNBOOK training step in order (resumable, logs to logs/)
   download_era5_india.py       ERA5 CDS download + 4x4 coarsening (not run here)
@@ -389,6 +391,24 @@ python experiments/nz_mass.py --set 'checkpoints.dir="checkpoints/nz_mass"' --sa
 ```
 
 ---
+
+### Studies after the first lab run (RUNBOOK steps 10–14)
+
+**Status: implemented and tested on the samples; not yet run on the real data.** The first lab run left three open points:
+
+- **NZ step 4 used other models.** It trains the plain v2 recipe (members from scratch, its own BGNet), not the member-study models of steps 1–3. That's why its λ = 0 QRE (57.85) and BGNet (49.51) differ from the member study's (warm start 52.03, converged BGNet 50.87).
+- **India members ≈ BGNet.**
+- **No λ had an effect.**
+
+`experiments/mass_study.py` adds three studies:
+
+| Study | What it does |
+| --- | --- |
+| India member study | Scratch vs warm start, selected on Perfect-Member validation MSE as for NZ |
+| Placement study | `"ensemble"`, `"members"` and `"both"` with λ ∈ {0, 0.1, 1, 3, 10}, each against its own λ = 0 control. Same validation-only rule, across all (placement, λ) pairs. For NZ it runs on the member-study models, and checks them against the member study's test MSEs |
+| Repetitions | 10 repetitions of BGNet, QRE, control and QRE + mass at the selected placement and λ: mean ± std and paired Wilcoxon tests at 5 % |
+
+Details are in the RUNBOOK, §10–14.
 
 ## 10. Scope
 

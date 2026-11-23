@@ -84,5 +84,13 @@
   },
   "checkpoints": {
     "dir": "checkpoints/india/smoke"
+  },
+  "study": {
+    "_comment": "smoke only: two lambdas, six repetitions (the minimum for the Wilcoxon tests)",
+    "member_inits": ["scratch", "warm_start"],
+    "member_init": "auto",
+    "placements": ["ensemble", "members", "both"],
+    "lambdas": [0, 1],
+    "repetitions": 6
   }
 }

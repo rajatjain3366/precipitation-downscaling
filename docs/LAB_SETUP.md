@@ -2,7 +2,7 @@
 
 This guide sets up the college lab PC, copies the data, checks the GPU, runs every training step of [RUNBOOK.md](RUNBOOK.md) with one command, and copies the results back. The main path is **Linux with an NVIDIA GPU and no admin rights**. Windows is covered briefly at the end. The RUNBOOK remains the reference for what each step does and what to check in its outputs.
 
-**Total time:** about 9–32 h on a CPU (RUNBOOK estimates, steps 1–9), plus 1.5–2.5 h if the NZ checkpoints have to be retrained (step 0). GPU times have not been measured; see the note in the RUNBOOK.
+**Total time:** about 9–32 h on a CPU (RUNBOOK estimates, steps 1–9), plus 1.5–2.5 h if the NZ checkpoints have to be retrained (step 0). On the lab GPU (RTX 4000 Ada), steps 0–9 took about 25 min. Steps 10–14 (RUNBOOK §10–14) are estimated at about 2–3.5 h on that GPU.
 
 **GPU required by default:** `run_lab.py` checks at startup whether TensorFlow sees a GPU and stops if it does not. Add `--allow-cpu` to run on the CPU anyway.
 
@@ -150,7 +150,8 @@ precipitation-downscaling/
   scp -r data\CORDEX_NZ data\India_sample <user>@<lab-pc>:~/precipitation-downscaling/data/
   scp -r data\India\ERA5_full data\India\IMD_jjas <user>@<lab-pc>:~/precipitation-downscaling/data/India/
   scp -r checkpoints
-z_v2_sanityep0 <user>@<lab-pc>:~/precipitation-downscaling/checkpoints/nz_v2_sanity/
+z_v2_sanity
+ep0 <user>@<lab-pc>:~/precipitation-downscaling/checkpoints/nz_v2_sanity/
   ```
 
 - **From Linux:** `rsync -av --progress data/CORDEX_NZ data/India_sample <user>@<lab-pc>:~/precipitation-downscaling/data/`, and likewise for `data/India/ERA5_full`, `data/India/IMD_jjas` and the checkpoints.
@@ -169,7 +170,7 @@ z_v2_sanityep0 <user>@<lab-pc>:~/precipitation-downscaling/checkpoints/nz_v2_sa
 python tests/run_smoke_tests.py 2>&1 | tee smoke_tests.log
 ```
 
-All 12 lines must say PASS. If any fails, don't start the long runs; send `smoke_tests.log`. On the GPU this is also the first test that the code runs there at all.
+All 13 lines must say PASS. If any fails, don't start the long runs; send `smoke_tests.log`. On the GPU this is also the first test that the code runs there at all.
 
 - **India steps:** they need `data/India_sample/` (section 2).
 - **Comparisons on a GPU:** the tests that compare two evaluations of the same model (for example "λ = 0 reproduces the original objective") are exact on a CPU and use a relative tolerance of 1e-5 on a GPU (`tests/gpu_tol.py`), as `nz_mass.py` does.
@@ -199,6 +200,13 @@ This prints every step with its command, its time estimate, its log files and wh
 | 7 | `india_A` | India experiment A (λ = 0) | 2–7 h |
 | 8 | `india_sweep` | India λ sweep (validation only) | 0.5–3.5 h |
 | 9 | `india_B` | India experiment B (selected λ) | 10–30 min |
+| 10 | `india_member_study` | India member study: scratch vs warm start, selected on validation | GPU 2–5 min |
+| 11 | `nz_placements` | NZ: mass placements × λ on the member-study models | GPU 20–40 min |
+| 12 | `india_placements` | India: mass placements × λ | GPU 5–25 min |
+| 13 | `nz_repetitions` | NZ: 10 repetitions, mean ± std, Wilcoxon tests | GPU 1–1.5 h |
+| 14 | `india_repetitions` | India: the same | GPU 30–70 min |
+
+The GPU estimates for steps 10–14 come from the measured times of the first lab run (RUNBOOK §10–14). The dry run also prints each finished step's measured duration. Before step 10, run the slow integration tests once: `python -m pytest -m slow tests/test_mass_study.py` (RUNBOOK §10–14).
 
 ### 4.2 Start inside tmux
 
@@ -298,7 +306,7 @@ One consequence for the RUNBOOK checks:
    - `logs/`, including `decisions.json`, `summary.txt` and `gpu_check.log`
    - `results/fixes_v2/nz_wn/`
    - `results/fixes_v2/nz_mass/`
-   - `results/india/qre_mass_v1/`
+   - `results/india/qre_mass_v1/` (with steps 10–14: `member_study/`, `placements/`, `repetitions/`; NZ steps 11 and 13 are in `results/fixes_v2/nz_wn/sanity/mass_study/`)
    - `smoke_tests.log`, `day_offset.log` and, if step 0 ran, `nz_step0b.log`
 
    ```bash

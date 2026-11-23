@@ -15,3 +15,9 @@ WORKSPACE_ROOT = os.path.dirname(TESTS_DIR)
 for p in (WORKSPACE_ROOT, TESTS_DIR):
     if p not in sys.path:
         sys.path.insert(0, p)
+
+
+def pytest_configure(config):
+    # slow: integration runs of the post-lab studies (about 10 min on a laptop CPU, minutes on a GPU);
+    # the smoke suite skips them (-m "not slow"); run them with  python -m pytest -m slow tests/test_mass_study.py
+    config.addinivalue_line("markers", "slow: long integration test, not part of the smoke suite")

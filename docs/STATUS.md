@@ -77,11 +77,37 @@ All models below are undertrained: members and BGNet ran 10 epochs, the Weight N
 11. **India intervals: the paper's published bounds** (0 / 0.166 / 0.392 / 0.61 / 0.812 / 0.923 / 1, `segmentation.method = "fixed"`). The Bayesian GMM on the 3,904 JJAS training totals was unstable (47 of 100 runs degenerate) and gave no extremes member (top interval = top 28 % of days). Training days per member are now 648 / 882 / 851 / 789 / 433 / 301; the extremes member has 301 training, 69 validation and 85 test days. The GMM remains an option. NZ is unchanged (GMM).
 12. **India ERA5 inputs are daily means** over UTC days (all 24 hourly fields), confirmed in the script that made them, `scripts/download_era5_india_jjas.py` (`resample('1D').mean()`). The 00:00 timestamps are bin labels and the `stepType: instant` attributes come from the hourly data.
 
+## First lab run (2026-11-23, RTX 4000 Ada, all 10 run_lab steps in about 25 min)
+
+The result files are committed: the results at their usual paths, and the logs in `results/lab_runs/2026-11-23_rtx4000ada/`. The step times were 2–3 min for each NZ member-study step, 10 min 50 s for `nz_mass` and 2 min 36 s for India A.
+
+- **NZ step 3, test MSE [0,1] / [0,0.2] / [0.9,1]:**
+
+  | Model | [0,1] | [0,0.2] | [0.9,1] |
+  | --- | --- | --- | --- |
+  | QRE (warm start) | 52.03 | 2.13 | 190.46 |
+  | Converged BGNet | 50.87 | 2.30 | 186.33 |
+  | Perfect-Member | 50.31 | 1.89 | 187.43 |
+
+- **NZ step 4:** QRE λ = 0 = 57.85 and BGNet = 49.51. The difference from step 3 is expected: step 4 trains its own v2 models (members from scratch with the v2 settings, its own BGNet, in `checkpoints/nz_mass`), not the member-study models. The two BGNets are separate trainings (other epoch cap, GPU); their 2.7 % gap is training variation, and the repetitions (step 13) will measure it. λ = 1 had no effect against the fine-tuned control.
+- **India:**
+  - A and B (λ = 0.01, ensemble placement) are identical to the 4th digit.
+  - The members are near-copies of BGNet (per-interval MSE within about 1 %), so QRE ≈ BGNet ≈ Perfect-Member.
+  - All three under-predict all-India totals by about 4 %.
+  - **Why the India members ≈ BGNet:** the warm-start members stopped at best epochs 2 / 3 / 2 / 7 / 6 / 4 (of 6–11 epochs, patience 4).
+    - They start from the converged BGNet (62 of 66 epochs) with a lower learning rate (5e-5). That is about 10–70 gradient steps per member, so they barely leave BGNet.
+    - NZ's warm-start members start from the 10-epoch BGNet instead. They trained 28–47 epochs and beat it on their own intervals (ratios 0.69–0.87).
+    - The India member study (step 10) adds members from scratch.
+- **Follow-up (steps 10–14, implemented 2026-11-23):**
+  - India member study (scratch vs warm start);
+  - mass placements `members` / `ensemble` / `both` with λ ∈ {0, 0.1, 1, 3, 10}, NZ on the member-study models;
+  - 10 repetitions with mean ± std and paired Wilcoxon tests. See the RUNBOOK §10–14.
+
 ## Next steps
 
-1. **Kartik, lab PC (Linux, NVIDIA GPU, no admin):** set up as in `docs/LAB_SETUP.md`: Miniconda in `~/miniconda3`, env `qre` with Python 3.10 and CUDA 11.2 / cuDNN 8.1 from conda-forge, `LD_LIBRARY_PATH`, the data, then `python scripts/run_lab.py --check-gpu` (must show a GPU) and the smoke tests.
-2. **Kartik, lab PC:** inside tmux, `python scripts/run_lab.py --dry-run`, then `python scripts/run_lab.py` (stops if TensorFlow sees no GPU, unless `--allow-cpu`). This runs RUNBOOK steps 0–9 in order: NZ member study B → A → BGNet retrain, NZ QRE vs QRE + mass, India data check, day-offset check, India A → λ sweep → B. It sets `members.init` and `day_offset` by the RUNBOOK rules (`logs/decisions.json`). About 9–32 h on a CPU; GPU time not measured. GPU results are not bit-identical to the laptop's CPU results.
-3. **Kartik, lab PC:** check `logs/summary.txt` and the RUNBOOK checks, and copy the results back (`docs/LAB_SETUP.md` §6).
+1. **Done (2026-11-23):** lab PC set up (Linux, RTX 4000 Ada, CUDA 11.2 / cuDNN 8.1), smoke tests passed, RUNBOOK steps 0–9 run in about 25 min; results committed (see above).
+2. **Kartik, lab PC:** the first run's result files are now in git, and the same files exist untracked on the lab PC, so a plain `git pull` would refuse to overwrite them. Run `git fetch origin && git checkout origin/main -- results && git pull` (the committed files are the lab's own, unchanged).
+3. **Kartik, lab PC:** `python -m pytest -m slow tests/test_mass_study.py`, then `python scripts/run_lab.py` (runs steps 10–14; 0–9 are skipped as done).
 4. **Kartik:** read the returned results; update the README results sections and this file.
 
 Cleanup is done (2026-11-23): `_to_delete/` (old ERA5 files, 1.22 GB), the empty `data/India/raw_temp/` and the scratchpad test folders were removed. Kept on purpose, not cleanup candidates: `data/CORDEX_NZ_sample` (the smoke suite regenerates it) and the unused NZ predictors `data/CORDEX_NZ/test/historical/predictors/imperfect` (226 MB) and `.../perfect/EC-Earth3_1981-2000.nc` (113 MB), which were slow to download.
@@ -110,6 +136,7 @@ Cleanup is done (2026-11-23): `_to_delete/` (old ERA5 files, 1.22 GB), the empty
   - `scripts/download_era5_india_jjas.py` (the ERA5 JJAS script, unchanged; run on both machines), `scripts/slice_imd_jjas.py` (the teammate's IMD JJAS script, unchanged), `scripts/check_india_data.py`
   - NZ mass study (2026-11-13): `experiments/nz_mass.py`, `src/grid_areas.py`, `tests/test_nz_mass.py`, `configs/cordex_midterm_on_v2_split.json`
   - Lab runs (2026-11-23): `scripts/run_lab.py`, `docs/LAB_SETUP.md`, `tests/test_run_lab.py`
+  - Post-lab studies (2026-11-23): `experiments/mass_study.py`, `tests/test_mass_study.py`; `run_india.py` stages members / placements / repeats; `nz_mass.py` stages placements / repeats; `study` sections in the configs; run_lab steps 10–14
   - GPU fixes from the first lab-PC test (2026-11-23): `src/gpu_setup.py` (memory growth, `GPU_RTOL`), `tests/conftest.py`, `tests/gpu_tol.py`, `tests/test_gpu_tol.py`
 - **Modified:**
   - `configs/cordex_v2.json`: squared-EMD default and the `member_study` section

@@ -27,7 +27,28 @@ split), loss_scales.json, plots/.
 
 Usage (same flags as run_cordex_v2.py):
   python experiments/nz_mass.py --set 'checkpoints.dir="checkpoints/nz_mass"' --save-dir results/fixes_v2/nz_mass
+
+--stage v2 (default) is the study above, on the NZ v2 models (run_repetition:
+members from scratch, BGNet with the v2 settings, all in checkpoints/nz_mass).
+Those are NOT the models of the NZ member study (RUNBOOK steps 1-3), which is why
+its lambda = 0 QRE and BGNet differ from the member-study numbers.
+
+--stage placements / repeats (experiments/mass_study.py, config section "study")
+use the member-study models instead: the member set selected in step 2
+(study.member_set = "auto" reads it from study.member_study_results), the
+converged BGNet of step 3 as the baseline, the 10-epoch BGNet as the warm start
+and the squared-EMD Weight Network. They must run with the member study's flags
+(--sanity, its intervals file, epochs and checkpoints.dir), so that the
+checkpoint signatures match; repetition 0 then loads those exact models, and the
+QRE / BGNet test MSEs are checked against the member study's (relative 1e-3).
+Repetitions k >= 1 train the same recipe with seed base_seed + 1000 k, in
+rep<k>/ of the same checkpoints.dir; the mass models go to rep<k>/mass/<placement>/.
+  python experiments/nz_mass.py --stage placements --sanity <member-study flags>
+  python experiments/nz_mass.py --stage repeats --sanity <member-study flags>
+Outputs: <save_dir>/mass_study/placements/, <save_dir>/mass_study/repetitions/.
 """
+import argparse
+import copy
 import json
 import os
 import sys
@@ -43,17 +64,21 @@ for p in [WORKSPACE_ROOT, SCRIPT_DIR]:
 
 import run_cordex_v2 as R  # noqa: E402
 import run_india as I  # noqa: E402
+import mass_study as S  # noqa: E402
+from src import checkpoints  # noqa: E402
 from src import india_metrics as M  # noqa: E402
+from src.builders import build_bgnet, build_omega  # noqa: E402
 from src.ConvolutionalNetworks import BGCallWrapper  # noqa: E402
 from src.GammaLoss import GammaLoss  # noqa: E402
-from src.gpu_setup import GPU_RTOL  # noqa: E402
 from src.grid_areas import cell_areas_from_centres  # noqa: E402
 from src.mass_conservation import MassConservation  # noqa: E402
 from src.quantiles import bin_y_var, ynetwork  # noqa: E402
 from src.segmentation import daily_totals, partition_indices  # noqa: E402
 
 MIDTERM_DIR = os.path.join(WORKSPACE_ROOT, "results", "final_cordex_qre")
-LAMBDA0_REL_TOL = GPU_RTOL  # lambda = 0 vs the NZ v2 QRE test MSEs: exact on a CPU, float noise allowed on a GPU
+# lambda = 0 vs the NZ v2 QRE (and the member study's) test MSEs: exact on a CPU; on a GPU the two evaluations
+# can pick other cuDNN kernels, so allow float noise (raised from 1e-5 after the first lab run)
+LAMBDA0_REL_TOL = 1e-3
 
 
 class NZContext:
@@ -189,22 +214,167 @@ def table_md(comp):
     return head + "\n".join(lines) + note
 
 
-def main():
+def max_rel_diff(mine, theirs):
+    """Largest relative difference of the regime MSEs (inf if the day counts differ)."""
+    return max(abs(mine[k]["mse"] - theirs[k]["mse"]) / max(abs(theirs[k]["mse"]), 1e-12)
+               if mine[k]["days"] == theirs[k]["days"] else float("inf") for k in theirs)
+
+
+# -----------------------------------------------------------------------------
+# Member-study models (RUNBOOK steps 1-3) for the placement study and the repetitions
+# -----------------------------------------------------------------------------
+def member_set(cfg):
+    """(variant, member-study results or None): study.member_set, or the set step 2 selected."""
+    study = cfg["study"]
+    path = study["member_study_results"]
+    path = path if os.path.isabs(path) else os.path.join(WORKSPACE_ROOT, path)
+    results = None
+    if os.path.exists(path):
+        with open(path) as f:
+            results = json.load(f)
+    if study.get("member_set", "auto") != "auto":
+        return study["member_set"], results
+    best = (results or {}).get("selection", {}).get("best_by_perfect_member_val_mse_0_1")
+    if best not in ("scratch", "warm_start"):
+        raise FileNotFoundError(f"no member-study selection in {path}; run RUNBOOK step 2 or set study.member_set")
+    return best, results
+
+
+def base_models(c, k, variant):
+    """
+    Repetition k of the member-study recipe (same names and signatures as run_cordex_v2 --sanity and
+    member_study.py, so k = 0 loads their checkpoints): 10-epoch BGNet (the warm start), squared-EMD Weight
+    Network, converged BGNet (the baseline) and the members of `variant`.
+    """
+    cfg, ms = c.cfg, c.cfg["member_study"]
+    seed = cfg["base_seed"] + 1000 * k
+    Xtr, Ytr, Xva, Yva = c.X["train"], c.Y["train"], c.X["val"], c.Y["val"]
+    D, aux = c.D, c.data["aux"]
+
+    def tl(tcfg, name, sig, build, train):
+        R.set_seed(seed)
+        return R.train_or_load(tcfg, f"rep{k}/{name}", sig, build, Xtr, train)[0]
+
+    bg_sig = checkpoints.signature(cfg, "bgnet", seed)
+    bgnet10 = tl(cfg, "bgnet", bg_sig, lambda: build_bgnet(cfg, D, aux),
+                 lambda m: R.fit(m, c.nll, Xtr, Ytr, Xva, Yva, cfg["members"]))
+    omega = tl(cfg, f"weight_network_{cfg['weight_network']['loss']}",
+               checkpoints.signature(cfg, "weight_network", seed, {"thresholds": c.thr}), lambda: build_omega(cfg, c.N),
+               lambda m: R.fit(m, R.weight_network_loss(cfg), Xtr, c.L["train"], Xva, c.L["val"], cfg["weight_network"]))
+    bcfg = copy.deepcopy(cfg)
+    bcfg["members"].update(ms["bgnet_converged"])
+    bgnet = tl(bcfg, "bgnet_converged", checkpoints.signature(bcfg, "bgnet", seed), lambda: build_bgnet(bcfg, D, aux),
+               lambda m: R.fit(m, c.nll, Xtr, Ytr, Xva, Yva, bcfg["members"]))
+    vcfg = copy.deepcopy(cfg)
+    vcfg["members"].update(ms[variant])
+    init = {"scratch": "random", "warm_start": {"from": f"rep{k}/bgnet", "signature": bg_sig}}[variant]
+    members = []
+    R.set_seed(seed)
+    for i in range(c.N):
+        Xs, Ys = Xtr[c.parts[i]], Ytr[c.parts[i]]
+        Xv, Yv = Xva[c.val_parts[i]], Yva[c.val_parts[i]]
+
+        def build():
+            m = build_bgnet(vcfg, D, aux)
+            if variant == "warm_start":
+                m(Xtr[:1], training=False)
+                m.set_weights(bgnet10.get_weights())
+            return m
+
+        sig = checkpoints.signature(vcfg, f"member_{i}", seed,
+                                    {"interval": list(c.q_ranges[i]), "thresholds": c.thr, "init": init})
+        members.append(R.train_or_load(vcfg, f"rep{k}/members_{variant}/member_{i}", sig, build, Xs,
+                                       lambda m: R.fit(m, c.nll, Xs, Ys, Xv, Yv, vcfg["members"]))[0])
+    # members trained with the mass term (placements "members" / "both") use the same recipe
+    members_cfg = dict(vcfg["members"], init=variant, warm_start={})
+    return {"members": members, "omega": omega, "bgnet": bgnet, "warm_bgnet": bgnet10,
+            "members_cfg": members_cfg, "seed": seed, "warm_start_signature": bg_sig}
+
+
+def rep_base(c, variant):
+    ck = c.cfg["checkpoints"]["dir"]
+
+    def models(k):
+        b = base_models(c, k, variant)
+        ctx = S.view(c, seed=b["seed"], members_cfg=b["members_cfg"])
+        ctx.warm_start_signature = b["warm_start_signature"]  # mass-trained members start from the 10-epoch BGNet
+        return {"ctx": ctx, "base": b,
+                "mass_dir": lambda p: os.path.join(ck, f"rep{k}", "mass", p)}
+    return models
+
+
+def stage_placements(cfg, data, seg):
+    c = NZContext(cfg, data, seg)
+    variant, ms = member_set(cfg)
+    print(f"== NZ placement study on the member-study models (members: {variant}) ==", flush=True)
+    out = os.path.join(cfg["save_dir"], "mass_study", "placements")
+    comp = S.placement_study(c, rep_base(c, variant)(0), cfg["study"], out)
+    # repetition 0 must be the member study's models: compare with its test MSEs
+    check, bad = {"tolerance": LAMBDA0_REL_TOL}, []
+    ref = (ms or {}).get("selection", {}).get("test", {})
+    for mine, theirs in (("qre", f"qre_{variant}_squared_emd"), ("bgnet", "bgnet_converged")):
+        if theirs in ref:
+            mine_mse = comp["test"][mine]["mse"]
+            rel = max(abs(mine_mse[r] - ref[theirs][r]["mse"]) / max(abs(ref[theirs][r]["mse"]), 1e-12) for r in mine_mse)
+            check[mine] = {"member_study_key": theirs, "max_relative_difference": rel}
+            if rel > LAMBDA0_REL_TOL:
+                bad.append(f"{mine} vs member study {theirs}: {rel:.3g}")
+        else:
+            check[mine] = {"member_study_key": theirs, "max_relative_difference": None,
+                           "note": "not in the member-study results (run RUNBOOK steps 2-3)"}
+    comp["member_study_check"] = check
+    R.save_json(comp, os.path.join(out, "comparison.json"))
+    print(f"  member-study check: {check}", flush=True)
+    if bad:
+        raise AssertionError("repetition 0 does not reproduce the member study's test MSEs "
+                             f"(relative tolerance {LAMBDA0_REL_TOL:g}): " + "; ".join(bad))
+    return comp
+
+
+def stage_repeats(cfg, data, seg):
+    c = NZContext(cfg, data, seg)
+    variant, _ = member_set(cfg)
+    placement, lam = S.read_selection(os.path.join(cfg["save_dir"], "mass_study", "placements"))
+    print(f"== NZ repetitions: {placement}, lambda {lam:g}, members {variant} ==", flush=True)
+    return S.repetitions(c, rep_base(c, variant), cfg["study"], os.path.join(cfg["save_dir"], "mass_study", "repetitions"),
+                         placement, lam)
+
+
+def parse_args(argv=None):
+    p = argparse.ArgumentParser(description="NZ: QRE vs QRE + mass conservation")
+    p.add_argument("--stage", choices=["v2", "placements", "repeats"], default="v2")
+    p.add_argument("--config", default="configs/cordex_v2.json")
+    p.add_argument("--sanity", action="store_true", help="the member study's --sanity settings")
+    p.add_argument("--repeats", type=int, default=None)
+    p.add_argument("--save-dir", default=None)
+    p.add_argument("--set", action="append", default=[], metavar="KEY.PATH=JSON")
+    return p.parse_args(argv)
+
+
+def main(argv=None):
     # the table printed at the end contains "λ"; on Windows a piped stdout (tee, tests) is cp1252 and would fail
     sys.stdout.reconfigure(encoding="utf-8", errors="replace")
-    args = R.parse_args()
+    args = parse_args(argv)
     cfg = R.load_config(args)
     if cfg["checkpoints"]["dir"] is None:
         raise ValueError("checkpoints.dir is required")
+    data = R.prepare_data(cfg)
+    seg = R.derive_segmentation(cfg, data)
+    if seg["method"] == "legacy":
+        raise ValueError("needs segmentation.method = bayesian_gmm")
+    if args.stage == "placements":
+        return stage_placements(cfg, data, seg)
+    if args.stage == "repeats":
+        return stage_repeats(cfg, data, seg)
+    return stage_v2(cfg, data, seg)
+
+
+def stage_v2(cfg, data, seg):
     mcfg = cfg["mass"]
     if mcfg["placement"] not in I.PLACEMENTS or 0.0 not in [float(v) for v in mcfg["lambdas"]]:
         raise ValueError("mass.placement must be members/ensemble/both and mass.lambdas must contain 0")
     out = cfg["save_dir"]
     t0 = time.time()
-    data = R.prepare_data(cfg)
-    seg = R.derive_segmentation(cfg, data)
-    if seg["method"] == "legacy":
-        raise ValueError("needs segmentation.method = bayesian_gmm")
 
     # 1. the NZ v2 models, exactly as run_cordex_v2.py trains / loads them
     log, base = R.run_repetition(cfg, data, seg, 0, return_models=True)
@@ -248,8 +418,7 @@ def main():
         mine, theirs = R.regime_mse(c.Y["test"], g0, c.train_totals), log["metrics"]["test"]["qre"]
         lambda0_exact = mine == theirs
         # exact on a CPU; on a GPU cuDNN may pick other kernels between the two evaluations, so allow float noise
-        lambda0_rel = max(abs(mine[k]["mse"] - theirs[k]["mse"]) / max(abs(theirs[k]["mse"]), 1e-12)
-                          if mine[k]["days"] == theirs[k]["days"] else float("inf") for k in theirs)
+        lambda0_rel = max_rel_diff(mine, theirs)
         if lambda0_rel > LAMBDA0_REL_TOL:
             raise AssertionError(f"lambda = 0 does not reproduce the NZ v2 QRE test MSEs "
                                  f"(max relative difference {lambda0_rel:.3g} > {LAMBDA0_REL_TOL:g})")
