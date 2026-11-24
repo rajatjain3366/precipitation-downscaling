@@ -1,0 +1,112 @@
+{
+  "started": "2026-11-24T13:22:58",
+  "written": "2026-11-24T14:51:41",
+  "gpus": 1,
+  "steps": [
+    {
+      "step": 0,
+      "name": "nz_checkpoints",
+      "title": "NZ base models (RUNBOOK 0b, only if not copied)",
+      "status": "already done",
+      "detail": "outputs present"
+    },
+    {
+      "step": 1,
+      "name": "nz_member_B",
+      "title": "NZ member study B: warm-started members",
+      "status": "already done",
+      "detail": "finished 2026-11-23T17:28:55 in 0h02m08s"
+    },
+    {
+      "step": 2,
+      "name": "nz_member_A",
+      "title": "NZ member study A: members from scratch + selection",
+      "status": "already done",
+      "detail": "finished 2026-11-23T17:31:57 in 0h03m03s"
+    },
+    {
+      "step": 3,
+      "name": "nz_member_bgnet",
+      "title": "NZ member study: BGNet retrained to convergence",
+      "status": "already done",
+      "detail": "finished 2026-11-23T17:34:00 in 0h02m03s"
+    },
+    {
+      "step": 4,
+      "name": "nz_mass",
+      "title": "NZ: QRE vs QRE + mass conservation",
+      "status": "already done",
+      "detail": "finished 2026-11-23T17:55:51 in 0h10m50s"
+    },
+    {
+      "step": 5,
+      "name": "india_data_check",
+      "title": "India data check",
+      "status": "already done",
+      "detail": "finished 2026-11-23T17:55:53 in 0h00m02s"
+    },
+    {
+      "step": 6,
+      "name": "india_day_offset",
+      "title": "India day-offset check",
+      "status": "already done",
+      "detail": "finished 2026-11-23T17:55:59 in 0h00m06s"
+    },
+    {
+      "step": 7,
+      "name": "india_A",
+      "title": "India experiment A (lambda = 0)",
+      "status": "already done",
+      "detail": "finished 2026-11-23T17:58:35 in 0h02m36s"
+    },
+    {
+      "step": 8,
+      "name": "india_sweep",
+      "title": "India lambda sweep (validation only)",
+      "status": "already done",
+      "detail": "finished 2026-11-23T17:59:52 in 0h01m17s"
+    },
+    {
+      "step": 9,
+      "name": "india_B",
+      "title": "India experiment B (selected lambda)",
+      "status": "already done",
+      "detail": "finished 2026-11-23T18:00:05 in 0h00m13s"
+    },
+    {
+      "step": 10,
+      "name": "india_member_study",
+      "title": "India member study: scratch vs warm start (Perfect-Member val MSE)",
+      "status": "already done",
+      "detail": "finished 2026-11-24T13:21:00 in 0h02m19s"
+    },
+    {
+      "step": 11,
+      "name": "nz_placements",
+      "title": "NZ: mass placements x lambdas on the member-study models",
+      "status": "finished",
+      "detail": "in 0h12m10s"
+    },
+    {
+      "step": 12,
+      "name": "india_placements",
+      "title": "India: mass placements x lambdas",
+      "status": "finished",
+      "detail": "in 0h05m57s"
+    },
+    {
+      "step": 13,
+      "name": "nz_repetitions",
+      "title": "NZ: repetitions of the final comparison (mean +- std, Wilcoxon)",
+      "status": "finished",
+      "detail": "in 0h48m02s"
+    },
+    {
+      "step": 14,
+      "name": "india_repetitions",
+      "title": "India: repetitions of the final comparison (mean +- std, Wilcoxon)",
+      "status": "finished",
+      "detail": "in 0h22m32s"
+    }
+  ]
+}

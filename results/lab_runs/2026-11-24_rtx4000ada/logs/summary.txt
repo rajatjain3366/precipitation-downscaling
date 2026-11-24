@@ -1,0 +1,18 @@
+run_lab summary  (started 2026-11-24T13:22:58, written 2026-11-24T14:51:41)
+GPU: 1 seen by TensorFlow
+
+   0  nz_checkpoints    already done    outputs present
+   1  nz_member_B       already done    finished 2026-11-23T17:28:55 in 0h02m08s
+   2  nz_member_A       already done    finished 2026-11-23T17:31:57 in 0h03m03s
+   3  nz_member_bgnet   already done    finished 2026-11-23T17:34:00 in 0h02m03s
+   4  nz_mass           already done    finished 2026-11-23T17:55:51 in 0h10m50s
+   5  india_data_check  already done    finished 2026-11-23T17:55:53 in 0h00m02s
+   6  india_day_offset  already done    finished 2026-11-23T17:55:59 in 0h00m06s
+   7  india_A           already done    finished 2026-11-23T17:58:35 in 0h02m36s
+   8  india_sweep       already done    finished 2026-11-23T17:59:52 in 0h01m17s
+   9  india_B           already done    finished 2026-11-23T18:00:05 in 0h00m13s
+  10  india_member_study already done    finished 2026-11-24T13:21:00 in 0h02m19s
+  11  nz_placements     finished        in 0h12m10s
+  12  india_placements  finished        in 0h05m57s
+  13  nz_repetitions    finished        in 0h48m02s
+  14  india_repetitions finished        in 0h22m32s

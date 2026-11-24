@@ -1,0 +1,226 @@
+{
+  "placement": "members",
+  "selected_lambda": 0.1,
+  "tolerance_met": true,
+  "reason": "lowest val daily_mae_mm_per_day among (placement, lambda > 0) with val MSE[0.0,1.0] within 2% of their control",
+  "rule": {
+    "mse_regime": "[0.0,1.0]",
+    "mse_tolerance": 0.02,
+    "total_metric": "daily_mae_mm_per_day"
+  },
+  "selected": {
+    "placement": "members",
+    "lambda_mass": 0.1,
+    "val_mse": 196.497314453125,
+    "val_mse_control": 193.75424194335938,
+    "val_mse_ratio": 1.0141574836362421,
+    "val_daily_mae_mm_per_day": 0.8453237273354434,
+    "val_daily_mae_mm_per_day_control": 0.9050518932103173,
+    "within_tolerance": true
+  },
+  "candidates": [
+    {
+      "placement": "ensemble",
+      "lambda_mass": 0.1,
+      "val_mse": 193.9811248779297,
+      "val_mse_control": 194.00460815429688,
+      "val_mse_ratio": 0.9998789550588999,
+      "val_daily_mae_mm_per_day": 0.9293654250194394,
+      "val_daily_mae_mm_per_day_control": 0.9375436061896547,
+      "within_tolerance": true
+    },
+    {
+      "placement": "ensemble",
+      "lambda_mass": 1.0,
+      "val_mse": 193.86410522460938,
+      "val_mse_control": 194.00460815429688,
+      "val_mse_ratio": 0.9992757752971736,
+      "val_daily_mae_mm_per_day": 0.9083263786574154,
+      "val_daily_mae_mm_per_day_control": 0.9375436061896547,
+      "within_tolerance": true
+    },
+    {
+      "placement": "ensemble",
+      "lambda_mass": 3.0,
+      "val_mse": 193.6992950439453,
+      "val_mse_control": 194.00460815429688,
+      "val_mse_ratio": 0.9984262584623312,
+      "val_daily_mae_mm_per_day": 0.8884579656518243,
+      "val_daily_mae_mm_per_day_control": 0.9375436061896547,
+      "within_tolerance": true
+    },
+    {
+      "placement": "ensemble",
+      "lambda_mass": 10.0,
+      "val_mse": 193.7860565185547,
+      "val_mse_control": 194.00460815429688,
+      "val_mse_ratio": 0.9988734719354276,
+      "val_daily_mae_mm_per_day": 0.9033724068963097,
+      "val_daily_mae_mm_per_day_control": 0.9375436061896547,
+      "within_tolerance": true
+    },
+    {
+      "placement": "members",
+      "lambda_mass": 0.1,
+      "val_mse": 196.497314453125,
+      "val_mse_control": 193.75424194335938,
+      "val_mse_ratio": 1.0141574836362421,
+      "val_daily_mae_mm_per_day": 0.8453237273354434,
+      "val_daily_mae_mm_per_day_control": 0.9050518932103173,
+      "within_tolerance": true
+    },
+    {
+      "placement": "members",
+      "lambda_mass": 1.0,
+      "val_mse": 211.79978942871094,
+      "val_mse_control": 193.75424194335938,
+      "val_mse_ratio": 1.0931362704855094,
+      "val_daily_mae_mm_per_day": 0.8759189754090972,
+      "val_daily_mae_mm_per_day_control": 0.9050518932103173,
+      "within_tolerance": false
+    },
+    {
+      "placement": "members",
+      "lambda_mass": 3.0,
+      "val_mse": 216.8091583251953,
+      "val_mse_control": 193.75424194335938,
+      "val_mse_ratio": 1.118990511642969,
+      "val_daily_mae_mm_per_day": 0.8724874200488238,
+      "val_daily_mae_mm_per_day_control": 0.9050518932103173,
+      "within_tolerance": false
+    },
+    {
+      "placement": "members",
+      "lambda_mass": 10.0,
+      "val_mse": 223.6671142578125,
+      "val_mse_control": 193.75424194335938,
+      "val_mse_ratio": 1.1543856382932645,
+      "val_daily_mae_mm_per_day": 0.872370960637143,
+      "val_daily_mae_mm_per_day_control": 0.9050518932103173,
+      "within_tolerance": false
+    },
+    {
+      "placement": "both",
+      "lambda_mass": 0.1,
+      "val_mse": 198.14141845703125,
+      "val_mse_control": 193.85394287109375,
+      "val_mse_ratio": 1.0221170409146052,
+      "val_daily_mae_mm_per_day": 0.9063145222071547,
+      "val_daily_mae_mm_per_day_control": 0.8998364345801972,
+      "within_tolerance": false
+    },
+    {
+      "placement": "both",
+      "lambda_mass": 1.0,
+      "val_mse": 215.68045043945312,
+      "val_mse_control": 193.85394287109375,
+      "val_mse_ratio": 1.1125925387180453,
+      "val_daily_mae_mm_per_day": 0.9193173477652204,
+      "val_daily_mae_mm_per_day_control": 0.8998364345801972,
+      "within_tolerance": false
+    },
+    {
+      "placement": "both",
+      "lambda_mass": 3.0,
+      "val_mse": 219.0788116455078,
+      "val_mse_control": 193.85394287109375,
+      "val_mse_ratio": 1.1301230627596146,
+      "val_daily_mae_mm_per_day": 0.9034724273305517,
+      "val_daily_mae_mm_per_day_control": 0.8998364345801972,
+      "within_tolerance": false
+    },
+    {
+      "placement": "both",
+      "lambda_mass": 10.0,
+      "val_mse": 219.09616088867188,
+      "val_mse_control": 193.85394287109375,
+      "val_mse_ratio": 1.130212559227456,
+      "val_daily_mae_mm_per_day": 0.8806077968925062,
+      "val_daily_mae_mm_per_day_control": 0.8998364345801972,
+      "within_tolerance": false
+    }
+  ],
+  "val_totals_improved_vs_control": true,
+  "controls": {
+    "ensemble": "fine-tuned lambda = 0 control (same ensemble stage, mass term off)",
+    "both": "fine-tuned lambda = 0 control (same ensemble stage, mass term off)",
+    "members": "the QRE itself (no extra stage at lambda = 0)"
+  },
+  "within_placement": {
+    "ensemble": {
+      "selected_lambda": 3.0,
+      "tolerance_met": true,
+      "reason": "lowest val daily_mae_mm_per_day with val MSE[0.0,1.0] within 2% of lambda=0",
+      "rule": {
+        "mse_regime": "[0.0,1.0]",
+        "mse_tolerance": 0.02,
+        "total_metric": "daily_mae_mm_per_day"
+      },
+      "val_mse": {
+        "0": 194.00460815429688,
+        "0.1": 193.9811248779297,
+        "1": 193.86410522460938,
+        "3": 193.6992950439453,
+        "10": 193.7860565185547
+      },
+      "val_daily_mae_mm_per_day": {
+        "0": 0.9375436061896547,
+        "0.1": 0.9293654250194394,
+        "1": 0.9083263786574154,
+        "3": 0.8884579656518243,
+        "10": 0.9033724068963097
+      },
+      "val_totals_improved_vs_lambda0": true
+    },
+    "members": {
+      "selected_lambda": 0.1,
+      "tolerance_met": true,
+      "reason": "lowest val daily_mae_mm_per_day with val MSE[0.0,1.0] within 2% of lambda=0",
+      "rule": {
+        "mse_regime": "[0.0,1.0]",
+        "mse_tolerance": 0.02,
+        "total_metric": "daily_mae_mm_per_day"
+      },
+      "val_mse": {
+        "0": 193.75424194335938,
+        "0.1": 196.497314453125,
+        "1": 211.79978942871094,
+        "3": 216.8091583251953,
+        "10": 223.6671142578125
+      },
+      "val_daily_mae_mm_per_day": {
+        "0": 0.9050518932103173,
+        "0.1": 0.8453237273354434,
+        "1": 0.8759189754090972,
+        "3": 0.8724874200488238,
+        "10": 0.872370960637143
+      },
+      "val_totals_improved_vs_lambda0": true
+    },
+    "both": {
+      "selected_lambda": 0.1,
+      "tolerance_met": false,
+      "reason": "no lambda>0 within 2% of lambda=0 MSE; lowest MSE",
+      "rule": {
+        "mse_regime": "[0.0,1.0]",
+        "mse_tolerance": 0.02,
+        "total_metric": "daily_mae_mm_per_day"
+      },
+      "val_mse": {
+        "0": 193.85394287109375,
+        "0.1": 198.14141845703125,
+        "1": 215.68045043945312,
+        "3": 219.0788116455078,
+        "10": 219.09616088867188
+      },
+      "val_daily_mae_mm_per_day": {
+        "0": 0.8998364345801972,
+        "0.1": 0.9063145222071547,
+        "1": 0.9193173477652204,
+        "3": 0.9034724273305517,
+        "10": 0.8806077968925062
+      },
+      "val_totals_improved_vs_lambda0": false
+    }
+  }
+}

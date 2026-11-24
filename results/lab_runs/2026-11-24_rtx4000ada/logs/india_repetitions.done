@@ -1,0 +1,16 @@
+{
+  "finished_at": "2026-11-24T14:51:41",
+  "seconds": 1351.8788809776306,
+  "command": [
+    "/home/aidslab/miniconda3/envs/qre/bin/python",
+    "experiments/run_india.py",
+    "--config",
+    "configs/india_v1.json",
+    "--stage",
+    "repeats",
+    "--set",
+    "members.init=\"warm_start\"",
+    "--set",
+    "data.day_offset=0"
+  ]
+}

@@ -1,0 +1,474 @@
+{
+  "bgnet_val": {
+    "mse": {
+      "[0.0,1.0]": 194.26992797851562,
+      "[0.0,0.2]": 57.40382766723633,
+      "[0.9,1.0]": 471.1519775390625
+    },
+    "mae": 6.5465922355651855,
+    "rmse": 13.938075065612793,
+    "spatial_corr": 0.5175916008449911,
+    "total_relative_discrepancy": -0.045114495758164584,
+    "daily_total_mae_mm_per_day": 0.9274079032119202,
+    "daily_mean_relative_error": 0.1427948758734789
+  },
+  "rule": "lowest Perfect-Member validation MSE [0,1] (as the NZ member study)",
+  "scratch": {
+    "perfect_member_val": {
+      "mse": {
+        "[0.0,1.0]": 227.16151428222656,
+        "[0.0,0.2]": 60.80599594116211,
+        "[0.9,1.0]": 623.85986328125
+      },
+      "mae": 7.197771072387695,
+      "rmse": 15.071878433227539,
+      "spatial_corr": 0.41427456343808505,
+      "total_relative_discrepancy": -0.08253181896100897,
+      "daily_total_mae_mm_per_day": 0.8490835768791798,
+      "daily_mean_relative_error": 0.12799074044128164
+    },
+    "own_interval_val": [
+      {
+        "interval": 0,
+        "val_days": 117,
+        "member_mse": 52.8330078125,
+        "bgnet_mse": 51.15961837768555,
+        "ratio": 1.032709185249598,
+        "best_epoch": 83,
+        "epochs": 87
+      },
+      {
+        "interval": 1,
+        "val_days": 149,
+        "member_mse": 134.03904724121094,
+        "bgnet_mse": 110.21472930908203,
+        "ratio": 1.2161627405109974,
+        "best_epoch": 29,
+        "epochs": 33
+      },
+      {
+        "interval": 2,
+        "val_days": 167,
+        "member_mse": 173.09927368164062,
+        "bgnet_mse": 162.12782287597656,
+        "ratio": 1.0676716100360943,
+        "best_epoch": 100,
+        "epochs": 100
+      },
+      {
+        "interval": 3,
+        "val_days": 148,
+        "member_mse": 242.88902282714844,
+        "bgnet_mse": 227.21424865722656,
+        "ratio": 1.0689867570478324,
+        "best_epoch": 96,
+        "epochs": 100
+      },
+      {
+        "interval": 4,
+        "val_days": 82,
+        "member_mse": 356.30145263671875,
+        "bgnet_mse": 303.424072265625,
+        "ratio": 1.1742689035061251,
+        "best_epoch": 100,
+        "epochs": 100
+      },
+      {
+        "interval": 5,
+        "val_days": 69,
+        "member_mse": 667.493408203125,
+        "bgnet_mse": 495.8563537597656,
+        "ratio": 1.3461426946371544,
+        "best_epoch": 55,
+        "epochs": 59
+      }
+    ],
+    "training": [
+      {
+        "epochs": 87,
+        "best_epoch": 83,
+        "best_val_loss": 1.443934440612793,
+        "still_improving_at_cap": false,
+        "final_epoch_cap": 100,
+        "seconds": 21.604403257369995,
+        "seconds_per_epoch": 0.2483264797035305,
+        "lambda_mass": 0.0,
+        "lambda_effective": 0.0,
+        "loss_ratio_nll_over_mass_at_init": null,
+        "interval": [
+          0.0,
+          0.166
+        ],
+        "train_days": 648,
+        "val_days": 117,
+        "at_best_epoch": {
+          "loss": 1.4152225255966187,
+          "bg_nll": 1.4173829555511475,
+          "mass_loss": 0.500291645526886,
+          "val_loss": 1.443934440612793,
+          "val_bg_nll": 1.480780839920044,
+          "val_mass_loss": 0.5351163148880005
+        }
+      },
+      {
+        "epochs": 33,
+        "best_epoch": 29,
+        "best_val_loss": 2.159982442855835,
+        "still_improving_at_cap": false,
+        "final_epoch_cap": 100,
+        "seconds": 10.993997573852539,
+        "seconds_per_epoch": 0.3331514705311168,
+        "lambda_mass": 0.0,
+        "lambda_effective": 0.0,
+        "loss_ratio_nll_over_mass_at_init": null,
+        "interval": [
+          0.166,
+          0.392
+        ],
+        "train_days": 882,
+        "val_days": 149,
+        "at_best_epoch": {
+          "loss": 2.126518726348877,
+          "bg_nll": 2.1263973712921143,
+          "mass_loss": 0.7998963594436646,
+          "val_loss": 2.159982442855835,
+          "val_bg_nll": 2.1677184104919434,
+          "val_mass_loss": 0.9478309154510498
+        }
+      },
+      {
+        "epochs": 100,
+        "best_epoch": 100,
+        "best_val_loss": 2.450244903564453,
+        "still_improving_at_cap": true,
+        "final_epoch_cap": 100,
+        "seconds": 28.084779262542725,
+        "seconds_per_epoch": 0.2808478021621704,
+        "lambda_mass": 0.0,
+        "lambda_effective": 0.0,
+        "loss_ratio_nll_over_mass_at_init": null,
+        "interval": [
+          0.392,
+          0.61
+        ],
+        "train_days": 851,
+        "val_days": 167,
+        "at_best_epoch": {
+          "loss": 2.373361110687256,
+          "bg_nll": 2.3675742149353027,
+          "mass_loss": 0.6662881374359131,
+          "val_loss": 2.450244903564453,
+          "val_bg_nll": 2.450516700744629,
+          "val_mass_loss": 0.5586123466491699
+        }
+      },
+      {
+        "epochs": 100,
+        "best_epoch": 96,
+        "best_val_loss": 2.7163867950439453,
+        "still_improving_at_cap": false,
+        "final_epoch_cap": 100,
+        "seconds": 26.806582927703857,
+        "seconds_per_epoch": 0.2680658340454102,
+        "lambda_mass": 0.0,
+        "lambda_effective": 0.0,
+        "loss_ratio_nll_over_mass_at_init": null,
+        "interval": [
+          0.61,
+          0.812
+        ],
+        "train_days": 789,
+        "val_days": 148,
+        "at_best_epoch": {
+          "loss": 2.6650898456573486,
+          "bg_nll": 2.664616823196411,
+          "mass_loss": 0.8297083377838135,
+          "val_loss": 2.7163867950439453,
+          "val_bg_nll": 2.7280454635620117,
+          "val_mass_loss": 0.48441678285598755
+        }
+      },
+      {
+        "epochs": 100,
+        "best_epoch": 100,
+        "best_val_loss": 2.966562509536743,
+        "still_improving_at_cap": true,
+        "final_epoch_cap": 100,
+        "seconds": 17.147419452667236,
+        "seconds_per_epoch": 0.1714742064476013,
+        "lambda_mass": 0.0,
+        "lambda_effective": 0.0,
+        "loss_ratio_nll_over_mass_at_init": null,
+        "interval": [
+          0.812,
+          0.923
+        ],
+        "train_days": 433,
+        "val_days": 82,
+        "at_best_epoch": {
+          "loss": 2.9984869956970215,
+          "bg_nll": 2.9977755546569824,
+          "mass_loss": 0.9735872149467468,
+          "val_loss": 2.966562509536743,
+          "val_bg_nll": 2.966562509536743,
+          "val_mass_loss": 0.6715871095657349
+        }
+      },
+      {
+        "epochs": 59,
+        "best_epoch": 55,
+        "best_val_loss": 3.2352945804595947,
+        "still_improving_at_cap": false,
+        "final_epoch_cap": 100,
+        "seconds": 8.634692192077637,
+        "seconds_per_epoch": 0.14635073128393142,
+        "lambda_mass": 0.0,
+        "lambda_effective": 0.0,
+        "loss_ratio_nll_over_mass_at_init": null,
+        "interval": [
+          0.923,
+          1.0
+        ],
+        "train_days": 301,
+        "val_days": 69,
+        "at_best_epoch": {
+          "loss": 3.372154474258423,
+          "bg_nll": 3.3715975284576416,
+          "mass_loss": 2.023815393447876,
+          "val_loss": 3.2352945804595947,
+          "val_bg_nll": 3.2352945804595947,
+          "val_mass_loss": 2.9139773845672607
+        }
+      }
+    ]
+  },
+  "warm_start": {
+    "perfect_member_val": {
+      "mse": {
+        "[0.0,1.0]": 192.9538116455078,
+        "[0.0,0.2]": 56.64918899536133,
+        "[0.9,1.0]": 466.9972229003906
+      },
+      "mae": 6.531425952911377,
+      "rmse": 13.89078140258789,
+      "spatial_corr": 0.5181374611736131,
+      "total_relative_discrepancy": -0.03948548847807867,
+      "daily_total_mae_mm_per_day": 0.736638899157292,
+      "daily_mean_relative_error": 0.1175663314840152
+    },
+    "own_interval_val": [
+      {
+        "interval": 0,
+        "val_days": 117,
+        "member_mse": 50.28496551513672,
+        "bgnet_mse": 51.15961837768555,
+        "ratio": 0.9829034521701919,
+        "best_epoch": 2,
+        "epochs": 6
+      },
+      {
+        "interval": 1,
+        "val_days": 149,
+        "member_mse": 109.47583770751953,
+        "bgnet_mse": 110.21472930908203,
+        "ratio": 0.9932958906110418,
+        "best_epoch": 3,
+        "epochs": 7
+      },
+      {
+        "interval": 2,
+        "val_days": 167,
+        "member_mse": 161.3570098876953,
+        "bgnet_mse": 162.12782287597656,
+        "ratio": 0.9952456464621072,
+        "best_epoch": 3,
+        "epochs": 7
+      },
+      {
+        "interval": 3,
+        "val_days": 148,
+        "member_mse": 226.74574279785156,
+        "bgnet_mse": 227.21424865722656,
+        "ratio": 0.9979380436652026,
+        "best_epoch": 7,
+        "epochs": 11
+      },
+      {
+        "interval": 4,
+        "val_days": 82,
+        "member_mse": 300.59259033203125,
+        "bgnet_mse": 303.424072265625,
+        "ratio": 0.9906682356727616,
+        "best_epoch": 6,
+        "epochs": 10
+      },
+      {
+        "interval": 5,
+        "val_days": 69,
+        "member_mse": 491.208251953125,
+        "bgnet_mse": 495.8563537597656,
+        "ratio": 0.9906261122371489,
+        "best_epoch": 4,
+        "epochs": 8
+      }
+    ],
+    "training": [
+      {
+        "epochs": 6,
+        "best_epoch": 2,
+        "best_val_loss": 1.39745032787323,
+        "still_improving_at_cap": false,
+        "final_epoch_cap": 100,
+        "seconds": 2.3797898292541504,
+        "seconds_per_epoch": 0.39663179715474445,
+        "lambda_mass": 0.0,
+        "lambda_effective": 0.0,
+        "loss_ratio_nll_over_mass_at_init": null,
+        "interval": [
+          0.0,
+          0.166
+        ],
+        "train_days": 648,
+        "val_days": 117,
+        "at_best_epoch": {
+          "loss": 1.3276610374450684,
+          "bg_nll": 1.3172389268875122,
+          "mass_loss": 0.4126018285751343,
+          "val_loss": 1.39745032787323,
+          "val_bg_nll": 1.4399430751800537,
+          "val_mass_loss": 0.5051634907722473
+        }
+      },
+      {
+        "epochs": 7,
+        "best_epoch": 3,
+        "best_val_loss": 2.0259182453155518,
+        "still_improving_at_cap": false,
+        "final_epoch_cap": 100,
+        "seconds": 3.092482328414917,
+        "seconds_per_epoch": 0.44178329195295063,
+        "lambda_mass": 0.0,
+        "lambda_effective": 0.0,
+        "loss_ratio_nll_over_mass_at_init": null,
+        "interval": [
+          0.166,
+          0.392
+        ],
+        "train_days": 882,
+        "val_days": 149,
+        "at_best_epoch": {
+          "loss": 1.9126707315444946,
+          "bg_nll": 1.912807822227478,
+          "mass_loss": 0.5299277305603027,
+          "val_loss": 2.0259182453155518,
+          "val_bg_nll": 2.0350594520568848,
+          "val_mass_loss": 0.6021161079406738
+        }
+      },
+      {
+        "epochs": 7,
+        "best_epoch": 3,
+        "best_val_loss": 2.403940439224243,
+        "still_improving_at_cap": false,
+        "final_epoch_cap": 100,
+        "seconds": 2.8713886737823486,
+        "seconds_per_epoch": 0.410198484148298,
+        "lambda_mass": 0.0,
+        "lambda_effective": 0.0,
+        "loss_ratio_nll_over_mass_at_init": null,
+        "interval": [
+          0.392,
+          0.61
+        ],
+        "train_days": 851,
+        "val_days": 167,
+        "at_best_epoch": {
+          "loss": 2.304269552230835,
+          "bg_nll": 2.3049397468566895,
+          "mass_loss": 0.6973969340324402,
+          "val_loss": 2.403940439224243,
+          "val_bg_nll": 2.4042959213256836,
+          "val_mass_loss": 0.6137998104095459
+        }
+      },
+      {
+        "epochs": 11,
+        "best_epoch": 7,
+        "best_val_loss": 2.654392957687378,
+        "still_improving_at_cap": false,
+        "final_epoch_cap": 100,
+        "seconds": 3.8497390747070312,
+        "seconds_per_epoch": 0.3499763445420699,
+        "lambda_mass": 0.0,
+        "lambda_effective": 0.0,
+        "loss_ratio_nll_over_mass_at_init": null,
+        "interval": [
+          0.61,
+          0.812
+        ],
+        "train_days": 789,
+        "val_days": 148,
+        "at_best_epoch": {
+          "loss": 2.5767292976379395,
+          "bg_nll": 2.57593035697937,
+          "mass_loss": 0.8277620673179626,
+          "val_loss": 2.654392957687378,
+          "val_bg_nll": 2.6650617122650146,
+          "val_mass_loss": 0.7247412204742432
+        }
+      },
+      {
+        "epochs": 10,
+        "best_epoch": 6,
+        "best_val_loss": 2.8583216667175293,
+        "still_improving_at_cap": false,
+        "final_epoch_cap": 100,
+        "seconds": 2.595912456512451,
+        "seconds_per_epoch": 0.2595913171768188,
+        "lambda_mass": 0.0,
+        "lambda_effective": 0.0,
+        "loss_ratio_nll_over_mass_at_init": null,
+        "interval": [
+          0.812,
+          0.923
+        ],
+        "train_days": 433,
+        "val_days": 82,
+        "at_best_epoch": {
+          "loss": 2.809084892272949,
+          "bg_nll": 2.8080615997314453,
+          "mass_loss": 0.9987062215805054,
+          "val_loss": 2.8583216667175293,
+          "val_bg_nll": 2.8583216667175293,
+          "val_mass_loss": 0.9586616158485413
+        }
+      },
+      {
+        "epochs": 8,
+        "best_epoch": 4,
+        "best_val_loss": 3.035656452178955,
+        "still_improving_at_cap": false,
+        "final_epoch_cap": 100,
+        "seconds": 2.0209383964538574,
+        "seconds_per_epoch": 0.25261741876602173,
+        "lambda_mass": 0.0,
+        "lambda_effective": 0.0,
+        "loss_ratio_nll_over_mass_at_init": null,
+        "interval": [
+          0.923,
+          1.0
+        ],
+        "train_days": 301,
+        "val_days": 69,
+        "at_best_epoch": {
+          "loss": 3.031141996383667,
+          "bg_nll": 3.03273344039917,
+          "mass_loss": 1.3573431968688965,
+          "val_loss": 3.035656452178955,
+          "val_bg_nll": 3.035656452178955,
+          "val_mass_loss": 1.4871203899383545
+        }
+      }
+    ]
+  }
+}

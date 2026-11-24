@@ -1,0 +1,1262 @@
+{
+  "0": {
+    "lambda_mass": 0.0,
+    "val": {
+      "qre": {
+        "regime_mse": {
+          "[0.0,1.0]": {
+            "mse": 194.00460815429688,
+            "days": 732
+          },
+          "[0.0,0.2]": {
+            "mse": 57.437538146972656,
+            "days": 134
+          },
+          "[0.9,1.0]": {
+            "mse": 470.1285095214844,
+            "days": 81
+          }
+        },
+        "interval_mse": [
+          {
+            "interval": 0,
+            "days": 117,
+            "mse": 51.01654815673828
+          },
+          {
+            "interval": 1,
+            "days": 149,
+            "mse": 109.90784454345703
+          },
+          {
+            "interval": 2,
+            "days": 167,
+            "mse": 161.74710083007812
+          },
+          {
+            "interval": 3,
+            "days": 148,
+            "mse": 227.27609252929688
+          },
+          {
+            "interval": 4,
+            "days": 82,
+            "mse": 303.62713623046875
+          },
+          {
+            "interval": 5,
+            "days": 69,
+            "mse": 494.494140625
+          }
+        ],
+        "spatial": {
+          "mae": 6.506951808929443,
+          "rmse": 13.928553581237793,
+          "mse": 194.00460815429688,
+          "bias": -0.4055486023426056,
+          "spatial_corr_daily_mean": 0.5186131407060007,
+          "spatial_corr_days_used": 732,
+          "spatial_corr_of_time_mean": 0.948198112855967
+        },
+        "all_india_totals": {
+          "observed_mean_mm_per_day": 7.195596610990257,
+          "predicted_mean_mm_per_day": 6.7938499897340865,
+          "total_observed_km3": 18410.57752178208,
+          "total_predicted_km3": 17382.672858052905,
+          "total_discrepancy_km3": -1027.9046637291763,
+          "total_relative_discrepancy": -0.05583228785262346,
+          "daily_bias_mm_per_day": -0.40174662125616983,
+          "daily_mae_mm_per_day": 0.9375436061896547,
+          "daily_rmse_mm_per_day": 1.2244715413510703,
+          "daily_abs_error_p95_mm_per_day": 2.4913972977653,
+          "daily_mean_relative_error": 0.1438884217132853,
+          "daily_median_relative_error": 0.11214399649216696,
+          "relative_error_eps_mm_per_day": 0.1,
+          "daily_totals_corr": 0.9376283836754301,
+          "days": 732
+        }
+      },
+      "perfect_member": {
+        "regime_mse": {
+          "[0.0,1.0]": {
+            "mse": 192.9538116455078,
+            "days": 732
+          },
+          "[0.0,0.2]": {
+            "mse": 56.64918899536133,
+            "days": 134
+          },
+          "[0.9,1.0]": {
+            "mse": 466.9972229003906,
+            "days": 81
+          }
+        },
+        "interval_mse": [
+          {
+            "interval": 0,
+            "days": 117,
+            "mse": 50.28496551513672
+          },
+          {
+            "interval": 1,
+            "days": 149,
+            "mse": 109.47583770751953
+          },
+          {
+            "interval": 2,
+            "days": 167,
+            "mse": 161.3570098876953
+          },
+          {
+            "interval": 3,
+            "days": 148,
+            "mse": 226.74574279785156
+          },
+          {
+            "interval": 4,
+            "days": 82,
+            "mse": 300.59259033203125
+          },
+          {
+            "interval": 5,
+            "days": 69,
+            "mse": 491.208251953125
+          }
+        ],
+        "spatial": {
+          "mae": 6.531425952911377,
+          "rmse": 13.89078140258789,
+          "mse": 192.9538116455078,
+          "bias": -0.2880080044269562,
+          "spatial_corr_daily_mean": 0.5181374611736131,
+          "spatial_corr_days_used": 732,
+          "spatial_corr_of_time_mean": 0.9479201000104225
+        },
+        "all_india_totals": {
+          "observed_mean_mm_per_day": 7.195596610990257,
+          "predicted_mean_mm_per_day": 6.9114749639141,
+          "total_observed_km3": 18410.57752178208,
+          "total_predicted_km3": 17683.626875170983,
+          "total_discrepancy_km3": -726.9506466111006,
+          "total_relative_discrepancy": -0.03948548847807867,
+          "daily_bias_mm_per_day": -0.2841216470761577,
+          "daily_mae_mm_per_day": 0.736638899157292,
+          "daily_rmse_mm_per_day": 0.9664613404478265,
+          "daily_abs_error_p95_mm_per_day": 1.988490095799109,
+          "daily_mean_relative_error": 0.1175663314840152,
+          "daily_median_relative_error": 0.08948540599995267,
+          "relative_error_eps_mm_per_day": 0.1,
+          "daily_totals_corr": 0.9614643182156324,
+          "days": 732
+        }
+      },
+      "weight_network": {
+        "accuracy": 0.610655737704918,
+        "within_one_interval": 0.9549180327868853,
+        "confusion_matrix_rows_true_cols_pred": [
+          [
+            96,
+            19,
+            2,
+            0,
+            0,
+            0
+          ],
+          [
+            15,
+            100,
+            33,
+            1,
+            0,
+            0
+          ],
+          [
+            1,
+            34,
+            119,
+            12,
+            1,
+            0
+          ],
+          [
+            0,
+            6,
+            66,
+            66,
+            8,
+            2
+          ],
+          [
+            0,
+            0,
+            11,
+            45,
+            21,
+            5
+          ],
+          [
+            0,
+            0,
+            1,
+            8,
+            15,
+            45
+          ]
+        ],
+        "argmax_histogram": [
+          112,
+          159,
+          232,
+          132,
+          45,
+          52
+        ],
+        "true_histogram": [
+          117,
+          149,
+          167,
+          148,
+          82,
+          69
+        ],
+        "mean_max_weight": 0.7557993531227112,
+        "largest_class_share": 0.31693989071038253,
+        "collapsed": false
+      }
+    },
+    "seconds": 18.75944495201111,
+    "is_control": true,
+    "training": {
+      "members": null,
+      "ensemble_stage": {
+        "epochs": 10,
+        "best_epoch": 5,
+        "best_val_loss": 0.00013105857942719012,
+        "still_improving_at_cap": false,
+        "final_epoch_cap": 50,
+        "seconds": 14.952788591384888,
+        "seconds_per_epoch": 1.4952789306640626,
+        "lambda_mass": 0.0,
+        "lambda_effective": 0.0,
+        "loss_ratio_qre_over_mass_at_init": null,
+        "members_trained": false,
+        "at_best_epoch": {
+          "loss": 0.272216796875,
+          "qre_loss": 0.272216796875,
+          "mass_loss": 0.7714673280715942,
+          "val_loss": 0.00013105857942719012,
+          "val_qre_loss": 0.00013105857942719012,
+          "val_mass_loss": 0.8963525295257568
+        }
+      }
+    }
+  },
+  "0.1": {
+    "lambda_mass": 0.1,
+    "val": {
+      "qre": {
+        "regime_mse": {
+          "[0.0,1.0]": {
+            "mse": 193.9811248779297,
+            "days": 732
+          },
+          "[0.0,0.2]": {
+            "mse": 57.45674514770508,
+            "days": 134
+          },
+          "[0.9,1.0]": {
+            "mse": 469.5970764160156,
+            "days": 81
+          }
+        },
+        "interval_mse": [
+          {
+            "interval": 0,
+            "days": 117,
+            "mse": 51.03779220581055
+          },
+          {
+            "interval": 1,
+            "days": 149,
+            "mse": 109.93824768066406
+          },
+          {
+            "interval": 2,
+            "days": 167,
+            "mse": 161.8399658203125
+          },
+          {
+            "interval": 3,
+            "days": 148,
+            "mse": 227.40562438964844
+          },
+          {
+            "interval": 4,
+            "days": 82,
+            "mse": 303.5792541503906
+          },
+          {
+            "interval": 5,
+            "days": 69,
+            "mse": 493.69769287109375
+          }
+        ],
+        "spatial": {
+          "mae": 6.517153739929199,
+          "rmse": 13.92771053314209,
+          "mse": 193.9811248779297,
+          "bias": -0.3769257068634033,
+          "spatial_corr_daily_mean": 0.5184843964351775,
+          "spatial_corr_days_used": 732,
+          "spatial_corr_of_time_mean": 0.9482404826449795
+        },
+        "all_india_totals": {
+          "observed_mean_mm_per_day": 7.195596610990257,
+          "predicted_mean_mm_per_day": 6.822343124850434,
+          "total_observed_km3": 18410.57752178208,
+          "total_predicted_km3": 17455.575092746956,
+          "total_discrepancy_km3": -955.002429035126,
+          "total_relative_discrepancy": -0.0518724862327233,
+          "daily_bias_mm_per_day": -0.3732534861398225,
+          "daily_mae_mm_per_day": 0.9293654250194394,
+          "daily_rmse_mm_per_day": 1.2149290598094165,
+          "daily_abs_error_p95_mm_per_day": 2.469524734216527,
+          "daily_mean_relative_error": 0.14331965351932904,
+          "daily_median_relative_error": 0.11016122148119098,
+          "relative_error_eps_mm_per_day": 0.1,
+          "daily_totals_corr": 0.9367770230346885,
+          "days": 732
+        }
+      },
+      "perfect_member": {
+        "regime_mse": {
+          "[0.0,1.0]": {
+            "mse": 192.9538116455078,
+            "days": 732
+          },
+          "[0.0,0.2]": {
+            "mse": 56.64918899536133,
+            "days": 134
+          },
+          "[0.9,1.0]": {
+            "mse": 466.9972229003906,
+            "days": 81
+          }
+        },
+        "interval_mse": [
+          {
+            "interval": 0,
+            "days": 117,
+            "mse": 50.28496551513672
+          },
+          {
+            "interval": 1,
+            "days": 149,
+            "mse": 109.47583770751953
+          },
+          {
+            "interval": 2,
+            "days": 167,
+            "mse": 161.3570098876953
+          },
+          {
+            "interval": 3,
+            "days": 148,
+            "mse": 226.74574279785156
+          },
+          {
+            "interval": 4,
+            "days": 82,
+            "mse": 300.59259033203125
+          },
+          {
+            "interval": 5,
+            "days": 69,
+            "mse": 491.208251953125
+          }
+        ],
+        "spatial": {
+          "mae": 6.531425952911377,
+          "rmse": 13.89078140258789,
+          "mse": 192.9538116455078,
+          "bias": -0.2880080044269562,
+          "spatial_corr_daily_mean": 0.5181374611736131,
+          "spatial_corr_days_used": 732,
+          "spatial_corr_of_time_mean": 0.9479201000104225
+        },
+        "all_india_totals": {
+          "observed_mean_mm_per_day": 7.195596610990257,
+          "predicted_mean_mm_per_day": 6.9114749639141,
+          "total_observed_km3": 18410.57752178208,
+          "total_predicted_km3": 17683.626875170983,
+          "total_discrepancy_km3": -726.9506466111006,
+          "total_relative_discrepancy": -0.03948548847807867,
+          "daily_bias_mm_per_day": -0.2841216470761577,
+          "daily_mae_mm_per_day": 0.736638899157292,
+          "daily_rmse_mm_per_day": 0.9664613404478265,
+          "daily_abs_error_p95_mm_per_day": 1.988490095799109,
+          "daily_mean_relative_error": 0.1175663314840152,
+          "daily_median_relative_error": 0.08948540599995267,
+          "relative_error_eps_mm_per_day": 0.1,
+          "daily_totals_corr": 0.9614643182156324,
+          "days": 732
+        }
+      },
+      "weight_network": {
+        "accuracy": 0.6092896174863388,
+        "within_one_interval": 0.9590163934426229,
+        "confusion_matrix_rows_true_cols_pred": [
+          [
+            95,
+            20,
+            2,
+            0,
+            0,
+            0
+          ],
+          [
+            15,
+            106,
+            26,
+            2,
+            0,
+            0
+          ],
+          [
+            1,
+            42,
+            108,
+            15,
+            1,
+            0
+          ],
+          [
+            0,
+            6,
+            55,
+            69,
+            14,
+            4
+          ],
+          [
+            0,
+            0,
+            7,
+            44,
+            20,
+            11
+          ],
+          [
+            0,
+            0,
+            1,
+            6,
+            14,
+            48
+          ]
+        ],
+        "argmax_histogram": [
+          111,
+          174,
+          199,
+          136,
+          49,
+          63
+        ],
+        "true_histogram": [
+          117,
+          149,
+          167,
+          148,
+          82,
+          69
+        ],
+        "mean_max_weight": 0.7493454813957214,
+        "largest_class_share": 0.2718579234972678,
+        "collapsed": false
+      }
+    },
+    "seconds": 14.583906173706055,
+    "is_control": false,
+    "training": {
+      "members": null,
+      "ensemble_stage": {
+        "epochs": 10,
+        "best_epoch": 5,
+        "best_val_loss": 0.03223273158073425,
+        "still_improving_at_cap": false,
+        "final_epoch_cap": 50,
+        "seconds": 11.60301160812378,
+        "seconds_per_epoch": 1.1603012084960938,
+        "lambda_mass": 0.1,
+        "lambda_effective": 0.03576736918911042,
+        "loss_ratio_qre_over_mass_at_init": 0.3576736918911042,
+        "members_trained": false,
+        "at_best_epoch": {
+          "loss": 0.3228135406970978,
+          "qre_loss": 0.2947932779788971,
+          "mass_loss": 0.7834031581878662,
+          "val_loss": 0.03223273158073425,
+          "val_qre_loss": 0.00016027635138016194,
+          "val_mass_loss": 0.8966959714889526
+        }
+      }
+    }
+  },
+  "1": {
+    "lambda_mass": 1.0,
+    "val": {
+      "qre": {
+        "regime_mse": {
+          "[0.0,1.0]": {
+            "mse": 193.86410522460938,
+            "days": 732
+          },
+          "[0.0,0.2]": {
+            "mse": 57.43173599243164,
+            "days": 134
+          },
+          "[0.9,1.0]": {
+            "mse": 469.5159912109375,
+            "days": 81
+          }
+        },
+        "interval_mse": [
+          {
+            "interval": 0,
+            "days": 117,
+            "mse": 51.00345230102539
+          },
+          {
+            "interval": 1,
+            "days": 149,
+            "mse": 110.0311279296875
+          },
+          {
+            "interval": 2,
+            "days": 167,
+            "mse": 161.88136291503906
+          },
+          {
+            "interval": 3,
+            "days": 148,
+            "mse": 227.09027099609375
+          },
+          {
+            "interval": 4,
+            "days": 82,
+            "mse": 302.83673095703125
+          },
+          {
+            "interval": 5,
+            "days": 69,
+            "mse": 493.7720642089844
+          }
+        ],
+        "spatial": {
+          "mae": 6.528544902801514,
+          "rmse": 13.923508644104004,
+          "mse": 193.86410522460938,
+          "bias": -0.34224578738212585,
+          "spatial_corr_daily_mean": 0.518473070035871,
+          "spatial_corr_days_used": 732,
+          "spatial_corr_of_time_mean": 0.9481551372103286
+        },
+        "all_india_totals": {
+          "observed_mean_mm_per_day": 7.195596610990257,
+          "predicted_mean_mm_per_day": 6.856874273605915,
+          "total_observed_km3": 18410.57752178208,
+          "total_predicted_km3": 17543.92612539211,
+          "total_discrepancy_km3": -866.6513963899685,
+          "total_relative_discrepancy": -0.047073558413070336,
+          "daily_bias_mm_per_day": -0.33872233738434077,
+          "daily_mae_mm_per_day": 0.9083263786574154,
+          "daily_rmse_mm_per_day": 1.1922909518226539,
+          "daily_abs_error_p95_mm_per_day": 2.3887752466201264,
+          "daily_mean_relative_error": 0.14110656786215006,
+          "daily_median_relative_error": 0.1094490541971144,
+          "relative_error_eps_mm_per_day": 0.1,
+          "daily_totals_corr": 0.9381804749314293,
+          "days": 732
+        }
+      },
+      "perfect_member": {
+        "regime_mse": {
+          "[0.0,1.0]": {
+            "mse": 192.9538116455078,
+            "days": 732
+          },
+          "[0.0,0.2]": {
+            "mse": 56.64918899536133,
+            "days": 134
+          },
+          "[0.9,1.0]": {
+            "mse": 466.9972229003906,
+            "days": 81
+          }
+        },
+        "interval_mse": [
+          {
+            "interval": 0,
+            "days": 117,
+            "mse": 50.28496551513672
+          },
+          {
+            "interval": 1,
+            "days": 149,
+            "mse": 109.47583770751953
+          },
+          {
+            "interval": 2,
+            "days": 167,
+            "mse": 161.3570098876953
+          },
+          {
+            "interval": 3,
+            "days": 148,
+            "mse": 226.74574279785156
+          },
+          {
+            "interval": 4,
+            "days": 82,
+            "mse": 300.59259033203125
+          },
+          {
+            "interval": 5,
+            "days": 69,
+            "mse": 491.208251953125
+          }
+        ],
+        "spatial": {
+          "mae": 6.531425952911377,
+          "rmse": 13.89078140258789,
+          "mse": 192.9538116455078,
+          "bias": -0.2880080044269562,
+          "spatial_corr_daily_mean": 0.5181374611736131,
+          "spatial_corr_days_used": 732,
+          "spatial_corr_of_time_mean": 0.9479201000104225
+        },
+        "all_india_totals": {
+          "observed_mean_mm_per_day": 7.195596610990257,
+          "predicted_mean_mm_per_day": 6.9114749639141,
+          "total_observed_km3": 18410.57752178208,
+          "total_predicted_km3": 17683.626875170983,
+          "total_discrepancy_km3": -726.9506466111006,
+          "total_relative_discrepancy": -0.03948548847807867,
+          "daily_bias_mm_per_day": -0.2841216470761577,
+          "daily_mae_mm_per_day": 0.736638899157292,
+          "daily_rmse_mm_per_day": 0.9664613404478265,
+          "daily_abs_error_p95_mm_per_day": 1.988490095799109,
+          "daily_mean_relative_error": 0.1175663314840152,
+          "daily_median_relative_error": 0.08948540599995267,
+          "relative_error_eps_mm_per_day": 0.1,
+          "daily_totals_corr": 0.9614643182156324,
+          "days": 732
+        }
+      },
+      "weight_network": {
+        "accuracy": 0.6161202185792349,
+        "within_one_interval": 0.9631147540983607,
+        "confusion_matrix_rows_true_cols_pred": [
+          [
+            96,
+            19,
+            2,
+            0,
+            0,
+            0
+          ],
+          [
+            20,
+            98,
+            28,
+            3,
+            0,
+            0
+          ],
+          [
+            1,
+            38,
+            106,
+            21,
+            1,
+            0
+          ],
+          [
+            0,
+            6,
+            43,
+            80,
+            17,
+            2
+          ],
+          [
+            0,
+            0,
+            5,
+            43,
+            24,
+            10
+          ],
+          [
+            0,
+            0,
+            0,
+            7,
+            15,
+            47
+          ]
+        ],
+        "argmax_histogram": [
+          117,
+          161,
+          184,
+          154,
+          57,
+          59
+        ],
+        "true_histogram": [
+          117,
+          149,
+          167,
+          148,
+          82,
+          69
+        ],
+        "mean_max_weight": 0.7264442443847656,
+        "largest_class_share": 0.25136612021857924,
+        "collapsed": false
+      }
+    },
+    "seconds": 13.552605152130127,
+    "is_control": false,
+    "training": {
+      "members": null,
+      "ensemble_stage": {
+        "epochs": 9,
+        "best_epoch": 4,
+        "best_val_loss": 0.32033100724220276,
+        "still_improving_at_cap": false,
+        "final_epoch_cap": 50,
+        "seconds": 10.704594135284424,
+        "seconds_per_epoch": 1.1893994278377957,
+        "lambda_mass": 1.0,
+        "lambda_effective": 0.3576736918911042,
+        "loss_ratio_qre_over_mass_at_init": 0.3576736918911042,
+        "members_trained": false,
+        "at_best_epoch": {
+          "loss": 0.4340493977069855,
+          "qre_loss": 0.23612606525421143,
+          "mass_loss": 0.5533628463745117,
+          "val_loss": 0.32033100724220276,
+          "val_qre_loss": 5.175155820325017e-05,
+          "val_mass_loss": 0.8954509496688843
+        }
+      }
+    }
+  },
+  "3": {
+    "lambda_mass": 3.0,
+    "val": {
+      "qre": {
+        "regime_mse": {
+          "[0.0,1.0]": {
+            "mse": 193.6992950439453,
+            "days": 732
+          },
+          "[0.0,0.2]": {
+            "mse": 57.50303649902344,
+            "days": 134
+          },
+          "[0.9,1.0]": {
+            "mse": 468.8296813964844,
+            "days": 81
+          }
+        },
+        "interval_mse": [
+          {
+            "interval": 0,
+            "days": 117,
+            "mse": 51.05242919921875
+          },
+          {
+            "interval": 1,
+            "days": 149,
+            "mse": 110.01696014404297
+          },
+          {
+            "interval": 2,
+            "days": 167,
+            "mse": 161.91848754882812
+          },
+          {
+            "interval": 3,
+            "days": 148,
+            "mse": 227.1060028076172
+          },
+          {
+            "interval": 4,
+            "days": 82,
+            "mse": 302.0546569824219
+          },
+          {
+            "interval": 5,
+            "days": 69,
+            "mse": 492.7774963378906
+          }
+        ],
+        "spatial": {
+          "mae": 6.574098110198975,
+          "rmse": 13.91758918762207,
+          "mse": 193.6992950439453,
+          "bias": -0.21325179934501648,
+          "spatial_corr_daily_mean": 0.5185315546486468,
+          "spatial_corr_days_used": 732,
+          "spatial_corr_of_time_mean": 0.9480482501642421
+        },
+        "all_india_totals": {
+          "observed_mean_mm_per_day": 7.195596610990257,
+          "predicted_mean_mm_per_day": 6.986433356611401,
+          "total_observed_km3": 18410.57752178208,
+          "total_predicted_km3": 17875.414627357375,
+          "total_discrepancy_km3": -535.162894424706,
+          "total_relative_discrepancy": -0.029068229597444158,
+          "daily_bias_mm_per_day": -0.20916325437885583,
+          "daily_mae_mm_per_day": 0.8884579656518243,
+          "daily_rmse_mm_per_day": 1.1649114606826623,
+          "daily_abs_error_p95_mm_per_day": 2.3508487601420938,
+          "daily_mean_relative_error": 0.14025744768422188,
+          "daily_median_relative_error": 0.10531988534897666,
+          "relative_error_eps_mm_per_day": 0.1,
+          "daily_totals_corr": 0.9367340697322802,
+          "days": 732
+        }
+      },
+      "perfect_member": {
+        "regime_mse": {
+          "[0.0,1.0]": {
+            "mse": 192.9538116455078,
+            "days": 732
+          },
+          "[0.0,0.2]": {
+            "mse": 56.64918899536133,
+            "days": 134
+          },
+          "[0.9,1.0]": {
+            "mse": 466.9972229003906,
+            "days": 81
+          }
+        },
+        "interval_mse": [
+          {
+            "interval": 0,
+            "days": 117,
+            "mse": 50.28496551513672
+          },
+          {
+            "interval": 1,
+            "days": 149,
+            "mse": 109.47583770751953
+          },
+          {
+            "interval": 2,
+            "days": 167,
+            "mse": 161.3570098876953
+          },
+          {
+            "interval": 3,
+            "days": 148,
+            "mse": 226.74574279785156
+          },
+          {
+            "interval": 4,
+            "days": 82,
+            "mse": 300.59259033203125
+          },
+          {
+            "interval": 5,
+            "days": 69,
+            "mse": 491.208251953125
+          }
+        ],
+        "spatial": {
+          "mae": 6.531425952911377,
+          "rmse": 13.89078140258789,
+          "mse": 192.9538116455078,
+          "bias": -0.2880080044269562,
+          "spatial_corr_daily_mean": 0.5181374611736131,
+          "spatial_corr_days_used": 732,
+          "spatial_corr_of_time_mean": 0.9479201000104225
+        },
+        "all_india_totals": {
+          "observed_mean_mm_per_day": 7.195596610990257,
+          "predicted_mean_mm_per_day": 6.9114749639141,
+          "total_observed_km3": 18410.57752178208,
+          "total_predicted_km3": 17683.626875170983,
+          "total_discrepancy_km3": -726.9506466111006,
+          "total_relative_discrepancy": -0.03948548847807867,
+          "daily_bias_mm_per_day": -0.2841216470761577,
+          "daily_mae_mm_per_day": 0.736638899157292,
+          "daily_rmse_mm_per_day": 0.9664613404478265,
+          "daily_abs_error_p95_mm_per_day": 1.988490095799109,
+          "daily_mean_relative_error": 0.1175663314840152,
+          "daily_median_relative_error": 0.08948540599995267,
+          "relative_error_eps_mm_per_day": 0.1,
+          "daily_totals_corr": 0.9614643182156324,
+          "days": 732
+        }
+      },
+      "weight_network": {
+        "accuracy": 0.6065573770491803,
+        "within_one_interval": 0.9603825136612022,
+        "confusion_matrix_rows_true_cols_pred": [
+          [
+            93,
+            22,
+            2,
+            0,
+            0,
+            0
+          ],
+          [
+            15,
+            87,
+            42,
+            5,
+            0,
+            0
+          ],
+          [
+            1,
+            28,
+            98,
+            35,
+            5,
+            0
+          ],
+          [
+            0,
+            4,
+            26,
+            76,
+            34,
+            8
+          ],
+          [
+            0,
+            0,
+            1,
+            30,
+            30,
+            21
+          ],
+          [
+            0,
+            0,
+            0,
+            3,
+            6,
+            60
+          ]
+        ],
+        "argmax_histogram": [
+          109,
+          141,
+          169,
+          149,
+          75,
+          89
+        ],
+        "true_histogram": [
+          117,
+          149,
+          167,
+          148,
+          82,
+          69
+        ],
+        "mean_max_weight": 0.71246737241745,
+        "largest_class_share": 0.23087431693989072,
+        "collapsed": false
+      }
+    },
+    "seconds": 20.07967758178711,
+    "is_control": false,
+    "training": {
+      "members": null,
+      "ensemble_stage": {
+        "epochs": 6,
+        "best_epoch": 1,
+        "best_val_loss": 0.9614754319190979,
+        "still_improving_at_cap": false,
+        "final_epoch_cap": 50,
+        "seconds": 7.358504056930542,
+        "seconds_per_epoch": 1.2264174620310466,
+        "lambda_mass": 3.0,
+        "lambda_effective": 1.0730210756733127,
+        "loss_ratio_qre_over_mass_at_init": 0.3576736918911042,
+        "members_trained": false,
+        "at_best_epoch": {
+          "loss": 0.9072105288505554,
+          "qre_loss": 0.24703896045684814,
+          "mass_loss": 0.6152456998825073,
+          "val_loss": 0.9614754319190979,
+          "val_qre_loss": 8.665156201459467e-05,
+          "val_mass_loss": 0.895964503288269
+        }
+      }
+    }
+  },
+  "10": {
+    "lambda_mass": 10.0,
+    "val": {
+      "qre": {
+        "regime_mse": {
+          "[0.0,1.0]": {
+            "mse": 193.7860565185547,
+            "days": 732
+          },
+          "[0.0,0.2]": {
+            "mse": 57.2349739074707,
+            "days": 134
+          },
+          "[0.9,1.0]": {
+            "mse": 469.18450927734375,
+            "days": 81
+          }
+        },
+        "interval_mse": [
+          {
+            "interval": 0,
+            "days": 117,
+            "mse": 50.78651428222656
+          },
+          {
+            "interval": 1,
+            "days": 149,
+            "mse": 110.07372283935547
+          },
+          {
+            "interval": 2,
+            "days": 167,
+            "mse": 161.83128356933594
+          },
+          {
+            "interval": 3,
+            "days": 148,
+            "mse": 227.227783203125
+          },
+          {
+            "interval": 4,
+            "days": 82,
+            "mse": 302.7399597167969
+          },
+          {
+            "interval": 5,
+            "days": 69,
+            "mse": 493.1614685058594
+          }
+        ],
+        "spatial": {
+          "mae": 6.534660816192627,
+          "rmse": 13.920705795288086,
+          "mse": 193.7860565185547,
+          "bias": -0.3229770064353943,
+          "spatial_corr_daily_mean": 0.5185582494485372,
+          "spatial_corr_days_used": 732,
+          "spatial_corr_of_time_mean": 0.9481015597941149
+        },
+        "all_india_totals": {
+          "observed_mean_mm_per_day": 7.195596610990257,
+          "predicted_mean_mm_per_day": 6.876409616921661,
+          "total_observed_km3": 18410.57752178208,
+          "total_predicted_km3": 17593.909048556518,
+          "total_discrepancy_km3": -816.6684732255659,
+          "total_relative_discrepancy": -0.04435865590089947,
+          "daily_bias_mm_per_day": -0.3191869940685952,
+          "daily_mae_mm_per_day": 0.9033724068963097,
+          "daily_rmse_mm_per_day": 1.1875353963925952,
+          "daily_abs_error_p95_mm_per_day": 2.3627383486213946,
+          "daily_mean_relative_error": 0.1400272439363785,
+          "daily_median_relative_error": 0.11018578382195815,
+          "relative_error_eps_mm_per_day": 0.1,
+          "daily_totals_corr": 0.9374419525020778,
+          "days": 732
+        }
+      },
+      "perfect_member": {
+        "regime_mse": {
+          "[0.0,1.0]": {
+            "mse": 192.9538116455078,
+            "days": 732
+          },
+          "[0.0,0.2]": {
+            "mse": 56.64918899536133,
+            "days": 134
+          },
+          "[0.9,1.0]": {
+            "mse": 466.9972229003906,
+            "days": 81
+          }
+        },
+        "interval_mse": [
+          {
+            "interval": 0,
+            "days": 117,
+            "mse": 50.28496551513672
+          },
+          {
+            "interval": 1,
+            "days": 149,
+            "mse": 109.47583770751953
+          },
+          {
+            "interval": 2,
+            "days": 167,
+            "mse": 161.3570098876953
+          },
+          {
+            "interval": 3,
+            "days": 148,
+            "mse": 226.74574279785156
+          },
+          {
+            "interval": 4,
+            "days": 82,
+            "mse": 300.59259033203125
+          },
+          {
+            "interval": 5,
+            "days": 69,
+            "mse": 491.208251953125
+          }
+        ],
+        "spatial": {
+          "mae": 6.531425952911377,
+          "rmse": 13.89078140258789,
+          "mse": 192.9538116455078,
+          "bias": -0.2880080044269562,
+          "spatial_corr_daily_mean": 0.5181374611736131,
+          "spatial_corr_days_used": 732,
+          "spatial_corr_of_time_mean": 0.9479201000104225
+        },
+        "all_india_totals": {
+          "observed_mean_mm_per_day": 7.195596610990257,
+          "predicted_mean_mm_per_day": 6.9114749639141,
+          "total_observed_km3": 18410.57752178208,
+          "total_predicted_km3": 17683.626875170983,
+          "total_discrepancy_km3": -726.9506466111006,
+          "total_relative_discrepancy": -0.03948548847807867,
+          "daily_bias_mm_per_day": -0.2841216470761577,
+          "daily_mae_mm_per_day": 0.736638899157292,
+          "daily_rmse_mm_per_day": 0.9664613404478265,
+          "daily_abs_error_p95_mm_per_day": 1.988490095799109,
+          "daily_mean_relative_error": 0.1175663314840152,
+          "daily_median_relative_error": 0.08948540599995267,
+          "relative_error_eps_mm_per_day": 0.1,
+          "daily_totals_corr": 0.9614643182156324,
+          "days": 732
+        }
+      },
+      "weight_network": {
+        "accuracy": 0.6284153005464481,
+        "within_one_interval": 0.9644808743169399,
+        "confusion_matrix_rows_true_cols_pred": [
+          [
+            105,
+            10,
+            2,
+            0,
+            0,
+            0
+          ],
+          [
+            23,
+            96,
+            27,
+            3,
+            0,
+            0
+          ],
+          [
+            1,
+            40,
+            101,
+            24,
+            1,
+            0
+          ],
+          [
+            0,
+            5,
+            44,
+            74,
+            19,
+            6
+          ],
+          [
+            0,
+            0,
+            4,
+            39,
+            28,
+            11
+          ],
+          [
+            0,
+            0,
+            0,
+            4,
+            9,
+            56
+          ]
+        ],
+        "argmax_histogram": [
+          129,
+          151,
+          178,
+          144,
+          57,
+          73
+        ],
+        "true_histogram": [
+          117,
+          149,
+          167,
+          148,
+          82,
+          69
+        ],
+        "mean_max_weight": 0.7202320098876953,
+        "largest_class_share": 0.24316939890710382,
+        "collapsed": false
+      }
+    },
+    "seconds": 14.637742757797241,
+    "is_control": false,
+    "training": {
+      "members": null,
+      "ensemble_stage": {
+        "epochs": 10,
+        "best_epoch": 5,
+        "best_val_loss": 3.202807664871216,
+        "still_improving_at_cap": false,
+        "final_epoch_cap": 50,
+        "seconds": 11.862881183624268,
+        "seconds_per_epoch": 1.1862881898880004,
+        "lambda_mass": 10.0,
+        "lambda_effective": 3.576736918911042,
+        "loss_ratio_qre_over_mass_at_init": 0.3576736918911042,
+        "members_trained": false,
+        "at_best_epoch": {
+          "loss": 3.128561019897461,
+          "qre_loss": 0.33672845363616943,
+          "mass_loss": 0.7805529236793518,
+          "val_loss": 3.202807664871216,
+          "val_qre_loss": 5.51461816939991e-05,
+          "val_mass_loss": 0.8954398036003113
+        }
+      }
+    }
+  }
+}

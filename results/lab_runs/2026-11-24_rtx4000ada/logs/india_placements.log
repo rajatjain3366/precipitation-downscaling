@@ -1,0 +1,130 @@
+
+===== 2026-11-24T13:35:10  step 12 india_placements
+$ /home/aidslab/miniconda3/envs/qre/bin/python experiments/run_india.py --config configs/india_v1.json --stage placements --set 'members.init="warm_start"' --set data.day_offset=0
+2026-11-24 13:35:10.313791: I tensorflow/core/platform/cpu_feature_guard.cc:193] This TensorFlow binary is optimized with oneAPI Deep Neural Network Library (oneDNN) to use the following CPU instructions in performance-critical operations:  AVX2 AVX_VNNI FMA
+To enable them in other operations, rebuild TensorFlow with the appropriate compiler flags.
+2026-11-24 13:35:10.369226: I tensorflow/core/util/util.cc:169] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+2026-11-24 13:35:10.384387: E tensorflow/stream_executor/cuda/cuda_blas.cc:2981] Unable to register cuBLAS factory: Attempting to register factory for plugin cuBLAS when one has already been registered
+2026-11-24 13:35:10.600282: W tensorflow/stream_executor/platform/default/dso_loader.cc:64] Could not load dynamic library 'libnvinfer.so.7'; dlerror: libnvinfer.so.7: cannot open shared object file: No such file or directory; LD_LIBRARY_PATH: /home/aidslab/miniconda3/envs/qre/lib/:
+2026-11-24 13:35:10.600314: W tensorflow/stream_executor/platform/default/dso_loader.cc:64] Could not load dynamic library 'libnvinfer_plugin.so.7'; dlerror: libnvinfer_plugin.so.7: cannot open shared object file: No such file or directory; LD_LIBRARY_PATH: /home/aidslab/miniconda3/envs/qre/lib/:
+2026-11-24 13:35:10.600317: W tensorflow/compiler/tf2tensorrt/utils/py_utils.cc:38] TF-TRT Warning: Cannot dlopen some TensorRT libraries. If you would like to use Nvidia GPU with TensorRT, please make sure the missing libraries mentioned above are installed properly.
+2026-11-24 13:35:10.950479: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:980] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2026-11-24 13:35:10.954619: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:980] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2026-11-24 13:35:10.955961: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:980] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+India data: X (5612, 32, 33, 5), Y (5612, 4964), days 1971-06-01 .. 2016-09-30, input grid [32, 33] (dropped lat [6.5], lon [99.75])
+2026-11-24 13:35:12.973021: I tensorflow/core/platform/cpu_feature_guard.cc:193] This TensorFlow binary is optimized with oneAPI Deep Neural Network Library (oneDNN) to use the following CPU instructions in performance-critical operations:  AVX2 AVX_VNNI FMA
+To enable them in other operations, rebuild TensorFlow with the appropriate compiler flags.
+2026-11-24 13:35:12.974444: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:980] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2026-11-24 13:35:12.975799: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:980] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2026-11-24 13:35:12.976969: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:980] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2026-11-24 13:35:13.315652: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:980] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2026-11-24 13:35:13.316885: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:980] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2026-11-24 13:35:13.318036: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:980] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2026-11-24 13:35:13.319727: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1616] Created device /job:localhost/replica:0/task:0/device:GPU:0 with 15131 MB memory:  -> device: 0, name: NVIDIA RTX 4000 Ada Generation, pci bus id: 0000:02:00.0, compute capability: 8.9
+== placement study (members: warm_start) ==
+2026-11-24 13:35:13.833690: I tensorflow/stream_executor/cuda/cuda_dnn.cc:384] Loaded cuDNN version 8100
+2026-11-24 13:35:14.772682: I tensorflow/stream_executor/cuda/cuda_blas.cc:1614] TensorFloat-32 will be used for the matrix multiplication. This will only be logged once.
+  loaded bgnet from checkpoint
+  loaded weight_network_squared_emd from checkpoint
+  loaded members_lam0/member_0 from checkpoint
+  member 0 (lambda 0) n=648 val=117 best_epoch=2/6 (0.4s/epoch)
+  loaded members_lam0/member_1 from checkpoint
+  member 1 (lambda 0) n=882 val=149 best_epoch=3/7 (0.4s/epoch)
+  loaded members_lam0/member_2 from checkpoint
+  member 2 (lambda 0) n=851 val=167 best_epoch=3/7 (0.4s/epoch)
+  loaded members_lam0/member_3 from checkpoint
+  member 3 (lambda 0) n=789 val=148 best_epoch=7/11 (0.3s/epoch)
+  loaded members_lam0/member_4 from checkpoint
+  member 4 (lambda 0) n=433 val=82 best_epoch=6/10 (0.3s/epoch)
+  loaded members_lam0/member_5 from checkpoint
+  member 5 (lambda 0) n=301 val=69 best_epoch=4/8 (0.3s/epoch)
+== placement ensemble ==
+  ensemble stage (lambda 0) best_epoch=5/10 lambda_eff=0.0
+  ensemble lambda 0 (control): val MSE [194.005, 57.438, 470.129] daily-total MAE 0.9375 mm/day, WN collapsed=False
+  ensemble stage (lambda 0.1) best_epoch=5/10 lambda_eff=0.03576736918911042
+  ensemble lambda 0.1: val MSE [193.981, 57.457, 469.597] daily-total MAE 0.9294 mm/day, WN collapsed=False
+  ensemble stage (lambda 1) best_epoch=4/9 lambda_eff=0.3576736918911042
+  ensemble lambda 1: val MSE [193.864, 57.432, 469.516] daily-total MAE 0.9083 mm/day, WN collapsed=False
+  ensemble stage (lambda 3) best_epoch=1/6 lambda_eff=1.0730210756733127
+  ensemble lambda 3: val MSE [193.699, 57.503, 468.83] daily-total MAE 0.8885 mm/day, WN collapsed=False
+  ensemble stage (lambda 10) best_epoch=5/10 lambda_eff=3.576736918911042
+  ensemble lambda 10: val MSE [193.786, 57.235, 469.185] daily-total MAE 0.9034 mm/day, WN collapsed=False
+== placement members ==
+  members lambda 0 (control): val MSE [193.754, 57.292, 469.374] daily-total MAE 0.9051 mm/day, WN collapsed=False
+  member 0 (lambda 0.1) n=648 val=117 best_epoch=4/8 (0.4s/epoch)
+  member 1 (lambda 0.1) n=882 val=149 best_epoch=3/7 (0.6s/epoch)
+  member 2 (lambda 0.1) n=851 val=167 best_epoch=4/8 (0.5s/epoch)
+  member 3 (lambda 0.1) n=789 val=148 best_epoch=11/15 (0.4s/epoch)
+  member 4 (lambda 0.1) n=433 val=82 best_epoch=16/20 (0.2s/epoch)
+  member 5 (lambda 0.1) n=301 val=69 best_epoch=11/15 (0.2s/epoch)
+  members lambda 0.1: val MSE [196.497, 56.981, 474.968] daily-total MAE 0.8453 mm/day, WN collapsed=False
+  member 0 (lambda 1) n=648 val=117 best_epoch=7/11 (0.3s/epoch)
+  member 1 (lambda 1) n=882 val=149 best_epoch=3/7 (0.4s/epoch)
+  member 2 (lambda 1) n=851 val=167 best_epoch=7/11 (0.4s/epoch)
+  member 3 (lambda 1) n=789 val=148 best_epoch=14/18 (0.3s/epoch)
+  member 4 (lambda 1) n=433 val=82 best_epoch=12/16 (0.2s/epoch)
+  member 5 (lambda 1) n=301 val=69 best_epoch=3/7 (0.3s/epoch)
+  members lambda 1: val MSE [211.8, 57.778, 512.354] daily-total MAE 0.8759 mm/day, WN collapsed=False
+  member 0 (lambda 3) n=648 val=117 best_epoch=7/11 (0.3s/epoch)
+  member 1 (lambda 3) n=882 val=149 best_epoch=3/7 (0.4s/epoch)
+  member 2 (lambda 3) n=851 val=167 best_epoch=7/11 (0.4s/epoch)
+  member 3 (lambda 3) n=789 val=148 best_epoch=4/8 (0.4s/epoch)
+  member 4 (lambda 3) n=433 val=82 best_epoch=21/25 (0.2s/epoch)
+  member 5 (lambda 3) n=301 val=69 best_epoch=3/7 (0.3s/epoch)
+  members lambda 3: val MSE [216.809, 58.233, 518.119] daily-total MAE 0.8725 mm/day, WN collapsed=False
+  member 0 (lambda 10) n=648 val=117 best_epoch=5/9 (0.3s/epoch)
+  member 1 (lambda 10) n=882 val=149 best_epoch=3/7 (0.5s/epoch)
+  member 2 (lambda 10) n=851 val=167 best_epoch=7/11 (0.4s/epoch)
+  member 3 (lambda 10) n=789 val=148 best_epoch=5/9 (0.4s/epoch)
+  member 4 (lambda 10) n=433 val=82 best_epoch=12/16 (0.2s/epoch)
+  member 5 (lambda 10) n=301 val=69 best_epoch=9/13 (0.2s/epoch)
+  members lambda 10: val MSE [223.667, 58.87, 552.549] daily-total MAE 0.8724 mm/day, WN collapsed=False
+== placement both ==
+  ensemble stage (lambda 0) best_epoch=4/9 lambda_eff=0.0
+  both lambda 0 (control): val MSE [193.854, 57.515, 469.594] daily-total MAE 0.8998 mm/day, WN collapsed=False
+  member 0 (lambda 0.1) n=648 val=117 best_epoch=4/8 (0.3s/epoch)
+  member 1 (lambda 0.1) n=882 val=149 best_epoch=3/7 (0.4s/epoch)
+  member 2 (lambda 0.1) n=851 val=167 best_epoch=9/13 (0.4s/epoch)
+  member 3 (lambda 0.1) n=789 val=148 best_epoch=5/9 (0.4s/epoch)
+  member 4 (lambda 0.1) n=433 val=82 best_epoch=16/20 (0.2s/epoch)
+  member 5 (lambda 0.1) n=301 val=69 best_epoch=11/15 (0.2s/epoch)
+  ensemble stage (lambda 0.1) best_epoch=5/10 lambda_eff=0.03662558168862654
+  both lambda 0.1: val MSE [198.141, 56.973, 478.861] daily-total MAE 0.9063 mm/day, WN collapsed=False
+  member 0 (lambda 1) n=648 val=117 best_epoch=7/11 (0.3s/epoch)
+  member 1 (lambda 1) n=882 val=149 best_epoch=3/7 (0.4s/epoch)
+  member 2 (lambda 1) n=851 val=167 best_epoch=7/11 (0.4s/epoch)
+  member 3 (lambda 1) n=789 val=148 best_epoch=14/18 (0.3s/epoch)
+  member 4 (lambda 1) n=433 val=82 best_epoch=12/16 (0.2s/epoch)
+  member 5 (lambda 1) n=301 val=69 best_epoch=9/13 (0.2s/epoch)
+  ensemble stage (lambda 1) best_epoch=7/12 lambda_eff=0.3553189058240946
+  both lambda 1: val MSE [215.68, 57.622, 538.708] daily-total MAE 0.9193 mm/day, WN collapsed=False
+  member 0 (lambda 3) n=648 val=117 best_epoch=7/11 (0.3s/epoch)
+  member 1 (lambda 3) n=882 val=149 best_epoch=3/7 (0.5s/epoch)
+  member 2 (lambda 3) n=851 val=167 best_epoch=7/11 (0.4s/epoch)
+  member 3 (lambda 3) n=789 val=148 best_epoch=7/11 (0.4s/epoch)
+  member 4 (lambda 3) n=433 val=82 best_epoch=13/17 (0.2s/epoch)
+  member 5 (lambda 3) n=301 val=69 best_epoch=3/7 (0.3s/epoch)
+  ensemble stage (lambda 3) best_epoch=7/12 lambda_eff=1.0363441196673226
+  both lambda 3: val MSE [219.079, 58.182, 528.474] daily-total MAE 0.9035 mm/day, WN collapsed=False
+  member 0 (lambda 10) n=648 val=117 best_epoch=7/11 (0.3s/epoch)
+  member 1 (lambda 10) n=882 val=149 best_epoch=3/7 (0.4s/epoch)
+  member 2 (lambda 10) n=851 val=167 best_epoch=7/11 (0.4s/epoch)
+  member 3 (lambda 10) n=789 val=148 best_epoch=5/9 (0.4s/epoch)
+  member 4 (lambda 10) n=433 val=82 best_epoch=12/16 (0.2s/epoch)
+  member 5 (lambda 10) n=301 val=69 best_epoch=3/7 (0.3s/epoch)
+  ensemble stage (lambda 10) best_epoch=1/6 lambda_eff=3.421305568958482
+  both lambda 10: val MSE [219.096, 58.656, 522.998] daily-total MAE 0.8806 mm/day, WN collapsed=False
+  selected placement members, lambda 0.1 (lowest val daily_mae_mm_per_day among (placement, lambda > 0) with val MSE[0.0,1.0] within 2% of their control)
+  loaded members_lam0.1/member_0 from checkpoint
+  member 0 (lambda 0.1) n=648 val=117 best_epoch=4/8 (0.4s/epoch)
+  loaded members_lam0.1/member_1 from checkpoint
+  member 1 (lambda 0.1) n=882 val=149 best_epoch=3/7 (0.6s/epoch)
+  loaded members_lam0.1/member_2 from checkpoint
+  member 2 (lambda 0.1) n=851 val=167 best_epoch=4/8 (0.5s/epoch)
+  loaded members_lam0.1/member_3 from checkpoint
+  member 3 (lambda 0.1) n=789 val=148 best_epoch=11/15 (0.4s/epoch)
+  loaded members_lam0.1/member_4 from checkpoint
+  member 4 (lambda 0.1) n=433 val=82 best_epoch=16/20 (0.2s/epoch)
+  loaded members_lam0.1/member_5 from checkpoint
+  member 5 (lambda 0.1) n=301 val=69 best_epoch=11/15 (0.2s/epoch)
+===== 2026-11-24T13:41:07  exit code 0

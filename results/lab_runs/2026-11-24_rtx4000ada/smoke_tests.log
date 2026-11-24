@@ -1,0 +1,16 @@
+
+============================================================
+  PASS  test_segmentation.py                        2.9s
+  PASS  test_builders.py                            5.1s
+  PASS  test_cordex_adapter.py                      3.4s
+  PASS  generate_sample_cordex.py                   0.8s
+  PASS  test_real_data_specialist_smoke.py          4.5s
+  PASS  test_real_data_qre_integration.py           5.8s
+  PASS  smoke_test_qre.py                           4.1s
+  PASS  test_qre_pipeline.py                        9.1s
+  PASS  test_india.py                              28.3s
+  PASS  run_india.py --config configs/india_smoke.json --stage all --save-dir results/india/smoke_run   12.4s
+  PASS  india_day_offset.py --config configs/india_smoke.json --save-dir results/india/smoke_run    1.4s
+  PASS  test_nz_mass.py                            25.3s
+  PASS  test_mass_study.py                          1.7s
+============================================================

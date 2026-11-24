@@ -1,0 +1,12 @@
+{
+  "finished_at": "2026-11-23T17:55:51",
+  "seconds": 649.8799812793732,
+  "command": [
+    "/home/aidslab/miniconda3/envs/qre/bin/python",
+    "experiments/nz_mass.py",
+    "--set",
+    "checkpoints.dir=\"checkpoints/nz_mass\"",
+    "--save-dir",
+    "results/fixes_v2/nz_mass"
+  ]
+}

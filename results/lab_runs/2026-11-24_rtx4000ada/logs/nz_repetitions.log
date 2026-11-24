@@ -1,0 +1,82 @@
+
+===== 2026-11-24T13:41:07  step 13 nz_repetitions
+$ /home/aidslab/miniconda3/envs/qre/bin/python experiments/nz_mass.py --stage repeats --sanity --set 'segmentation.intervals_file="results/fixes_v2/dry_run/segmentation.json"' --set sanity.members_max_epochs=10 --set sanity.weight_network_max_epochs=30 --set 'checkpoints.dir="checkpoints/nz_v2_sanity"' --save-dir results/fixes_v2/nz_wn
+2026-11-24 13:41:07.626451: I tensorflow/core/platform/cpu_feature_guard.cc:193] This TensorFlow binary is optimized with oneAPI Deep Neural Network Library (oneDNN) to use the following CPU instructions in performance-critical operations:  AVX2 AVX_VNNI FMA
+To enable them in other operations, rebuild TensorFlow with the appropriate compiler flags.
+2026-11-24 13:41:07.679391: I tensorflow/core/util/util.cc:169] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+2026-11-24 13:41:07.694621: E tensorflow/stream_executor/cuda/cuda_blas.cc:2981] Unable to register cuBLAS factory: Attempting to register factory for plugin cuBLAS when one has already been registered
+2026-11-24 13:41:07.918830: W tensorflow/stream_executor/platform/default/dso_loader.cc:64] Could not load dynamic library 'libnvinfer.so.7'; dlerror: libnvinfer.so.7: cannot open shared object file: No such file or directory; LD_LIBRARY_PATH: /home/aidslab/miniconda3/envs/qre/lib/:
+2026-11-24 13:41:07.918862: W tensorflow/stream_executor/platform/default/dso_loader.cc:64] Could not load dynamic library 'libnvinfer_plugin.so.7'; dlerror: libnvinfer_plugin.so.7: cannot open shared object file: No such file or directory; LD_LIBRARY_PATH: /home/aidslab/miniconda3/envs/qre/lib/:
+2026-11-24 13:41:07.918864: W tensorflow/compiler/tf2tensorrt/utils/py_utils.cc:38] TF-TRT Warning: Cannot dlopen some TensorRT libraries. If you would like to use Nvidia GPU with TensorRT, please make sure the missing libraries mentioned above are installed properly.
+2026-11-24 13:41:08.263685: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:980] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2026-11-24 13:41:08.267804: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:980] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2026-11-24 13:41:08.269050: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:980] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2026-11-24 13:41:10.346590: I tensorflow/core/platform/cpu_feature_guard.cc:193] This TensorFlow binary is optimized with oneAPI Deep Neural Network Library (oneDNN) to use the following CPU instructions in performance-critical operations:  AVX2 AVX_VNNI FMA
+To enable them in other operations, rebuild TensorFlow with the appropriate compiler flags.
+2026-11-24 13:41:10.347688: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:980] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2026-11-24 13:41:10.349392: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:980] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2026-11-24 13:41:10.350615: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:980] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2026-11-24 13:41:10.675786: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:980] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2026-11-24 13:41:10.677396: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:980] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2026-11-24 13:41:10.678638: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:980] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2026-11-24 13:41:10.680020: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1616] Created device /job:localhost/replica:0/task:0/device:GPU:0 with 15136 MB memory:  -> device: 0, name: NVIDIA RTX 4000 Ada Generation, pci bus id: 0000:02:00.0, compute capability: 8.9
+== NZ repetitions: ensemble, lambda 10, members warm_start ==
+2026-11-24 13:41:11.187999: I tensorflow/stream_executor/cuda/cuda_dnn.cc:384] Loaded cuDNN version 8100
+2026-11-24 13:41:12.148464: I tensorflow/stream_executor/cuda/cuda_blas.cc:1614] TensorFloat-32 will be used for the matrix multiplication. This will only be logged once.
+  loaded rep0/bgnet from checkpoint
+  loaded rep0/weight_network_squared_emd from checkpoint
+  loaded rep0/bgnet_converged from checkpoint
+  loaded rep0/members_warm_start/member_0 from checkpoint
+  loaded rep0/members_warm_start/member_1 from checkpoint
+  loaded rep0/members_warm_start/member_2 from checkpoint
+  loaded rep0/members_warm_start/member_3 from checkpoint
+  loaded rep0/members_warm_start/member_4 from checkpoint
+  loaded rep0/members_warm_start/member_5 from checkpoint
+  loaded ensemble_lam0/omega from checkpoint
+  ensemble stage (lambda 0) best_epoch=7/12 lambda_eff=0.0
+  loaded ensemble_lam10/omega from checkpoint
+  ensemble stage (lambda 10) best_epoch=4/9 lambda_eff=2.6215030440278864
+  repetition 0 (seed 42): MSE[0,1] BGNet 50.873, QRE 52.032, QRE (λ = 0 control) 52.169, QRE + mass 51.980 (10s)
+  ensemble stage (lambda 0) best_epoch=1/6 lambda_eff=0.0
+  ensemble stage (lambda 10) best_epoch=2/7 lambda_eff=2.561501870206903
+  repetition 1 (seed 1042): MSE[0,1] BGNet 48.823, QRE 53.906, QRE (λ = 0 control) 53.926, QRE + mass 53.469 (333s)
+  ensemble stage (lambda 0) best_epoch=1/6 lambda_eff=0.0
+  ensemble stage (lambda 10) best_epoch=4/9 lambda_eff=2.5856335117692586
+  repetition 2 (seed 2042): MSE[0,1] BGNet 50.027, QRE 53.257, QRE (λ = 0 control) 53.262, QRE + mass 53.088 (314s)
+  ensemble stage (lambda 0) best_epoch=2/7 lambda_eff=0.0
+  ensemble stage (lambda 10) best_epoch=11/16 lambda_eff=2.5382926557622305
+  repetition 3 (seed 3042): MSE[0,1] BGNet 51.039, QRE 54.011, QRE (λ = 0 control) 54.817, QRE + mass 53.610 (315s)
+  ensemble stage (lambda 0) best_epoch=6/11 lambda_eff=0.0
+  ensemble stage (lambda 10) best_epoch=6/11 lambda_eff=2.60897241904098
+  repetition 4 (seed 4042): MSE[0,1] BGNet 52.336, QRE 53.348, QRE (λ = 0 control) 53.382, QRE + mass 53.274 (354s)
+  ensemble stage (lambda 0) best_epoch=2/7 lambda_eff=0.0
+  ensemble stage (lambda 10) best_epoch=13/18 lambda_eff=2.7121558948992956
+  repetition 5 (seed 5042): MSE[0,1] BGNet 50.348, QRE 53.025, QRE (λ = 0 control) 53.199, QRE + mass 52.659 (342s)
+  ensemble stage (lambda 0) best_epoch=2/7 lambda_eff=0.0
+  ensemble stage (lambda 10) best_epoch=2/7 lambda_eff=2.529818928672212
+  repetition 6 (seed 6042): MSE[0,1] BGNet 51.686, QRE 54.445, QRE (λ = 0 control) 54.360, QRE + mass 54.061 (313s)
+  ensemble stage (lambda 0) best_epoch=1/6 lambda_eff=0.0
+  ensemble stage (lambda 10) best_epoch=1/6 lambda_eff=2.676029596026486
+  repetition 7 (seed 7042): MSE[0,1] BGNet 50.354, QRE 53.694, QRE (λ = 0 control) 53.575, QRE + mass 53.356 (288s)
+  ensemble stage (lambda 0) best_epoch=1/6 lambda_eff=0.0
+  ensemble stage (lambda 10) best_epoch=7/12 lambda_eff=2.427363389645879
+  repetition 8 (seed 8042): MSE[0,1] BGNet 49.195, QRE 53.656, QRE (λ = 0 control) 53.549, QRE + mass 53.115 (299s)
+  ensemble stage (lambda 0) best_epoch=3/8 lambda_eff=0.0
+  ensemble stage (lambda 10) best_epoch=6/11 lambda_eff=2.697357212167822
+  repetition 9 (seed 9042): MSE[0,1] BGNet 50.423, QRE 53.771, QRE (λ = 0 control) 53.621, QRE + mass 53.308 (309s)
+| Model | MSE [0,1] | MSE [0,0.2] | MSE [0.9,1] | Daily-total MAE (mm/day) | Abs. total rel. discrepancy |
+| --- | --- | --- | --- | --- | --- |
+| BGNet | 50.51 ± 1.05 | 2.24 ± 0.05 | 185.45 ± 4.02 | 1.132 ± 0.025 | 0.024 ± 0.020 |
+| QRE | 53.51 ± 0.66 | 2.21 ± 0.05 | 195.81 ± 3.44 | 1.131 ± 0.015 | 0.023 ± 0.014 |
+| QRE (λ = 0 control) | 53.59 ± 0.71 | 2.23 ± 0.07 | 196.24 ± 4.60 | 1.136 ± 0.025 | 0.023 ± 0.023 |
+| QRE + mass (ensemble, λ = 10) | 53.19 ± 0.56 | 2.24 ± 0.05 | 195.10 ± 3.20 | 1.116 ± 0.013 | 0.027 ± 0.015 |
+
+| Test | MSE [0,1] | MSE [0,0.2] | MSE [0.9,1] | Daily-total MAE (mm/day) | Abs. total rel. discrepancy |
+| --- | --- | --- | --- | --- | --- |
+| QRE vs BGNet | p = 0.00195 * (Δmed +3.1) | p = 0.695 (Δmed -0.00938) | p = 0.00195 * (Δmed +11.1) | p = 0.922 (Δmed +0.00168) | p = 0.922 (Δmed -0.000922) |
+| QRE + mass (ensemble, λ = 10) vs QRE | p = 0.00195 * (Δmed -0.375) | p = 0.232 (Δmed +0.0329) | p = 0.0273 * (Δmed -0.628) | p = 0.00195 * (Δmed -0.0138) | p = 0.557 (Δmed +0.00232) |
+| QRE + mass (ensemble, λ = 10) vs QRE (λ = 0 control) | p = 0.00195 * (Δmed -0.306) | p = 0.625 (Δmed +0.0199) | p = 0.275 (Δmed -0.787) | p = 0.00195 * (Δmed -0.0147) | p = 0.432 (Δmed +0.00716) |
+
+Test split, 10 repetitions (seed base_seed + 1000 k), mean ± std (ddof 1). * = significant at 5% (paired two-sided Wilcoxon signed-rank; lower is better; Δmed = median of first − second). paired two-sided Wilcoxon signed-rank tests at 5%; needs at least 6 repetitions.
+
+===== 2026-11-24T14:29:09  exit code 0

@@ -1,0 +1,21 @@
+{
+  "finished_at": "2026-11-24T13:35:10",
+  "seconds": 730.4391994476318,
+  "command": [
+    "/home/aidslab/miniconda3/envs/qre/bin/python",
+    "experiments/nz_mass.py",
+    "--stage",
+    "placements",
+    "--sanity",
+    "--set",
+    "segmentation.intervals_file=\"results/fixes_v2/dry_run/segmentation.json\"",
+    "--set",
+    "sanity.members_max_epochs=10",
+    "--set",
+    "sanity.weight_network_max_epochs=30",
+    "--set",
+    "checkpoints.dir=\"checkpoints/nz_v2_sanity\"",
+    "--save-dir",
+    "results/fixes_v2/nz_wn"
+  ]
+}

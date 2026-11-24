@@ -1,0 +1,186 @@
+
+===== 2026-11-24T14:29:09  step 14 india_repetitions
+$ /home/aidslab/miniconda3/envs/qre/bin/python experiments/run_india.py --config configs/india_v1.json --stage repeats --set 'members.init="warm_start"' --set data.day_offset=0
+2026-11-24 14:29:09.565130: I tensorflow/core/platform/cpu_feature_guard.cc:193] This TensorFlow binary is optimized with oneAPI Deep Neural Network Library (oneDNN) to use the following CPU instructions in performance-critical operations:  AVX2 AVX_VNNI FMA
+To enable them in other operations, rebuild TensorFlow with the appropriate compiler flags.
+2026-11-24 14:29:09.622761: I tensorflow/core/util/util.cc:169] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+2026-11-24 14:29:09.638128: E tensorflow/stream_executor/cuda/cuda_blas.cc:2981] Unable to register cuBLAS factory: Attempting to register factory for plugin cuBLAS when one has already been registered
+2026-11-24 14:29:09.860541: W tensorflow/stream_executor/platform/default/dso_loader.cc:64] Could not load dynamic library 'libnvinfer.so.7'; dlerror: libnvinfer.so.7: cannot open shared object file: No such file or directory; LD_LIBRARY_PATH: /home/aidslab/miniconda3/envs/qre/lib/:
+2026-11-24 14:29:09.860575: W tensorflow/stream_executor/platform/default/dso_loader.cc:64] Could not load dynamic library 'libnvinfer_plugin.so.7'; dlerror: libnvinfer_plugin.so.7: cannot open shared object file: No such file or directory; LD_LIBRARY_PATH: /home/aidslab/miniconda3/envs/qre/lib/:
+2026-11-24 14:29:09.860578: W tensorflow/compiler/tf2tensorrt/utils/py_utils.cc:38] TF-TRT Warning: Cannot dlopen some TensorRT libraries. If you would like to use Nvidia GPU with TensorRT, please make sure the missing libraries mentioned above are installed properly.
+2026-11-24 14:29:10.205673: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:980] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2026-11-24 14:29:10.209710: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:980] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2026-11-24 14:29:10.211130: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:980] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+India data: X (5612, 32, 33, 5), Y (5612, 4964), days 1971-06-01 .. 2016-09-30, input grid [32, 33] (dropped lat [6.5], lon [99.75])
+2026-11-24 14:29:12.183719: I tensorflow/core/platform/cpu_feature_guard.cc:193] This TensorFlow binary is optimized with oneAPI Deep Neural Network Library (oneDNN) to use the following CPU instructions in performance-critical operations:  AVX2 AVX_VNNI FMA
+To enable them in other operations, rebuild TensorFlow with the appropriate compiler flags.
+2026-11-24 14:29:12.185689: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:980] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2026-11-24 14:29:12.187063: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:980] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2026-11-24 14:29:12.188288: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:980] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2026-11-24 14:29:12.536207: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:980] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2026-11-24 14:29:12.537773: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:980] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2026-11-24 14:29:12.539085: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:980] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2026-11-24 14:29:12.540429: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1616] Created device /job:localhost/replica:0/task:0/device:GPU:0 with 15172 MB memory:  -> device: 0, name: NVIDIA RTX 4000 Ada Generation, pci bus id: 0000:02:00.0, compute capability: 8.9
+== repetitions: members, lambda 0.1, members warm_start ==
+2026-11-24 14:29:13.052640: I tensorflow/stream_executor/cuda/cuda_dnn.cc:384] Loaded cuDNN version 8100
+2026-11-24 14:29:13.989161: I tensorflow/stream_executor/cuda/cuda_blas.cc:1614] TensorFloat-32 will be used for the matrix multiplication. This will only be logged once.
+  loaded bgnet from checkpoint
+  loaded weight_network_squared_emd from checkpoint
+  loaded members_lam0/member_0 from checkpoint
+  member 0 (lambda 0) n=648 val=117 best_epoch=2/6 (0.4s/epoch)
+  loaded members_lam0/member_1 from checkpoint
+  member 1 (lambda 0) n=882 val=149 best_epoch=3/7 (0.4s/epoch)
+  loaded members_lam0/member_2 from checkpoint
+  member 2 (lambda 0) n=851 val=167 best_epoch=3/7 (0.4s/epoch)
+  loaded members_lam0/member_3 from checkpoint
+  member 3 (lambda 0) n=789 val=148 best_epoch=7/11 (0.3s/epoch)
+  loaded members_lam0/member_4 from checkpoint
+  member 4 (lambda 0) n=433 val=82 best_epoch=6/10 (0.3s/epoch)
+  loaded members_lam0/member_5 from checkpoint
+  member 5 (lambda 0) n=301 val=69 best_epoch=4/8 (0.3s/epoch)
+  loaded members_lam0.1/member_0 from checkpoint
+  member 0 (lambda 0.1) n=648 val=117 best_epoch=4/8 (0.4s/epoch)
+  loaded members_lam0.1/member_1 from checkpoint
+  member 1 (lambda 0.1) n=882 val=149 best_epoch=3/7 (0.6s/epoch)
+  loaded members_lam0.1/member_2 from checkpoint
+  member 2 (lambda 0.1) n=851 val=167 best_epoch=4/8 (0.5s/epoch)
+  loaded members_lam0.1/member_3 from checkpoint
+  member 3 (lambda 0.1) n=789 val=148 best_epoch=11/15 (0.4s/epoch)
+  loaded members_lam0.1/member_4 from checkpoint
+  member 4 (lambda 0.1) n=433 val=82 best_epoch=16/20 (0.2s/epoch)
+  loaded members_lam0.1/member_5 from checkpoint
+  member 5 (lambda 0.1) n=301 val=69 best_epoch=11/15 (0.2s/epoch)
+  repetition 0 (seed 42): MSE[0,1] BGNet 176.912, QRE 176.904, QRE (λ = 0 control) 176.904, QRE + mass 179.878 (8s)
+  member 0 (lambda 0) n=648 val=117 best_epoch=3/7 (0.4s/epoch)
+  member 1 (lambda 0) n=882 val=149 best_epoch=4/8 (0.5s/epoch)
+  member 2 (lambda 0) n=851 val=167 best_epoch=2/6 (0.6s/epoch)
+  member 3 (lambda 0) n=789 val=148 best_epoch=5/9 (0.5s/epoch)
+  member 4 (lambda 0) n=433 val=82 best_epoch=5/9 (0.4s/epoch)
+  member 5 (lambda 0) n=301 val=69 best_epoch=11/15 (0.2s/epoch)
+  member 0 (lambda 0.1) n=648 val=117 best_epoch=2/6 (0.4s/epoch)
+  member 1 (lambda 0.1) n=882 val=149 best_epoch=7/11 (0.4s/epoch)
+  member 2 (lambda 0.1) n=851 val=167 best_epoch=5/9 (0.4s/epoch)
+  member 3 (lambda 0.1) n=789 val=148 best_epoch=9/13 (0.3s/epoch)
+  member 4 (lambda 0.1) n=433 val=82 best_epoch=7/11 (0.2s/epoch)
+  member 5 (lambda 0.1) n=301 val=69 best_epoch=6/10 (0.2s/epoch)
+  repetition 1 (seed 1042): MSE[0,1] BGNet 181.602, QRE 181.267, QRE (λ = 0 control) 181.267, QRE + mass 183.877 (152s)
+  member 0 (lambda 0) n=648 val=117 best_epoch=6/10 (0.3s/epoch)
+  member 1 (lambda 0) n=882 val=149 best_epoch=2/6 (0.4s/epoch)
+  member 2 (lambda 0) n=851 val=167 best_epoch=5/9 (0.4s/epoch)
+  member 3 (lambda 0) n=789 val=148 best_epoch=5/9 (0.4s/epoch)
+  member 4 (lambda 0) n=433 val=82 best_epoch=1/5 (0.4s/epoch)
+  member 5 (lambda 0) n=301 val=69 best_epoch=7/11 (0.2s/epoch)
+  member 0 (lambda 0.1) n=648 val=117 best_epoch=7/11 (0.3s/epoch)
+  member 1 (lambda 0.1) n=882 val=149 best_epoch=10/14 (0.4s/epoch)
+  member 2 (lambda 0.1) n=851 val=167 best_epoch=10/14 (0.3s/epoch)
+  member 3 (lambda 0.1) n=789 val=148 best_epoch=6/10 (0.4s/epoch)
+  member 4 (lambda 0.1) n=433 val=82 best_epoch=14/18 (0.2s/epoch)
+  member 5 (lambda 0.1) n=301 val=69 best_epoch=2/6 (0.3s/epoch)
+  repetition 2 (seed 2042): MSE[0,1] BGNet 180.967, QRE 180.921, QRE (λ = 0 control) 180.921, QRE + mass 184.526 (137s)
+  member 0 (lambda 0) n=648 val=117 best_epoch=3/7 (0.4s/epoch)
+  member 1 (lambda 0) n=882 val=149 best_epoch=2/6 (0.5s/epoch)
+  member 2 (lambda 0) n=851 val=167 best_epoch=2/6 (0.4s/epoch)
+  member 3 (lambda 0) n=789 val=148 best_epoch=4/8 (0.4s/epoch)
+  member 4 (lambda 0) n=433 val=82 best_epoch=5/9 (0.3s/epoch)
+  member 5 (lambda 0) n=301 val=69 best_epoch=4/8 (0.3s/epoch)
+  member 0 (lambda 0.1) n=648 val=117 best_epoch=3/7 (0.4s/epoch)
+  member 1 (lambda 0.1) n=882 val=149 best_epoch=10/14 (0.3s/epoch)
+  member 2 (lambda 0.1) n=851 val=167 best_epoch=5/9 (0.4s/epoch)
+  member 3 (lambda 0.1) n=789 val=148 best_epoch=6/10 (0.4s/epoch)
+  member 4 (lambda 0.1) n=433 val=82 best_epoch=22/26 (0.2s/epoch)
+  member 5 (lambda 0.1) n=301 val=69 best_epoch=4/8 (0.2s/epoch)
+  repetition 3 (seed 3042): MSE[0,1] BGNet 177.653, QRE 177.568, QRE (λ = 0 control) 177.568, QRE + mass 179.789 (149s)
+  member 0 (lambda 0) n=648 val=117 best_epoch=4/8 (0.3s/epoch)
+  member 1 (lambda 0) n=882 val=149 best_epoch=1/5 (0.5s/epoch)
+  member 2 (lambda 0) n=851 val=167 best_epoch=6/10 (0.4s/epoch)
+  member 3 (lambda 0) n=789 val=148 best_epoch=5/9 (0.4s/epoch)
+  member 4 (lambda 0) n=433 val=82 best_epoch=6/10 (0.3s/epoch)
+  member 5 (lambda 0) n=301 val=69 best_epoch=7/11 (0.2s/epoch)
+  member 0 (lambda 0.1) n=648 val=117 best_epoch=2/6 (0.4s/epoch)
+  member 1 (lambda 0.1) n=882 val=149 best_epoch=7/11 (0.4s/epoch)
+  member 2 (lambda 0.1) n=851 val=167 best_epoch=6/10 (0.4s/epoch)
+  member 3 (lambda 0.1) n=789 val=148 best_epoch=6/10 (0.4s/epoch)
+  member 4 (lambda 0.1) n=433 val=82 best_epoch=15/19 (0.2s/epoch)
+  member 5 (lambda 0.1) n=301 val=69 best_epoch=8/12 (0.2s/epoch)
+  repetition 4 (seed 4042): MSE[0,1] BGNet 178.107, QRE 177.574, QRE (λ = 0 control) 177.574, QRE + mass 180.913 (153s)
+  member 0 (lambda 0) n=648 val=117 best_epoch=8/12 (0.3s/epoch)
+  member 1 (lambda 0) n=882 val=149 best_epoch=12/16 (0.3s/epoch)
+  member 2 (lambda 0) n=851 val=167 best_epoch=8/12 (0.4s/epoch)
+  member 3 (lambda 0) n=789 val=148 best_epoch=7/11 (0.3s/epoch)
+  member 4 (lambda 0) n=433 val=82 best_epoch=5/9 (0.3s/epoch)
+  member 5 (lambda 0) n=301 val=69 best_epoch=5/9 (0.2s/epoch)
+  member 0 (lambda 0.1) n=648 val=117 best_epoch=8/12 (0.4s/epoch)
+  member 1 (lambda 0.1) n=882 val=149 best_epoch=8/12 (0.4s/epoch)
+  member 2 (lambda 0.1) n=851 val=167 best_epoch=11/15 (0.3s/epoch)
+  member 3 (lambda 0.1) n=789 val=148 best_epoch=7/11 (0.3s/epoch)
+  member 4 (lambda 0.1) n=433 val=82 best_epoch=13/17 (0.2s/epoch)
+  member 5 (lambda 0.1) n=301 val=69 best_epoch=6/10 (0.2s/epoch)
+  repetition 5 (seed 5042): MSE[0,1] BGNet 188.297, QRE 186.486, QRE (λ = 0 control) 186.486, QRE + mass 189.365 (128s)
+  member 0 (lambda 0) n=648 val=117 best_epoch=6/10 (0.4s/epoch)
+  member 1 (lambda 0) n=882 val=149 best_epoch=1/5 (0.5s/epoch)
+  member 2 (lambda 0) n=851 val=167 best_epoch=6/10 (0.4s/epoch)
+  member 3 (lambda 0) n=789 val=148 best_epoch=2/6 (0.4s/epoch)
+  member 4 (lambda 0) n=433 val=82 best_epoch=3/7 (0.3s/epoch)
+  member 5 (lambda 0) n=301 val=69 best_epoch=6/10 (0.2s/epoch)
+  member 0 (lambda 0.1) n=648 val=117 best_epoch=3/7 (0.4s/epoch)
+  member 1 (lambda 0.1) n=882 val=149 best_epoch=6/10 (0.4s/epoch)
+  member 2 (lambda 0.1) n=851 val=167 best_epoch=8/12 (0.4s/epoch)
+  member 3 (lambda 0.1) n=789 val=148 best_epoch=11/15 (0.3s/epoch)
+  member 4 (lambda 0.1) n=433 val=82 best_epoch=10/14 (0.2s/epoch)
+  member 5 (lambda 0.1) n=301 val=69 best_epoch=6/10 (0.2s/epoch)
+  repetition 6 (seed 6042): MSE[0,1] BGNet 177.171, QRE 176.965, QRE (λ = 0 control) 176.965, QRE + mass 180.287 (144s)
+  member 0 (lambda 0) n=648 val=117 best_epoch=3/7 (0.4s/epoch)
+  member 1 (lambda 0) n=882 val=149 best_epoch=6/10 (0.4s/epoch)
+  member 2 (lambda 0) n=851 val=167 best_epoch=6/10 (0.4s/epoch)
+  member 3 (lambda 0) n=789 val=148 best_epoch=5/9 (0.4s/epoch)
+  member 4 (lambda 0) n=433 val=82 best_epoch=3/7 (0.3s/epoch)
+  member 5 (lambda 0) n=301 val=69 best_epoch=3/7 (0.3s/epoch)
+  member 0 (lambda 0.1) n=648 val=117 best_epoch=5/9 (0.4s/epoch)
+  member 1 (lambda 0.1) n=882 val=149 best_epoch=3/7 (0.4s/epoch)
+  member 2 (lambda 0.1) n=851 val=167 best_epoch=7/11 (0.4s/epoch)
+  member 3 (lambda 0.1) n=789 val=148 best_epoch=8/12 (0.3s/epoch)
+  member 4 (lambda 0.1) n=433 val=82 best_epoch=23/27 (0.2s/epoch)
+  member 5 (lambda 0.1) n=301 val=69 best_epoch=3/7 (0.3s/epoch)
+  repetition 7 (seed 7042): MSE[0,1] BGNet 181.494, QRE 181.139, QRE (λ = 0 control) 181.139, QRE + mass 184.400 (132s)
+  member 0 (lambda 0) n=648 val=117 best_epoch=4/8 (0.4s/epoch)
+  member 1 (lambda 0) n=882 val=149 best_epoch=5/9 (0.4s/epoch)
+  member 2 (lambda 0) n=851 val=167 best_epoch=3/7 (0.4s/epoch)
+  member 3 (lambda 0) n=789 val=148 best_epoch=4/8 (0.4s/epoch)
+  member 4 (lambda 0) n=433 val=82 best_epoch=5/9 (0.3s/epoch)
+  member 5 (lambda 0) n=301 val=69 best_epoch=10/14 (0.2s/epoch)
+  member 0 (lambda 0.1) n=648 val=117 best_epoch=2/6 (0.4s/epoch)
+  member 1 (lambda 0.1) n=882 val=149 best_epoch=5/9 (0.5s/epoch)
+  member 2 (lambda 0.1) n=851 val=167 best_epoch=5/9 (0.4s/epoch)
+  member 3 (lambda 0.1) n=789 val=148 best_epoch=16/20 (0.3s/epoch)
+  member 4 (lambda 0.1) n=433 val=82 best_epoch=12/16 (0.2s/epoch)
+  member 5 (lambda 0.1) n=301 val=69 best_epoch=3/7 (0.3s/epoch)
+  repetition 8 (seed 8042): MSE[0,1] BGNet 177.219, QRE 176.633, QRE (λ = 0 control) 176.633, QRE + mass 180.048 (170s)
+  member 0 (lambda 0) n=648 val=117 best_epoch=5/9 (0.3s/epoch)
+  member 1 (lambda 0) n=882 val=149 best_epoch=3/7 (0.5s/epoch)
+  member 2 (lambda 0) n=851 val=167 best_epoch=3/7 (0.4s/epoch)
+  member 3 (lambda 0) n=789 val=148 best_epoch=3/7 (0.4s/epoch)
+  member 4 (lambda 0) n=433 val=82 best_epoch=1/5 (0.4s/epoch)
+  member 5 (lambda 0) n=301 val=69 best_epoch=3/7 (0.3s/epoch)
+  member 0 (lambda 0.1) n=648 val=117 best_epoch=4/8 (0.4s/epoch)
+  member 1 (lambda 0.1) n=882 val=149 best_epoch=6/10 (0.4s/epoch)
+  member 2 (lambda 0.1) n=851 val=167 best_epoch=21/25 (0.3s/epoch)
+  member 3 (lambda 0.1) n=789 val=148 best_epoch=11/15 (0.3s/epoch)
+  member 4 (lambda 0.1) n=433 val=82 best_epoch=16/20 (0.2s/epoch)
+  member 5 (lambda 0.1) n=301 val=69 best_epoch=15/19 (0.2s/epoch)
+  repetition 9 (seed 9042): MSE[0,1] BGNet 175.629, QRE 175.265, QRE (λ = 0 control) 175.265, QRE + mass 177.794 (175s)
+| Model | MSE [0,1] | MSE [0,0.2] | MSE [0.9,1] | Daily-total MAE (mm/day) | Abs. total rel. discrepancy |
+| --- | --- | --- | --- | --- | --- |
+| BGNet | 179.51 ± 3.74 | 58.03 ± 0.72 | 387.11 ± 9.19 | 1.040 ± 0.016 | 0.029 ± 0.017 |
+| QRE | 179.07 ± 3.36 | 57.52 ± 0.45 | 384.58 ± 8.13 | 1.026 ± 0.014 | 0.032 ± 0.010 |
+| QRE (λ = 0 control) | 179.07 ± 3.36 | 57.52 ± 0.45 | 384.58 ± 8.13 | 1.026 ± 0.014 | 0.032 ± 0.010 |
+| QRE + mass (members, λ = 0.1) | 182.09 ± 3.41 | 57.79 ± 0.46 | 392.91 ± 8.60 | 1.027 ± 0.013 | 0.007 ± 0.005 |
+
+| Test | MSE [0,1] | MSE [0,0.2] | MSE [0.9,1] | Daily-total MAE (mm/day) | Abs. total rel. discrepancy |
+| --- | --- | --- | --- | --- | --- |
+| QRE vs BGNet | p = 0.00195 * (Δmed -0.345) | p = 0.00977 * (Δmed -0.48) | p = 0.00195 * (Δmed -2.03) | p = 0.0371 * (Δmed -0.015) | p = 0.846 (Δmed +0.00181) |
+| QRE + mass (members, λ = 0.1) vs QRE | p = 0.00195 * (Δmed +3.12) | p = 0.0195 * (Δmed +0.322) | p = 0.00195 * (Δmed +8.9) | p = 0.77 (Δmed +0.00399) | p = 0.00195 * (Δmed -0.025) |
+| QRE + mass (members, λ = 0.1) vs QRE (λ = 0 control) | p = 0.00195 * (Δmed +3.12) | p = 0.0195 * (Δmed +0.322) | p = 0.00195 * (Δmed +8.9) | p = 0.77 (Δmed +0.00399) | p = 0.00195 * (Δmed -0.025) |
+
+Test split, 10 repetitions (seed base_seed + 1000 k), mean ± std (ddof 1). * = significant at 5% (paired two-sided Wilcoxon signed-rank; lower is better; Δmed = median of first − second). paired two-sided Wilcoxon signed-rank tests at 5%; needs at least 6 repetitions.
+
+===== 2026-11-24T14:51:41  exit code 0

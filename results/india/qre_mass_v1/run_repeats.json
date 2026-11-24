@@ -1,0 +1,202 @@
+{
+  "config": {
+    "experiment_name": "india_qre_mass_v1",
+    "save_dir": "/home/aidslab/precipitation-downscaling/results/india/qre_mass_v1",
+    "base_seed": 42,
+    "n_intervals": 6,
+    "data": {
+      "data_dir": "/home/aidslab/precipitation-downscaling/data/India",
+      "imd_pattern": "IMD_jjas/RF25_ind*_jjas.nc",
+      "imd_variable": "RAINFALL",
+      "era5_pattern": "ERA5_full/era5_*_coarse.nc",
+      "era5_variables": [
+        "q",
+        "t",
+        "u",
+        "v",
+        "w"
+      ],
+      "pressure_level": 850.0,
+      "coarsen_factor": 4,
+      "aggregation_shift_hours": 0,
+      "day_offset": 0,
+      "period": [
+        "1971-06-01",
+        "2016-09-30"
+      ],
+      "months": [
+        6,
+        7,
+        8,
+        9
+      ],
+      "allow_missing_days": false,
+      "standardize_predictors": true,
+      "use_elevation": false,
+      "input_hw": [
+        32,
+        33
+      ]
+    },
+    "split": {
+      "train": [
+        "1971-01-01",
+        "2002-12-31"
+      ],
+      "val": [
+        "2003-01-01",
+        "2008-12-31"
+      ],
+      "test": [
+        "2009-01-01",
+        "2016-12-31"
+      ]
+    },
+    "loss": {
+      "rain_threshold": 0.0,
+      "epsilon": 0.0001
+    },
+    "segmentation": {
+      "method": "fixed",
+      "fixed_bounds": [
+        0.0,
+        0.166,
+        0.392,
+        0.61,
+        0.812,
+        0.923,
+        1.0
+      ],
+      "n_runs": 100,
+      "seed": 0,
+      "weight_concentration_prior": null,
+      "intervals_file": null
+    },
+    "prediction": {
+      "mode": "expected"
+    },
+    "architecture": {
+      "channels": [
+        64,
+        128,
+        256
+      ],
+      "kernel": 6,
+      "padding": "valid",
+      "dense": [
+        512
+      ],
+      "dense_activation": "relu",
+      "dropout": 0.2,
+      "attention_reduction": 1,
+      "omega_init_conv": true
+    },
+    "bgnet": {
+      "learning_rate": 0.0001,
+      "decay_rate": 0.7,
+      "decay_steps": 6000,
+      "patience": 4,
+      "max_epochs": 100,
+      "extend_epochs": 50,
+      "max_epochs_hard": 100,
+      "batch_size": 91
+    },
+    "members": {
+      "init": "warm_start",
+      "warm_start": {
+        "learning_rate": 5e-05
+      },
+      "learning_rate": 0.0001,
+      "decay_rate": 0.7,
+      "decay_steps": 6000,
+      "patience": 4,
+      "max_epochs": 100,
+      "extend_epochs": 50,
+      "max_epochs_hard": 100,
+      "batch_size": 91
+    },
+    "weight_network": {
+      "dense": 100,
+      "dropout": 0.2,
+      "loss": "squared_emd",
+      "ce_weight": 1.0,
+      "emd_weight": 1.0,
+      "emd_reduction": "sum",
+      "learning_rate": 5e-05,
+      "decay_rate": 0.7,
+      "decay_steps": 6000,
+      "patience": 15,
+      "max_epochs": 100,
+      "extend_epochs": 50,
+      "max_epochs_hard": 300,
+      "batch_size": 91,
+      "collapse_fraction": 0.7
+    },
+    "mass": {
+      "placement": "ensemble",
+      "mode": "absolute",
+      "eps_mm_per_day": 0.1,
+      "lambdas": [
+        0,
+        0.01,
+        0.1,
+        1
+      ],
+      "lambda_scaling": "initial_ratio",
+      "scaling_max_days": 512
+    },
+    "ensemble": {
+      "train_members": false,
+      "precompute_member_predictions": true,
+      "learning_rate": 5e-05,
+      "decay_rate": null,
+      "decay_steps": 6000,
+      "patience": 5,
+      "max_epochs": 50,
+      "extend_epochs": 0,
+      "max_epochs_hard": 50,
+      "batch_size": 91
+    },
+    "selection": {
+      "mse_regime": "[0.0,1.0]",
+      "mse_tolerance": 0.02,
+      "total_metric": "daily_mae_mm_per_day"
+    },
+    "checkpoints": {
+      "dir": "/home/aidslab/precipitation-downscaling/checkpoints/india/qre_mass_v1"
+    },
+    "study": {
+      "_comment": "run_india.py --stage members / placements / repeats: member study, mass placements x lambdas, repetitions",
+      "member_inits": [
+        "scratch",
+        "warm_start"
+      ],
+      "member_init": "auto",
+      "placements": [
+        "ensemble",
+        "members",
+        "both"
+      ],
+      "lambdas": [
+        0,
+        0.1,
+        1,
+        3,
+        10
+      ],
+      "repetitions": 10
+    }
+  },
+  "stage": "repeats",
+  "argv": [
+    "experiments/run_india.py",
+    "--config",
+    "configs/india_v1.json",
+    "--stage",
+    "repeats",
+    "--set",
+    "members.init=\"warm_start\"",
+    "--set",
+    "data.day_offset=0"
+  ]
+}

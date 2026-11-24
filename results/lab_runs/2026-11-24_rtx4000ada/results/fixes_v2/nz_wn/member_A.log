@@ -1,0 +1,51 @@
+
+===== 2026-11-23T17:28:55  step 2 nz_member_A
+$ /home/aidslab/miniconda3/envs/qre/bin/python experiments/member_study.py --sanity --set 'segmentation.intervals_file="results/fixes_v2/dry_run/segmentation.json"' --set sanity.members_max_epochs=10 --set sanity.weight_network_max_epochs=30 --set 'checkpoints.dir="checkpoints/nz_v2_sanity"' --save-dir results/fixes_v2/nz_wn
+2026-11-23 17:28:55.228531: I tensorflow/core/platform/cpu_feature_guard.cc:193] This TensorFlow binary is optimized with oneAPI Deep Neural Network Library (oneDNN) to use the following CPU instructions in performance-critical operations:  AVX2 AVX_VNNI FMA
+To enable them in other operations, rebuild TensorFlow with the appropriate compiler flags.
+2026-11-23 17:28:55.279268: I tensorflow/core/util/util.cc:169] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+2026-11-23 17:28:55.294180: E tensorflow/stream_executor/cuda/cuda_blas.cc:2981] Unable to register cuBLAS factory: Attempting to register factory for plugin cuBLAS when one has already been registered
+2026-11-23 17:28:55.516485: W tensorflow/stream_executor/platform/default/dso_loader.cc:64] Could not load dynamic library 'libnvinfer.so.7'; dlerror: libnvinfer.so.7: cannot open shared object file: No such file or directory; LD_LIBRARY_PATH: /home/aidslab/miniconda3/envs/qre/lib/:/home/aidslab/miniconda3/envs/qre/lib/:
+2026-11-23 17:28:55.516517: W tensorflow/stream_executor/platform/default/dso_loader.cc:64] Could not load dynamic library 'libnvinfer_plugin.so.7'; dlerror: libnvinfer_plugin.so.7: cannot open shared object file: No such file or directory; LD_LIBRARY_PATH: /home/aidslab/miniconda3/envs/qre/lib/:/home/aidslab/miniconda3/envs/qre/lib/:
+2026-11-23 17:28:55.516520: W tensorflow/compiler/tf2tensorrt/utils/py_utils.cc:38] TF-TRT Warning: Cannot dlopen some TensorRT libraries. If you would like to use Nvidia GPU with TensorRT, please make sure the missing libraries mentioned above are installed properly.
+2026-11-23 17:28:57.925156: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:980] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2026-11-23 17:28:57.928833: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:980] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2026-11-23 17:28:57.929828: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:980] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2026-11-23 17:28:57.930938: I tensorflow/core/platform/cpu_feature_guard.cc:193] This TensorFlow binary is optimized with oneAPI Deep Neural Network Library (oneDNN) to use the following CPU instructions in performance-critical operations:  AVX2 AVX_VNNI FMA
+To enable them in other operations, rebuild TensorFlow with the appropriate compiler flags.
+2026-11-23 17:28:57.932608: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:980] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2026-11-23 17:28:57.933607: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:980] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2026-11-23 17:28:57.934551: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:980] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2026-11-23 17:28:58.255631: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:980] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2026-11-23 17:28:58.257195: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:980] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2026-11-23 17:28:58.258611: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:980] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2026-11-23 17:28:58.259811: W tensorflow/core/common_runtime/gpu/gpu_bfc_allocator.cc:42] Overriding orig_value setting because the TF_FORCE_GPU_ALLOW_GROWTH environment variable is set. Original config value was 0.
+2026-11-23 17:28:58.259831: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1616] Created device /job:localhost/replica:0/task:0/device:GPU:0 with 15083 MB memory:  -> device: 0, name: NVIDIA RTX 4000 Ada Generation, pci bus id: 0000:02:00.0, compute capability: 8.9
+2026-11-23 17:28:58.680517: I tensorflow/stream_executor/cuda/cuda_dnn.cc:384] Loaded cuDNN version 8100
+2026-11-23 17:28:59.641133: I tensorflow/stream_executor/cuda/cuda_blas.cc:1614] TensorFloat-32 will be used for the matrix multiplication. This will only be logged once.
+sanity_10_epoch: member/BGNet own-interval MSE ratio [0.899, 0.815, 1.062, 1.329, 1.766, 2.491], Perfect-Member val MSE {'[0.0,1.0]': 116.74, '[0.0,0.2]': 1.89, '[0.9,1.0]': 585.1}
+  loaded rep0/members_warm_start/member_0 from checkpoint
+  warm_start member 0 n=1288 val=234 best_epoch=32/36 (0.4s/epoch)
+  loaded rep0/members_warm_start/member_1 from checkpoint
+  warm_start member 1 n=2086 val=384 best_epoch=38/42 (0.6s/epoch)
+  loaded rep0/members_warm_start/member_2 from checkpoint
+  warm_start member 2 n=2084 val=388 best_epoch=32/36 (0.6s/epoch)
+  loaded rep0/members_warm_start/member_3 from checkpoint
+  warm_start member 3 n=1957 val=320 best_epoch=43/47 (0.5s/epoch)
+  loaded rep0/members_warm_start/member_4 from checkpoint
+  warm_start member 4 n=1549 val=260 best_epoch=47/51 (0.4s/epoch)
+  loaded rep0/members_warm_start/member_5 from checkpoint
+  warm_start member 5 n=1256 val=239 best_epoch=28/32 (0.4s/epoch)
+warm_start: member/BGNet own-interval MSE ratio [0.689, 0.699, 0.845, 0.829, 0.865, 0.855], Perfect-Member val MSE {'[0.0,1.0]': 51.44, '[0.0,0.2]': 1.58, '[0.9,1.0]': 196.43}
+  scratch member 0 n=1288 val=234 best_epoch=47/51 (0.4s/epoch)
+  scratch member 1 n=2086 val=384 best_epoch=42/46 (0.6s/epoch)
+  scratch member 2 n=2084 val=388 best_epoch=54/58 (0.5s/epoch)
+  scratch member 3 n=1957 val=320 best_epoch=49/53 (0.5s/epoch)
+  scratch member 4 n=1549 val=260 best_epoch=69/73 (0.4s/epoch)
+  scratch member 5 n=1256 val=239 best_epoch=82/86 (0.3s/epoch)
+scratch: member/BGNet own-interval MSE ratio [0.711, 0.71, 0.872, 0.874, 0.942, 0.951], Perfect-Member val MSE {'[0.0,1.0]': 55.86, '[0.0,0.2]': 1.67, '[0.9,1.0]': 216.67}
+best member set by Perfect-Member val MSE [0,1]: warm_start
+QRE val MSE (scratch): {'[0.0,1.0]': 58.29, '[0.0,0.2]': 1.78, '[0.9,1.0]': 221.97}
+QRE val MSE (warm_start): {'[0.0,1.0]': 53.61, '[0.0,0.2]': 1.71, '[0.9,1.0]': 202.19}
+TEST: {'qre_warm_start_squared_emd': {'[0.0,1.0]': 52.03, '[0.0,0.2]': 2.13, '[0.9,1.0]': 190.46}, 'perfect_member': {'[0.0,1.0]': 50.31, '[0.0,0.2]': 1.89, '[0.9,1.0]': 187.43}, 'bgnet': {'[0.0,1.0]': 60.6, '[0.0,0.2]': 2.86, '[0.9,1.0]': 231.79}}
+===== 2026-11-23T17:31:57  exit code 0

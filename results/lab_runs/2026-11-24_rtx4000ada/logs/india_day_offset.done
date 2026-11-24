@@ -1,0 +1,10 @@
+{
+  "finished_at": "2026-11-23T17:55:59",
+  "seconds": 6.420480251312256,
+  "command": [
+    "/home/aidslab/miniconda3/envs/qre/bin/python",
+    "experiments/india_day_offset.py",
+    "--config",
+    "configs/india_v1.json"
+  ]
+}

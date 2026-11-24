@@ -1,0 +1,8 @@
+{
+  "selected_init": "warm_start",
+  "rule": "lowest Perfect-Member validation MSE [0,1] (as the NZ member study)",
+  "perfect_member_val_mse_0_1": {
+    "scratch": 227.16151428222656,
+    "warm_start": 192.9538116455078
+  }
+}
