@@ -2,7 +2,7 @@
 
 > **Bachelor Thesis Project (BTP)**
 > **Based on the AAAI-24 paper**: *"Quantile-Regression-Ensemble: A Deep Learning Algorithm for Downscaling Extreme Precipitation"* (Bailie, Koh, Rampal & Gibson), Proceedings of the AAAI Conference on Artificial Intelligence 38(20), 21914–21922, 2024, [doi:10.1609/aaai.v38i20.30193](https://doi.org/10.1609/aaai.v38i20.30193) ([AAAI page](https://ojs.aaai.org/index.php/AAAI/article/view/30193))
-> **This repository**: a reproduction on alternative data (CORDEX-ML-Bench, New Zealand), and an extension to India (ERA5 → IMD) with a global mass-conservation regularization (§8, implemented and smoke-tested; no India results yet)
+> **This repository**: a reproduction on alternative data (CORDEX-ML-Bench, New Zealand), and an extension to India (ERA5 → IMD) with a global mass-conservation regularization (§8; run on the lab GPU, final results from 10 repetitions in §9)
 
 ---
 
@@ -255,7 +255,12 @@ results/
 
 ## 8. India: QRE with global mass-conservation regularization
 
-**Status: implemented and tested on the sample files only. No India experiment has been run, and no India result exists yet.** The long runs are listed in [docs/RUNBOOK.md](docs/RUNBOOK.md) and run in one go by `scripts/run_lab.py` ([docs/LAB_SETUP.md](docs/LAB_SETUP.md)).
+**Status: run on the lab GPU (RTX 4000 Ada).**
+
+- **2026-11-23:** experiments A, the λ sweep and B (RUNBOOK steps 5–9).
+- **2026-11-24:** the India member study, the placement study and 10 repetitions (steps 10, 12, 14).
+
+The final India results (10 repetitions, mean ± std, paired Wilcoxon tests) are in [results/india/qre_mass_v1/repetitions/summary.md](results/india/qre_mass_v1/repetitions/summary.md) and summarized at the end of §9. Logs are in `results/lab_runs/`. The runs are listed in [docs/RUNBOOK.md](docs/RUNBOOK.md) and run in one go by `scripts/run_lab.py` ([docs/LAB_SETUP.md](docs/LAB_SETUP.md)).
 
 The same QRE code as the NZ v2 pipeline is used: train-only normalization, $p\alpha\beta$ predictions, one builder for members and BGNet, interval bounds fixed once on training totals (for India the paper's published bounds, see below), training thresholds for validation and test labels, members early-stopped on their own validation interval, the squared-EMD Weight Network and checkpoints. Everything is new code (`experiments/run_india.py`, `configs/india_*.json`, `results/india/`). The NZ code, configs and outputs are unchanged. There is one addition: a constraint on the all-India daily rainfall total. It does not model moisture-flux convergence or any other physics.
 
@@ -354,7 +359,12 @@ python experiments/run_india.py --config configs/india_smoke.json --stage all
 
 ## 9. NZ: QRE vs QRE + mass conservation
 
-**Status: implemented and smoke-tested on the synthetic fixture only; not run on the real NZ data.** The run is RUNBOOK step 4.
+**Status: run on the real NZ data on the lab GPU (RTX 4000 Ada).**
+
+- **This study, RUNBOOK step 4 (2026-11-23):** its outputs are in [results/fixes_v2/nz_mass/](results/fixes_v2/nz_mass/).
+- **The final comparison:** placements and 10 repetitions on the member-study models (steps 11 and 13, 2026-11-24). It is in [results/fixes_v2/nz_wn/sanity/mass_study/repetitions/summary.md](results/fixes_v2/nz_wn/sanity/mass_study/repetitions/summary.md) and summarized at the end of this section. Use it for the final numbers.
+
+Step 4 trains its own v2 models (members from scratch), not the member-study models, so its numbers differ from the final ones (see "Studies after the first lab run" below).
 
 Before the India experiment, the new model is compared with the old one on the NZ (CORDEX) data. `experiments/nz_mass.py` uses `configs/cordex_v2.json` and the v2 split (train 1961–1988, val 1989–1993, test 1994–2000):
 
