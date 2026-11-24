@@ -260,7 +260,7 @@ function notes(s, who, text) { s.addNotes(`${who} ${text.replace(/\s+/g, " ").tr
     `${n("mt.reps")} repetitions`,
   ], { size: 14 });
   source(s, "results/final_cordex_qre/metrics_table.csv, metadata.json (tag midterm-eval)");
-  takeaway(s, `MSE [0, 1]: QRE ${n("mt.qre.0.0,1.0.mean_mse")} ± ${n("mt.qre.0.0,1.0.std_mse")} vs BGNet ${n("mt.single_bgnet.0.0,1.0.mean_mse")} ± ${n("mt.single_bgnet.0.0,1.0.std_mse")}: something was wrong`);
+  takeaway(s, `Test MSE [0, 1]: QRE ${n("mt.qre.0.0,1.0.mean_mse")} ± ${n("mt.qre.0.0,1.0.std_mse")} vs BGNet ${n("mt.single_bgnet.0.0,1.0.mean_mse")} ± ${n("mt.single_bgnet.0.0,1.0.std_mse")}: something was wrong`);
   notes(s, A, `At the mid-term we showed our first implementation. It used a split of ${n("mt.train_years")} training,
     ${n("mt.val_years")} validation and ${n("mt.test_years")} test years, batch size ${n("mt.batch")}, learning rate
     ${n("mt.lr")} without decay, and three repetitions. The result was the opposite of the paper's: on all test days the
@@ -276,11 +276,11 @@ function notes(s, who, text) { s.addNotes(`${who} ${text.replace(/\s+/g, " ").tr
   const s = content("Mid-term", "Diagnosis · problem 1", "Problem 1: the Weight Network collapsed");
   image(s, "fig_wn_collapse.png", { x: MX, y: 1.6, w: 6.9, h: 4.2 }, "Weight Network argmax histogram");
   card(s, 7.8, 1.65, 4.93, 1.55, "Symptom in the mid-term run", [
-    `Weight Network best epoch = ${n("mt.omega.rep0.best_epoch")} in all ${n("mt.reps")} repetitions (stopped after ${n("mt.omega.rep0.epochs")} epochs)`,
+    `Best validation epoch of the Weight Network = ${n("mt.omega.rep0.best_epoch")} in all ${n("mt.reps")} repetitions (stopped after ${n("mt.omega.rep0.epochs")} epochs)`,
   ], { size: 15 });
-  card(s, 7.8, 3.55, 4.93, 2.25, "Measured with the same EMD loss after the other fixes", [
+  card(s, 7.8, 3.55, 4.93, 2.25, "Validation days, same EMD loss, after the other fixes", [
     `Argmax histogram ${n("s.wn.argmax")} (true ${n("s.wn.true")})`,
-    `Mean max weight ${n("s.wn.mean_max")}; accuracy ${n("s.wn.accuracy")} < majority class ${n("wl.chance.majority")}`,
+    `Mean max weight ${n("s.wn.mean_max")}; validation accuracy ${n("s.wn.accuracy")} < majority class ${n("wl.chance.majority")}`,
   ], { size: 15, fill: C.redLight });
   source(s, "results/final_cordex_qre/training_history/training_log.json; results/fixes_v2/nz/sanity/repetition_0.json");
   takeaway(s, "Every day went to one interval: QRE was just one member, never an ensemble");
@@ -299,7 +299,7 @@ function notes(s, who, text) { s.addNotes(`${who} ${text.replace(/\s+/g, " ").tr
   const s = content("Mid-term", "Diagnosis · problem 2", "Problem 2: unscaled inputs and an unfair baseline");
   image(s, "fig_predictor_scales.png", { x: MX, y: 1.6, w: 6.4, h: 4.2 }, "Raw predictor scales");
   card(s, 7.3, 1.65, 5.43, 1.3, "No input normalization", [
-    `q850 has mean ${n("nz.raw_mean.q850")} kg/kg next to t850 at ${n("nz.raw_mean.t850")} K, fed to the network as they are`,
+    `Training split: q850 has mean ${n("nz.raw_mean.q850")} kg/kg next to t850 at ${n("nz.raw_mean.t850")} K, fed to the network as they are`,
   ], { size: 15 });
   card(s, 7.3, 3.1, 5.43, 1.3, "Unfair baseline", [
     "The BGNet baseline had a different architecture from the members, so QRE vs BGNet was not like for like",
@@ -387,7 +387,7 @@ function notes(s, who, text) { s.addNotes(`${who} ${text.replace(/\s+/g, " ").tr
   ], { x: MX + 0.2, y: 1.72, w: 4.0, h: 3.95, fontFace: MATH, color: C.ink, valign: "top", margin: 0, isTextBox: true, objectName: "loss formulas" });
   image(s, "fig_loss_study.png", { x: 5.2, y: 1.6, w: 7.53, h: 4.25 }, "Weight Network loss study");
   source(s, "results/fixes_v2/nz_wn/sanity/weight_network_losses/results.json (validation 1989–1993)");
-  takeaway(s, `CE, squared EMD and CE + EMD all fix the collapse (accuracy ${n("wl.cross_entropy.accuracy")}–${n("wl.emd_squared_cdf.accuracy")}); we use squared EMD`);
+  takeaway(s, `CE, squared EMD and CE + EMD all fix the collapse (validation accuracy ${n("wl.cross_entropy.accuracy")}–${n("wl.emd_squared_cdf.accuracy")}); we use squared EMD`);
   notes(s, A, `Why does the EMD loss collapse? The paper's loss is the sum over intervals of the distance to the true
     interval times the weight. It is linear in the weights, so its minimum is a one-hot vector, and the gradient
     through the softmax is omega k times c k minus L, which goes to zero once omega is one-hot. The network falls into
@@ -409,7 +409,7 @@ function notes(s, who, text) { s.addNotes(`${who} ${text.replace(/\s+/g, " ").tr
     `Warm start from BGNet: ${n("ms.warm_start.pm_val")} (selected)`,
   ], { size: 15 });
   card(s, 8.25, 3.85, 4.48, 1.3, "Fair baseline: BGNet trained to convergence", [
-    `Validation MSE ${n("ms.bgc_val")} (best epoch ${n("ms.bgc.best_epoch")} of ${n("ms.bgc.epochs")})`,
+    `Validation MSE [0, 1] ${n("ms.bgc_val")} (best epoch ${n("ms.bgc.best_epoch")} of ${n("ms.bgc.epochs")}); test ${n("ms.test.bgnet_converged.[0.0,1.0]")}`,
   ], { size: 15, fill: C.tealLight });
   source(s, "results/fixes_v2/nz_wn/sanity/member_study/results.json (validation 1989–1993)");
   takeaway(s, "With trained members, the best possible weighting reaches the level of a converged BGNet");
@@ -428,7 +428,7 @@ function notes(s, who, text) { s.addNotes(`${who} ${text.replace(/\s+/g, " ").tr
   const s = content("Fixes", "NZ · before and after", "NZ: the fixes brought QRE close to BGNet");
   image(s, "fig_nz_before_after.png", { x: MX, y: 1.55, w: W - 2 * MX, h: 4.25 }, "NZ mid-term vs final test MSE");
   source(s, "results/final_cordex_qre/metrics_table.csv (test 1981–2000); results/fixes_v2/nz_wn/sanity/mass_study/repetitions/summary.json (test 1994–2000)");
-  takeaway(s, `MSE [0, 1]: QRE ${n("mt.qre.0.0,1.0.mean_mse")} vs BGNet ${n("mt.single_bgnet.0.0,1.0.mean_mse")} at mid-term; ${n("nz.rep.qre.mse_0_1.mean")} vs ${n("nz.rep.bgnet.mse_0_1.mean")} now (different test years)`);
+  takeaway(s, `Test MSE [0, 1]: QRE ${n("mt.qre.0.0,1.0.mean_mse")} vs BGNet ${n("mt.single_bgnet.0.0,1.0.mean_mse")} at mid-term; ${n("nz.rep.qre.mse_0_1.mean")} vs ${n("nz.rep.bgnet.mse_0_1.mean")} now (different test years)`);
   notes(s, A, `This puts the mid-term and the final New Zealand results side by side for the three error measures. The
     hatched bars are the mid-term run, the solid bars the final ten-repetition run. One caution: the test periods
     differ, ${n("mt.test_dates")} at the mid-term and ${n("nz.v2.test_years")} now, so compare the gap between QRE and
@@ -448,7 +448,7 @@ function notes(s, who, text) { s.addNotes(`${who} ${text.replace(/\s+/g, " ").tr
     ["Season", `JJAS: ${n("in.files.imd")} seasons × ${n("in.days_per_file")} days = ${n("in.n_days")} days`],
     ["Split", `${n("in.train_first")}–${n("in.train_last")} / ${n("in.val_first")}–${n("in.val_last")} / ${n("in.test_first")}–${n("in.test_last")}: ${n("in.train_days")} / ${n("in.val_days")} / ${n("in.test_days")} days`],
     ["Intervals", `Paper's fixed bounds: the GMM was unstable (${n("in.gmm.degenerate")})`],
-    ["Day offset", `${n("in.offset.recommended")}: ERA5 day D → IMD day D (score difference ${n("in.offset.score_diff")})`],
+    ["Day offset", `${n("in.offset.recommended")}: ERA5 day D → IMD day D (score difference ${n("in.offset.score_diff")}, train + val days)`],
   ];
   rows.forEach(([h, b], i) => {
     s.addText([{ text: h, options: { bold: true, color: C.teal, breakLine: true, fontSize: 14 } }, { text: b, options: { fontSize: 15, color: C.ink } }],
@@ -516,7 +516,7 @@ function notes(s, who, text) { s.addNotes(`${who} ${text.replace(/\s+/g, " ").tr
     { text: `${n("in.cand.members.0.1.mae")} vs ${n("in.cand.members.0.1.control_mae")} mm/day.` },
   ], { x: MX, y: 5.6, w: W - 2 * MX, h: 0.35, fontSize: 14, color: C.ink, fontFace: BODY, margin: 0, isTextBox: true });
   source(s, "results/fixes_v2/nz_wn/sanity/mass_study/placements/selection.json; results/india/qre_mass_v1/placements/selection.json", 5.98);
-  takeaway(s, `Training the members with the mass term costs NZ ${n("nz.sel.members_cost")} MSE; the ensemble placement costs nothing`, 6.3);
+  takeaway(s, `Training the members with the mass term costs NZ ${n("nz.sel.members_cost")} validation MSE; the ensemble placement costs nothing`, 6.3);
   notes(s, B, `Here is the validation sweep for both regions. Each line is a placement, and the y-axis is the
     validation error divided by that placement's own lambda equals zero control; the shaded band is the 2 percent
     tolerance. For New Zealand, putting the mass term into the members or both raises the error by 6 to 53 percent,
@@ -568,18 +568,18 @@ function notes(s, who, text) { s.addNotes(`${who} ${text.replace(/\s+/g, " ").tr
   const s = content("Results", "NZ · final results (10 repetitions, test 1994–2000)", "NZ: QRE trails a converged BGNet");
   const M = ["mse_0_1", "mse_0_0.2", "mse_0.9_1", "daily_total_mae", "abs_total_rel_discrepancy"];
   table(s, [
-    ["Model", "MSE [0, 1]", "MSE [0, 0.2]", "MSE [0.9, 1]", "Daily-total MAE", "|Total rel. discr.|"],
+    ["Model (test)", "MSE [0, 1]", "MSE [0, 0.2]", "MSE [0.9, 1]", "Daily-total MAE", "|Total rel. discr.|"],
     ...[["bgnet", "BGNet (converged)"], ["qre", "QRE"], ["control", "QRE (λ = 0 control)"], ["qre_mass", `QRE + mass (ens., λ = ${n("nz.rep.lambda")})`]]
       .map(([m, l]) => [l, ...M.map((k) => pm("nz", m, k))]),
   ], { x: MX, y: 1.6, w: W - 2 * MX, colW: [2.85, 1.85, 1.85, 1.95, 1.8, 1.833], size: 14, name: "NZ results table" });
   const P = (t, k) => { const p = n(`nz.rep.p.${t}.${k}`); return { text: p, bold: Number(NUM[`nz.rep.p.${t}.${k}`].value) < 0.05, color: Number(NUM[`nz.rep.p.${t}.${k}`].value) < 0.05 ? C.tealDark : C.ink }; };
   table(s, [
-    ["Wilcoxon p", "MSE [0, 1]", "MSE [0, 0.2]", "MSE [0.9, 1]", "Daily-total MAE", "|Total rel. discr.|"],
+    ["Wilcoxon p (test)", "MSE [0, 1]", "MSE [0, 0.2]", "MSE [0.9, 1]", "Daily-total MAE", "|Total rel. discr.|"],
     ...[["qre_vs_bgnet", "QRE vs BGNet"], ["qre_mass_vs_qre", "QRE + mass vs QRE"], ["qre_mass_vs_control", "QRE + mass vs control"]]
       .map(([t, l]) => [l, ...M.map((k) => P(t, k))]),
   ], { x: MX, y: 3.95, w: W - 2 * MX, colW: [2.85, 1.85, 1.85, 1.95, 1.8, 1.833], size: 14, name: "NZ p-value table" });
   source(s, "results/fixes_v2/nz_wn/sanity/mass_study/repetitions/summary.json and summary.md (mean ± std, n = 10); bold p < 0.05");
-  takeaway(s, `QRE is worse than BGNet on MSE [0, 1] and [0.9, 1] (p = ${n("nz.rep.p.qre_vs_bgnet.mse_0_1")}); totals are the same`);
+  takeaway(s, `QRE is worse than BGNet on test MSE [0, 1] and [0.9, 1] (p = ${n("nz.rep.p.qre_vs_bgnet.mse_0_1")}); totals are the same`);
   notes(s, B, `These are the final New Zealand numbers on the test years, mean and standard deviation over ten
     repetitions. The converged BGNet has an error of ${pm("nz", "bgnet", "mse_0_1")} on all days; QRE has
     ${pm("nz", "qre", "mse_0_1")}. The bottom table gives the Wilcoxon p-values; bold means significant. QRE is
@@ -596,7 +596,7 @@ function notes(s, who, text) { s.addNotes(`${who} ${text.replace(/\s+/g, " ").tr
   const s = content("Results", "NZ · final results", "NZ: small but consistent gains from the mass term");
   image(s, "fig_nz_final.png", { x: MX, y: 1.55, w: W - 2 * MX, h: 4.3 }, "NZ final results with error bars");
   source(s, "results/fixes_v2/nz_wn/sanity/mass_study/repetitions/summary.json (bars: mean ± std; dots: the 10 repetitions)");
-  takeaway(s, `vs its control: MSE [0, 1] ${n("nz.rep.qre_mass.mse_0_1.mean")} vs ${n("nz.rep.control.mse_0_1.mean")}, daily-total MAE ${n("nz.rep.qre_mass.daily_total_mae.mean")} vs ${n("nz.rep.control.daily_total_mae.mean")} (both p = ${n("nz.rep.p.qre_mass_vs_control.mse_0_1")})`);
+  takeaway(s, `Test, vs its control: MSE [0, 1] ${n("nz.rep.qre_mass.mse_0_1.mean")} vs ${n("nz.rep.control.mse_0_1.mean")}, daily-total MAE ${n("nz.rep.qre_mass.daily_total_mae.mean")} vs ${n("nz.rep.control.daily_total_mae.mean")} (both p = ${n("nz.rep.p.qre_mass_vs_control.mse_0_1")})`);
   notes(s, B, `The same results as a chart. Bars are means with standard deviations, and each dot is one repetition.
     The gap between BGNet and the three QRE variants on all days and on extremes is clearly larger than the spread
     over repetitions. The light amber bar is the lambda equals zero control: the same ensemble fine-tuning as QRE plus
@@ -613,14 +613,14 @@ function notes(s, who, text) { s.addNotes(`${who} ${text.replace(/\s+/g, " ").tr
   card(s, 8.25, 1.65, 4.48, 1.95, "Perfect-Member validation MSE [0, 1]", [
     `From scratch: ${n("im.scratch.pm_val")}`,
     `Warm start: ${n("im.warm_start.pm_val")} (selected)`,
-    `BGNet itself: ${n("im.bgnet_val")}`,
+    `BGNet itself (validation): ${n("im.bgnet_val")}`,
   ], { size: 15 });
   card(s, 8.25, 3.8, 4.48, 1.75, "Training", [
     `Scratch: best epochs ${n("im.scratch.best_epoch.1")}–${n("im.scratch.best_epoch.2")}, two still improving at the ${n("cfg.in.max_epochs")}-epoch cap`,
     `Warm start: best epochs ${n("im.warm_start.best_epoch.0")}–${n("im.warm_start.best_epoch.3")}`,
   ], { size: 14 });
   source(s, "results/india/qre_mass_v1/member_study/results.json and selection.json");
-  takeaway(s, `Members trained from scratch on ${n("im.scratch.train_days.5")}–${n("im.scratch.train_days.1")} days each lose to BGNet on every interval`);
+  takeaway(s, `Members trained from scratch on ${n("im.scratch.train_days.5")}–${n("im.scratch.train_days.1")} training days each lose to BGNet on every interval (validation)`);
   notes(s, B, `For India we repeated the member study. Each member trained from scratch sees only the days of its own
     interval, between ${n("im.scratch.train_days.5")} and ${n("im.scratch.train_days.1")} days, the numbers at the bottom
     of the bars. Every scratch member is worse than BGNet on its own interval, by up to a third on the extremes
@@ -636,19 +636,19 @@ function notes(s, who, text) { s.addNotes(`${who} ${text.replace(/\s+/g, " ").tr
   const s = content("Results", "India · final results (10 repetitions, test 2009–2016 JJAS)", "India: QRE slightly beats BGNet; the mass term fixes totals");
   const M = ["mse_0_1", "mse_0_0.2", "mse_0.9_1", "daily_total_mae", "abs_total_rel_discrepancy"];
   table(s, [
-    ["Model", "MSE [0, 1]", "MSE [0, 0.2]", "MSE [0.9, 1]", "Daily-total MAE", "|Total rel. discr.|"],
+    ["Model (test)", "MSE [0, 1]", "MSE [0, 0.2]", "MSE [0.9, 1]", "Daily-total MAE", "|Total rel. discr.|"],
     ...[["bgnet", "BGNet"], ["qre", "QRE (= λ = 0 control)"], ["qre_mass", `QRE + mass (members, λ = ${n("in.rep.lambda")})`]]
       .map(([m, l]) => [l, ...M.map((k) => pm("in", m, k))]),
   ], { x: MX, y: 1.6, w: W - 2 * MX, colW: [3.15, 1.8, 1.8, 1.85, 1.75, 1.783], size: 14, name: "India results table" });
   const P = (t, k) => { const v = Number(NUM[`in.rep.p.${t}.${k}`].value); return { text: n(`in.rep.p.${t}.${k}`), bold: v < 0.05, color: v < 0.05 ? C.tealDark : C.ink }; };
   table(s, [
-    ["Wilcoxon p", "MSE [0, 1]", "MSE [0, 0.2]", "MSE [0.9, 1]", "Daily-total MAE", "|Total rel. discr.|"],
+    ["Wilcoxon p (test)", "MSE [0, 1]", "MSE [0, 0.2]", "MSE [0.9, 1]", "Daily-total MAE", "|Total rel. discr.|"],
     ...[["qre_vs_bgnet", "QRE vs BGNet"], ["qre_mass_vs_qre", "QRE + mass vs QRE"]].map(([t, l]) => [l, ...M.map((k) => P(t, k))]),
   ], { x: MX, y: 3.55, w: W - 2 * MX, colW: [3.15, 1.8, 1.8, 1.85, 1.75, 1.783], size: 14, name: "India p-value table" });
   s.addText("For the members placement the λ = 0 control is the QRE itself (no extra stage).", { x: MX, y: 4.95, w: W - 2 * MX, h: 0.35,
     fontSize: 14, color: C.muted, fontFace: BODY, margin: 0, isTextBox: true });
   source(s, "results/india/qre_mass_v1/repetitions/summary.json and summary.md (mean ± std, n = 10); bold p < 0.05");
-  takeaway(s, `|Total rel. discrepancy| ${n("in.rep.qre.abs_total_rel_discrepancy.mean")} → ${n("in.rep.qre_mass.abs_total_rel_discrepancy.mean")} (p = ${n("in.rep.p.qre_mass_vs_qre.abs_total_rel_discrepancy")}), at a cost in MSE`);
+  takeaway(s, `Test |total rel. discrepancy| ${n("in.rep.qre.abs_total_rel_discrepancy.mean")} → ${n("in.rep.qre_mass.abs_total_rel_discrepancy.mean")} (p = ${n("in.rep.p.qre_mass_vs_qre.abs_total_rel_discrepancy")}), at a cost in MSE`);
   notes(s, B, `The final India results. Here QRE beats BGNet, slightly but consistently: on all days
     ${pm("in", "qre", "mse_0_1")} against ${pm("in", "bgnet", "mse_0_1")}, p ${n("in.rep.p.qre_vs_bgnet.mse_0_1")}, and it
     is also significantly better on dry days, on extremes and on the daily-total error. The gain is small compared with
@@ -663,11 +663,11 @@ function notes(s, who, text) { s.addNotes(`${who} ${text.replace(/\s+/g, " ").tr
 {
   const s = content("Results", "India · water balance vs accuracy", "Mass conservation removes India's rainfall deficit");
   image(s, "fig_india_bias.png", { x: MX, y: 1.6, w: 6.6, h: 4.25 }, "India signed total discrepancy");
-  stat(s, 7.55, 1.75, 5.2, n("rep.in.bias_change"), "mean signed bias of the all-India total, QRE → QRE + mass", C.teal);
-  stat(s, 7.55, 3.05, 2.5, `+${n("rep.in.mse_cost").split("+")[1].split(" ")[0]} %`, "MSE [0, 1]", C.red);
-  stat(s, 10.15, 3.05, 2.5, `+${n("rep.in.mse_cost").split("+")[2].split(" ")[0]} %`, "MSE [0.9, 1]", C.red);
+  stat(s, 7.55, 1.75, 5.2, n("rep.in.bias_change"), "test: mean signed bias of the all-India total, QRE → QRE + mass", C.teal);
+  stat(s, 7.55, 3.05, 2.5, `+${n("rep.in.mse_cost").split("+")[1].split(" ")[0]} %`, "test MSE [0, 1]", C.red);
+  stat(s, 10.15, 3.05, 2.5, `+${n("rep.in.mse_cost").split("+")[2].split(" ")[0]} %`, "test MSE [0.9, 1]", C.red);
   card(s, 7.55, 4.3, 5.18, 1.5, "All three changes are significant", [
-    `p = ${n("in.rep.p.qre_mass_vs_qre.abs_total_rel_discrepancy")} for the totals and for both MSE values (all 10 repetitions agree)`,
+    `Test: p = ${n("in.rep.p.qre_mass_vs_qre.abs_total_rel_discrepancy")} for the totals and for both MSE values (all 10 repetitions agree)`,
   ], { size: 15, fill: C.tealLight });
   source(s, "docs/STATUS.md (signed discrepancy from the ten rep_<k>.json files); results/india/qre_mass_v1/repetitions/summary.json");
   takeaway(s, "The mass term fixes the water balance at a small cost in accuracy");
@@ -686,10 +686,10 @@ function notes(s, who, text) { s.addNotes(`${who} ${text.replace(/\s+/g, " ").tr
 {
   const s = content("Conclusion", "Conclusion", "Key findings");
   const F = [
-    ["The fixes rescued QRE", `NZ MSE [0, 1]: ${n("mt.qre.0.0,1.0.mean_mse")} (BGNet ${n("mt.single_bgnet.0.0,1.0.mean_mse")}) at mid-term → ${n("nz.rep.qre.mse_0_1.mean")} (BGNet ${n("nz.rep.bgnet.mse_0_1.mean")}); different test years`],
-    ["QRE vs BGNet depends on the data", `NZ: QRE worse (${n("nz.rep.qre.mse_0_1.mean")} vs ${n("nz.rep.bgnet.mse_0_1.mean")}); India: QRE slightly better (${n("in.rep.qre.mse_0_1.mean")} vs ${n("in.rep.bgnet.mse_0_1.mean")}); both p = ${n("nz.rep.p.qre_vs_bgnet.mse_0_1")}`],
-    ["Mass conservation fixes the water balance", `India total bias ${n("rep.in.bias_change")} at ${n("rep.in.mse_cost")}; NZ: small gains over its control`],
-    ["Specialization needs data per member", `India scratch members (${n("im.scratch.train_days.5")}–${n("im.scratch.train_days.1")} days) lose to BGNet; warm start helps`],
+    ["The fixes rescued QRE", `NZ test MSE [0, 1]: ${n("mt.qre.0.0,1.0.mean_mse")} (BGNet ${n("mt.single_bgnet.0.0,1.0.mean_mse")}) at mid-term → ${n("nz.rep.qre.mse_0_1.mean")} (BGNet ${n("nz.rep.bgnet.mse_0_1.mean")}); different test years`],
+    ["QRE vs BGNet depends on the data", `Test MSE [0, 1]: NZ QRE worse (${n("nz.rep.qre.mse_0_1.mean")} vs ${n("nz.rep.bgnet.mse_0_1.mean")}); India: QRE slightly better (${n("in.rep.qre.mse_0_1.mean")} vs ${n("in.rep.bgnet.mse_0_1.mean")}); both p = ${n("nz.rep.p.qre_vs_bgnet.mse_0_1")}`],
+    ["Mass conservation fixes the water balance", `India test total bias ${n("rep.in.bias_change")} at ${n("rep.in.mse_cost")}; NZ: small gains over its control`],
+    ["Specialization needs data per member", `India scratch members (${n("im.scratch.train_days.5")}–${n("im.scratch.train_days.1")} training days) lose to BGNet on validation; warm start helps`],
     ["Evaluate fairly", "Same builder, converged baseline, λ = 0 control with the same training, 10 seeds, paired tests"],
   ];
   F.forEach(([h, b], i) => {

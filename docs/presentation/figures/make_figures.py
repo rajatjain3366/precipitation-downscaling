@@ -117,7 +117,7 @@ def predictor_scales():
                         textcoords="offset points", ha="center", fontsize=12)
     ax.set_xticks(x, ["q850\n(kg/kg)", "t850\n(K)", "u850\n(m/s)", "v850\n(m/s)"])
     ax.set_ylim(1e-4, 5e4)
-    ax.set_ylabel("Raw value (log scale)")
+    ax.set_ylabel("Raw value, training split (log)")
     ax.legend(frameon=False, loc="upper right", ncol=2)
     save(fig, "fig_predictor_scales.png")
 
@@ -136,7 +136,7 @@ def loss_study():
     axes[0].annotate(f"{acc[0]:.3f}", (0, acc[0] / 2), ha="center", va="center", fontsize=13, color="white",
                      fontweight="bold")
     axes[0].axhline(v("wl.chance.majority"), color=COL["muted"], ls="--", lw=1.5,
-                    label=f"majority-class chance {v('wl.chance.majority'):.3f}")
+                    label=f"majority-class chance (val) {v('wl.chance.majority'):.3f}")
     axes[0].legend(frameon=False, loc="upper left", fontsize=12)
     axes[0].set_xticks(x, [l for _, l in variants])
     axes[0].set_ylim(0, 0.85)
@@ -145,10 +145,10 @@ def loss_study():
     bars = axes[1].bar(x, mse, color=cols, width=0.6)
     bar_labels(axes[1], bars)
     axes[1].axhline(v("wl.reference_perfect_member.val.[0.0,1.0]"), color=COL["pm"], ls="--", lw=1.5,
-                    label=f"Perfect-Member bound {v('wl.reference_perfect_member.val.[0.0,1.0]'):.2f}")
-    axes[1].legend(frameon=False, loc="upper right", fontsize=12)
+                    label=f"Perfect Member (val) {v('wl.reference_perfect_member.val.[0.0,1.0]'):.2f}")
+    axes[1].legend(frameon=False, loc="upper right", fontsize=12, handlelength=1.2)
     axes[1].set_xticks(x, [l for _, l in variants])
-    axes[1].set_ylim(0, 175)
+    axes[1].set_ylim(0, 190)
     axes[1].set_title("QRE validation MSE [0, 1]", loc="left")
     fig.tight_layout()
     save(fig, "fig_loss_study.png")
@@ -241,7 +241,7 @@ def india_bias():
     for i, m in enumerate(models):
         ax.text(i, 0.014, labels[m], ha="center", fontsize=13)
     ax.set_xticks(range(3), [LABEL[m] for m in models])
-    ax.set_ylabel("Signed total relative discrepancy\n(predicted − observed) / observed")
+    ax.set_ylabel("Test: signed total relative discrepancy\n(predicted − observed) / observed")
     ax.set_ylim(-0.07, 0.026)
     save(fig, "fig_india_bias.png")
 
@@ -349,8 +349,8 @@ if __name__ == "__main__":
     member_study_nz()
     nz_before_after()
     final_bars("nz", ["bgnet", "qre", "control", "qre_mass"],
-               [("mse_0_1", "MSE [0, 1]", "{:.2f}"), ("mse_0.9_1", "MSE [0.9, 1]", "{:.2f}"),
-                ("daily_total_mae", "Daily-total MAE (mm/day)", "{:.3f}")], "fig_nz_final.png")
+               [("mse_0_1", "Test MSE [0, 1]", "{:.2f}"), ("mse_0.9_1", "Test MSE [0.9, 1]", "{:.2f}"),
+                ("daily_total_mae", "Test daily-total MAE", "{:.3f}")], "fig_nz_final.png")
     india_bias()
     india_member()
     placements()
