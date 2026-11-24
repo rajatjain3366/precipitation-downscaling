@@ -66,3 +66,8 @@ _to_delete/
 results/india/smoke_run/
 # scripts/run_lab.py: step logs, finished-step markers, decisions and summary (machine-specific)
 logs/
+
+# docs/presentation build dependencies (npm install in docs/presentation)
+docs/presentation/node_modules/
+docs/presentation/BTP_endterm.pdf
+docs/presentation/render/

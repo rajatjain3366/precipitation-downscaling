@@ -1,0 +1,5279 @@
+{
+ "paper.points": {
+  "value": "11,491 points",
+  "display": "11,491 points",
+  "source": "README.md",
+  "field": "text: \"11,491 points\""
+ },
+ "paper.reps": {
+  "value": "| Repetitions | 40 |",
+  "display": "40",
+  "source": "README.md",
+  "field": "text: \"| Repetitions | 40 |\""
+ },
+ "paper.bounds": {
+  "value": [
+   0.0,
+   0.166,
+   0.392,
+   0.61,
+   0.812,
+   0.923,
+   1.0
+  ],
+  "display": "0 / 0.166 / 0.392 / 0.61 / 0.812 / 0.923 / 1",
+  "source": "results/india/qre_mass_v1/segmentation.json",
+  "field": "paper_bounds"
+ },
+ "nz.land_cells": {
+  "value": 2804,
+  "display": "2,804",
+  "source": "results/baseline_rerun/data_match_check.json",
+  "field": "D_land"
+ },
+ "nz.x_shape": {
+  "value": [
+   7300,
+   16,
+   16,
+   4
+  ],
+  "display": "16 × 16 × 4",
+  "source": "results/baseline_rerun/data_match_check.json",
+  "field": "x_train_shape"
+ },
+ "nz.target_res": {
+  "value": "128x128",
+  "display": "128 × 128",
+  "source": "results/final_cordex_qre/metadata.json",
+  "field": "target_resolution"
+ },
+ "nz.v2.train_days": {
+  "value": 10220,
+  "display": "10,220",
+  "source": "results/fixes_v2/dry_run/data_report.json",
+  "field": "train_days"
+ },
+ "nz.v2.train_years": {
+  "value": [
+   1961,
+   1988
+  ],
+  "display": "1961–1988",
+  "source": "results/fixes_v2/dry_run/data_report.json",
+  "field": "train_years"
+ },
+ "nz.v2.train_fraction": {
+  "value": 0.7,
+  "display": "70 %",
+  "source": "results/fixes_v2/dry_run/data_report.json",
+  "field": "train_fraction"
+ },
+ "nz.v2.val_days": {
+  "value": 1825,
+  "display": "1,825",
+  "source": "results/fixes_v2/dry_run/data_report.json",
+  "field": "val_days"
+ },
+ "nz.v2.val_years": {
+  "value": [
+   1989,
+   1993
+  ],
+  "display": "1989–1993",
+  "source": "results/fixes_v2/dry_run/data_report.json",
+  "field": "val_years"
+ },
+ "nz.v2.val_fraction": {
+  "value": 0.125,
+  "display": "12.5 %",
+  "source": "results/fixes_v2/dry_run/data_report.json",
+  "field": "val_fraction"
+ },
+ "nz.v2.test_days": {
+  "value": 2555,
+  "display": "2,555",
+  "source": "results/fixes_v2/dry_run/data_report.json",
+  "field": "test_days"
+ },
+ "nz.v2.test_years": {
+  "value": [
+   1994,
+   2000
+  ],
+  "display": "1994–2000",
+  "source": "results/fixes_v2/dry_run/data_report.json",
+  "field": "test_years"
+ },
+ "nz.v2.test_fraction": {
+  "value": 0.175,
+  "display": "17.5 %",
+  "source": "results/fixes_v2/dry_run/data_report.json",
+  "field": "test_fraction"
+ },
+ "nz.raw_mean.q850": {
+  "value": 0.0041419774880308855,
+  "display": "0.004142",
+  "source": "results/fixes_v2/dry_run/data_report.json",
+  "field": "standardizer/mean/0"
+ },
+ "nz.raw_std.q850": {
+  "value": 0.001999389481423992,
+  "display": "0.001999",
+  "source": "results/fixes_v2/dry_run/data_report.json",
+  "field": "standardizer/std/0"
+ },
+ "nz.raw_mean.t850": {
+  "value": 277.5336906624925,
+  "display": "277.5",
+  "source": "results/fixes_v2/dry_run/data_report.json",
+  "field": "standardizer/mean/1"
+ },
+ "nz.raw_std.t850": {
+  "value": 5.924249703802801,
+  "display": "5.924",
+  "source": "results/fixes_v2/dry_run/data_report.json",
+  "field": "standardizer/std/1"
+ },
+ "nz.raw_mean.u850": {
+  "value": 5.795429739316133,
+  "display": "5.795",
+  "source": "results/fixes_v2/dry_run/data_report.json",
+  "field": "standardizer/mean/2"
+ },
+ "nz.raw_std.u850": {
+  "value": 8.24649473908857,
+  "display": "8.246",
+  "source": "results/fixes_v2/dry_run/data_report.json",
+  "field": "standardizer/std/2"
+ },
+ "nz.raw_mean.v850": {
+  "value": -0.18007877028444588,
+  "display": "-0.1801",
+  "source": "results/fixes_v2/dry_run/data_report.json",
+  "field": "standardizer/mean/3"
+ },
+ "nz.raw_std.v850": {
+  "value": 6.917638350056158,
+  "display": "6.918",
+  "source": "results/fixes_v2/dry_run/data_report.json",
+  "field": "standardizer/std/3"
+ },
+ "nz.kernel": {
+  "value": "**3, \"same\" padding**",
+  "display": "3 × 3, same",
+  "source": "README.md",
+  "field": "text: \"**3, \"same\" padding**\""
+ },
+ "mt.train_dates": {
+  "value": "1961-01-01 to 1975-12-31",
+  "display": "1961–1975",
+  "source": "results/final_cordex_qre/metadata.json",
+  "field": "actual_train_dates"
+ },
+ "mt.val_dates": {
+  "value": "1976-01-01 to 1980-12-31",
+  "display": "1976–1980",
+  "source": "results/final_cordex_qre/metadata.json",
+  "field": "actual_val_dates"
+ },
+ "mt.test_dates": {
+  "value": "1981-01-01 to 2000-12-31",
+  "display": "1981–2000",
+  "source": "results/final_cordex_qre/metadata.json",
+  "field": "actual_test_dates"
+ },
+ "mt.train_years": {
+  "value": 15,
+  "display": "15",
+  "source": "results/final_cordex_qre/metadata.json",
+  "field": "config/train_years"
+ },
+ "mt.val_years": {
+  "value": 5,
+  "display": "5",
+  "source": "results/final_cordex_qre/metadata.json",
+  "field": "config/validation_years"
+ },
+ "mt.test_years": {
+  "value": 20,
+  "display": "20",
+  "source": "results/final_cordex_qre/metadata.json",
+  "field": "config/test_years"
+ },
+ "mt.batch": {
+  "value": 16,
+  "display": "16",
+  "source": "results/final_cordex_qre/metadata.json",
+  "field": "config/batch_size"
+ },
+ "mt.lr": {
+  "value": 0.001,
+  "display": "0.001",
+  "source": "results/final_cordex_qre/metadata.json",
+  "field": "config/specialist_learning_rate"
+ },
+ "mt.decay": {
+  "value": null,
+  "display": "none",
+  "source": "results/final_cordex_qre/metadata.json",
+  "field": "config/decay_rate"
+ },
+ "mt.max_epochs_member": {
+  "value": 30,
+  "display": "30",
+  "source": "results/final_cordex_qre/metadata.json",
+  "field": "config/max_epochs_specialist"
+ },
+ "mt.max_epochs_omega": {
+  "value": 25,
+  "display": "25",
+  "source": "results/final_cordex_qre/metadata.json",
+  "field": "config/max_epochs_omega"
+ },
+ "mt.reps": {
+  "value": 3,
+  "display": "3",
+  "source": "results/final_cordex_qre/metadata.json",
+  "field": "repeats"
+ },
+ "mt.qre.0.0,1.0.mean_mse": {
+  "value": 112.47416178385417,
+  "display": "112.47",
+  "source": "results/final_cordex_qre/metrics_table.csv",
+  "field": "model=qre, quantile_regime=Q_[0.0_1.0], mean_mse"
+ },
+ "mt.qre.0.0,1.0.std_mse": {
+  "value": 9.453995596788639,
+  "display": "9.45",
+  "source": "results/final_cordex_qre/metrics_table.csv",
+  "field": "model=qre, quantile_regime=Q_[0.0_1.0], std_mse"
+ },
+ "mt.qre.0.0,0.2.mean_mse": {
+  "value": 27.862573464711506,
+  "display": "27.86",
+  "source": "results/final_cordex_qre/metrics_table.csv",
+  "field": "model=qre, quantile_regime=Q_[0.0_0.2], mean_mse"
+ },
+ "mt.qre.0.0,0.2.std_mse": {
+  "value": 15.062636402528838,
+  "display": "15.06",
+  "source": "results/final_cordex_qre/metrics_table.csv",
+  "field": "model=qre, quantile_regime=Q_[0.0_0.2], std_mse"
+ },
+ "mt.qre.0.9,1.0.mean_mse": {
+  "value": 579.690673828125,
+  "display": "579.69",
+  "source": "results/final_cordex_qre/metrics_table.csv",
+  "field": "model=qre, quantile_regime=Q_[0.9_1.0], mean_mse"
+ },
+ "mt.qre.0.9,1.0.std_mse": {
+  "value": 80.66192543029871,
+  "display": "80.66",
+  "source": "results/final_cordex_qre/metrics_table.csv",
+  "field": "model=qre, quantile_regime=Q_[0.9_1.0], std_mse"
+ },
+ "mt.single_bgnet.0.0,1.0.mean_mse": {
+  "value": 62.02635828653971,
+  "display": "62.03",
+  "source": "results/final_cordex_qre/metrics_table.csv",
+  "field": "model=single_bgnet, quantile_regime=Q_[0.0_1.0], mean_mse"
+ },
+ "mt.single_bgnet.0.0,1.0.std_mse": {
+  "value": 0.22177008070259918,
+  "display": "0.22",
+  "source": "results/final_cordex_qre/metrics_table.csv",
+  "field": "model=single_bgnet, quantile_regime=Q_[0.0_1.0], std_mse"
+ },
+ "mt.single_bgnet.0.0,0.2.mean_mse": {
+  "value": 4.275745550791423,
+  "display": "4.28",
+  "source": "results/final_cordex_qre/metrics_table.csv",
+  "field": "model=single_bgnet, quantile_regime=Q_[0.0_0.2], mean_mse"
+ },
+ "mt.single_bgnet.0.0,0.2.std_mse": {
+  "value": 0.3542445461409485,
+  "display": "0.35",
+  "source": "results/final_cordex_qre/metrics_table.csv",
+  "field": "model=single_bgnet, quantile_regime=Q_[0.0_0.2], std_mse"
+ },
+ "mt.single_bgnet.0.9,1.0.mean_mse": {
+  "value": 251.72262064615884,
+  "display": "251.72",
+  "source": "results/final_cordex_qre/metrics_table.csv",
+  "field": "model=single_bgnet, quantile_regime=Q_[0.9_1.0], mean_mse"
+ },
+ "mt.single_bgnet.0.9,1.0.std_mse": {
+  "value": 3.776062094883908,
+  "display": "3.78",
+  "source": "results/final_cordex_qre/metrics_table.csv",
+  "field": "model=single_bgnet, quantile_regime=Q_[0.9_1.0], std_mse"
+ },
+ "mt.bagging_cqre.0.0,1.0.mean_mse": {
+  "value": 106.95610809326172,
+  "display": "106.96",
+  "source": "results/final_cordex_qre/metrics_table.csv",
+  "field": "model=bagging_cqre, quantile_regime=Q_[0.0_1.0], mean_mse"
+ },
+ "mt.bagging_cqre.0.0,1.0.std_mse": {
+  "value": 5.815283862806485,
+  "display": "5.82",
+  "source": "results/final_cordex_qre/metrics_table.csv",
+  "field": "model=bagging_cqre, quantile_regime=Q_[0.0_1.0], std_mse"
+ },
+ "mt.bagging_cqre.0.0,0.2.mean_mse": {
+  "value": 43.222333908081055,
+  "display": "43.22",
+  "source": "results/final_cordex_qre/metrics_table.csv",
+  "field": "model=bagging_cqre, quantile_regime=Q_[0.0_0.2], mean_mse"
+ },
+ "mt.bagging_cqre.0.0,0.2.std_mse": {
+  "value": 8.836246050234003,
+  "display": "8.84",
+  "source": "results/final_cordex_qre/metrics_table.csv",
+  "field": "model=bagging_cqre, quantile_regime=Q_[0.0_0.2], std_mse"
+ },
+ "mt.bagging_cqre.0.9,1.0.mean_mse": {
+  "value": 494.9926452636719,
+  "display": "494.99",
+  "source": "results/final_cordex_qre/metrics_table.csv",
+  "field": "model=bagging_cqre, quantile_regime=Q_[0.9_1.0], mean_mse"
+ },
+ "mt.bagging_cqre.0.9,1.0.std_mse": {
+  "value": 19.88323462213982,
+  "display": "19.88",
+  "source": "results/final_cordex_qre/metrics_table.csv",
+  "field": "model=bagging_cqre, quantile_regime=Q_[0.9_1.0], std_mse"
+ },
+ "mt.probability_pqre.0.0,1.0.mean_mse": {
+  "value": 105.48414866129558,
+  "display": "105.48",
+  "source": "results/final_cordex_qre/metrics_table.csv",
+  "field": "model=probability_pqre, quantile_regime=Q_[0.0_1.0], mean_mse"
+ },
+ "mt.probability_pqre.0.0,1.0.std_mse": {
+  "value": 4.081777895638674,
+  "display": "4.08",
+  "source": "results/final_cordex_qre/metrics_table.csv",
+  "field": "model=probability_pqre, quantile_regime=Q_[0.0_1.0], std_mse"
+ },
+ "mt.probability_pqre.0.0,0.2.mean_mse": {
+  "value": 24.666287104288738,
+  "display": "24.67",
+  "source": "results/final_cordex_qre/metrics_table.csv",
+  "field": "model=probability_pqre, quantile_regime=Q_[0.0_0.2], mean_mse"
+ },
+ "mt.probability_pqre.0.0,0.2.std_mse": {
+  "value": 2.8468010019092187,
+  "display": "2.85",
+  "source": "results/final_cordex_qre/metrics_table.csv",
+  "field": "model=probability_pqre, quantile_regime=Q_[0.0_0.2], std_mse"
+ },
+ "mt.probability_pqre.0.9,1.0.mean_mse": {
+  "value": 550.611572265625,
+  "display": "550.61",
+  "source": "results/final_cordex_qre/metrics_table.csv",
+  "field": "model=probability_pqre, quantile_regime=Q_[0.9_1.0], mean_mse"
+ },
+ "mt.probability_pqre.0.9,1.0.std_mse": {
+  "value": 19.502301260486966,
+  "display": "19.50",
+  "source": "results/final_cordex_qre/metrics_table.csv",
+  "field": "model=probability_pqre, quantile_regime=Q_[0.9_1.0], std_mse"
+ },
+ "mt.empirical_mean.0.0,1.0.mean_mse": {
+  "value": 155.3961944580078,
+  "display": "155.40",
+  "source": "results/final_cordex_qre/metrics_table.csv",
+  "field": "model=empirical_mean, quantile_regime=Q_[0.0_1.0], mean_mse"
+ },
+ "mt.empirical_mean.0.0,1.0.std_mse": {
+  "value": 0.0,
+  "display": "0.00",
+  "source": "results/final_cordex_qre/metrics_table.csv",
+  "field": "model=empirical_mean, quantile_regime=Q_[0.0_1.0], std_mse"
+ },
+ "mt.empirical_mean.0.0,0.2.mean_mse": {
+  "value": 42.811702728271484,
+  "display": "42.81",
+  "source": "results/final_cordex_qre/metrics_table.csv",
+  "field": "model=empirical_mean, quantile_regime=Q_[0.0_0.2], mean_mse"
+ },
+ "mt.empirical_mean.0.0,0.2.std_mse": {
+  "value": 0.0,
+  "display": "0.00",
+  "source": "results/final_cordex_qre/metrics_table.csv",
+  "field": "model=empirical_mean, quantile_regime=Q_[0.0_0.2], std_mse"
+ },
+ "mt.empirical_mean.0.9,1.0.mean_mse": {
+  "value": 751.4755859375,
+  "display": "751.48",
+  "source": "results/final_cordex_qre/metrics_table.csv",
+  "field": "model=empirical_mean, quantile_regime=Q_[0.9_1.0], mean_mse"
+ },
+ "mt.empirical_mean.0.9,1.0.std_mse": {
+  "value": 0.0,
+  "display": "0.00",
+  "source": "results/final_cordex_qre/metrics_table.csv",
+  "field": "model=empirical_mean, quantile_regime=Q_[0.9_1.0], std_mse"
+ },
+ "mt.omega.rep0.best_epoch": {
+  "value": 1,
+  "display": "1",
+  "source": "results/final_cordex_qre/training_history/training_log.json",
+  "field": "omega/rep_0/best_epoch"
+ },
+ "mt.omega.rep0.epochs": {
+  "value": 4,
+  "display": "4",
+  "source": "results/final_cordex_qre/training_history/training_log.json",
+  "field": "omega/rep_0/epochs_completed"
+ },
+ "mt.gmm.rep0.sample_counts": {
+  "value": [
+   995,
+   1580,
+   1244,
+   869,
+   503,
+   290
+  ],
+  "display": "995 / 1580 / 1244 / 869 / 503 / 290",
+  "source": "results/final_cordex_qre/training_history/training_log.json",
+  "field": "gmm_diagnostics/rep_0/sample_counts"
+ },
+ "mt.gmm.rep0.sample_sum": {
+  "value": 5481,
+  "display": "5,481",
+  "source": "results/final_cordex_qre/training_history/training_log.json",
+  "field": "sum of gmm_diagnostics/rep_0/sample_counts"
+ },
+ "mt.gmm.rep0.intervals": {
+  "value": [
+   [
+    0.0,
+    0.18155251141552511
+   ],
+   [
+    0.18155251141552511,
+    0.4699543378995434
+   ],
+   [
+    0.4699543378995434,
+    0.6969863013698631
+   ],
+   [
+    0.6969863013698631,
+    0.8555251141552511
+   ],
+   [
+    0.8555251141552511,
+    0.9470319634703196
+   ],
+   [
+    0.9470319634703196,
+    1.0
+   ]
+  ],
+  "display": "0.182 / 0.470 / 0.697 / 0.856 / 0.947",
+  "source": "results/final_cordex_qre/training_history/training_log.json",
+  "field": "gmm_diagnostics/rep_0/intervals"
+ },
+ "mt.gmm.rep0.weights": {
+  "value": [
+   0.19662150740623474,
+   0.2689265012741089,
+   0.0628918930888176,
+   0.024684423580765724,
+   0.3261924088001251,
+   0.12068325281143188
+  ],
+  "display": "0.197 / 0.269 / 0.063 / 0.025 / 0.326 / 0.121",
+  "source": "results/final_cordex_qre/training_history/training_log.json",
+  "field": "gmm_diagnostics/rep_0/weights"
+ },
+ "mt.omega.rep1.best_epoch": {
+  "value": 1,
+  "display": "1",
+  "source": "results/final_cordex_qre/training_history/training_log.json",
+  "field": "omega/rep_1/best_epoch"
+ },
+ "mt.omega.rep1.epochs": {
+  "value": 4,
+  "display": "4",
+  "source": "results/final_cordex_qre/training_history/training_log.json",
+  "field": "omega/rep_1/epochs_completed"
+ },
+ "mt.gmm.rep1.sample_counts": {
+  "value": [
+   930,
+   1454,
+   1193,
+   863,
+   613,
+   427
+  ],
+  "display": "930 / 1454 / 1193 / 863 / 613 / 427",
+  "source": "results/final_cordex_qre/training_history/training_log.json",
+  "field": "gmm_diagnostics/rep_1/sample_counts"
+ },
+ "mt.gmm.rep1.sample_sum": {
+  "value": 5480,
+  "display": "5,480",
+  "source": "results/final_cordex_qre/training_history/training_log.json",
+  "field": "sum of gmm_diagnostics/rep_1/sample_counts"
+ },
+ "mt.gmm.rep1.intervals": {
+  "value": [
+   [
+    0.0,
+    0.16968036529680366
+   ],
+   [
+    0.16968036529680366,
+    0.4350684931506849
+   ],
+   [
+    0.4350684931506849,
+    0.6527853881278539
+   ],
+   [
+    0.6527853881278539,
+    0.8102283105022831
+   ],
+   [
+    0.8102283105022831,
+    0.9220091324200913
+   ],
+   [
+    0.9220091324200913,
+    1.0
+   ]
+  ],
+  "display": "0.170 / 0.435 / 0.653 / 0.810 / 0.922",
+  "source": "results/final_cordex_qre/training_history/training_log.json",
+  "field": "gmm_diagnostics/rep_1/intervals"
+ },
+ "mt.gmm.rep1.weights": {
+  "value": [
+   0.13683509826660156,
+   0.08781971037387848,
+   0.24589674174785614,
+   0.04103255271911621,
+   0.30797818303108215,
+   0.18043763935565948
+  ],
+  "display": "0.137 / 0.088 / 0.246 / 0.041 / 0.308 / 0.180",
+  "source": "results/final_cordex_qre/training_history/training_log.json",
+  "field": "gmm_diagnostics/rep_1/weights"
+ },
+ "mt.omega.rep2.best_epoch": {
+  "value": 1,
+  "display": "1",
+  "source": "results/final_cordex_qre/training_history/training_log.json",
+  "field": "omega/rep_2/best_epoch"
+ },
+ "mt.omega.rep2.epochs": {
+  "value": 4,
+  "display": "4",
+  "source": "results/final_cordex_qre/training_history/training_log.json",
+  "field": "omega/rep_2/epochs_completed"
+ },
+ "mt.gmm.rep2.sample_counts": {
+  "value": [
+   930,
+   1454,
+   1193,
+   863,
+   613,
+   427
+  ],
+  "display": "930 / 1454 / 1193 / 863 / 613 / 427",
+  "source": "results/final_cordex_qre/training_history/training_log.json",
+  "field": "gmm_diagnostics/rep_2/sample_counts"
+ },
+ "mt.gmm.rep2.sample_sum": {
+  "value": 5480,
+  "display": "5,480",
+  "source": "results/final_cordex_qre/training_history/training_log.json",
+  "field": "sum of gmm_diagnostics/rep_2/sample_counts"
+ },
+ "mt.gmm.rep2.intervals": {
+  "value": [
+   [
+    0.0,
+    0.16968036529680366
+   ],
+   [
+    0.16968036529680366,
+    0.4350684931506849
+   ],
+   [
+    0.4350684931506849,
+    0.6527853881278539
+   ],
+   [
+    0.6527853881278539,
+    0.8102283105022831
+   ],
+   [
+    0.8102283105022831,
+    0.9220091324200913
+   ],
+   [
+    0.9220091324200913,
+    1.0
+   ]
+  ],
+  "display": "0.170 / 0.435 / 0.653 / 0.810 / 0.922",
+  "source": "results/final_cordex_qre/training_history/training_log.json",
+  "field": "gmm_diagnostics/rep_2/intervals"
+ },
+ "mt.gmm.rep2.weights": {
+  "value": [
+   0.18043777346611023,
+   0.041032575070858,
+   0.3079780638217926,
+   0.08781969547271729,
+   0.13683490455150604,
+   0.24589698016643524
+  ],
+  "display": "0.180 / 0.041 / 0.308 / 0.088 / 0.137 / 0.246",
+  "source": "results/final_cordex_qre/training_history/training_log.json",
+  "field": "gmm_diagnostics/rep_2/weights"
+ },
+ "mt.train_days": {
+  "value": 5475,
+  "display": "5,475",
+  "source": "results/baseline_rerun/data_match_check.json",
+  "field": "train_days"
+ },
+ "mt.problems.normalize": {
+  "value": "the predictors were not normalized",
+  "display": "the predictors were not normalized",
+  "source": "README.md",
+  "field": "text: \"the predictors were not normalized\""
+ },
+ "mt.problems.bgnet": {
+  "value": "the BGNet baseline had a different architecture from the members",
+  "display": "the BGNet baseline had a different architecture from the members",
+  "source": "README.md",
+  "field": "text: \"the BGNet baseline had a different architecture from the members\""
+ },
+ "mt.problems.threshold": {
+  "value": "predictions used a $p > 0.5$ threshold instead of $p\\cdot\\alpha\\beta$",
+  "display": "p > 0.5 threshold instead of p·α·β",
+  "source": "README.md",
+  "field": "text: \"predictions used a $p > 0.5$ threshold instead of $p\\cdot\\alpha\\beta$\""
+ },
+ "mt.problems.rain_threshold_old": {
+  "value": "| `loss.rain_threshold` | `0.1` | `0.5` |",
+  "display": "0.5 (old) → 0.1",
+  "source": "README.md",
+  "field": "text: \"| `loss.rain_threshold` | `0.1` | `0.5` |\""
+ },
+ "s.wn.argmax": {
+  "value": [
+   0,
+   0,
+   0,
+   1825,
+   0,
+   0
+  ],
+  "display": "[0, 0, 0, 1825, 0, 0]",
+  "source": "results/fixes_v2/nz/sanity/repetition_0.json",
+  "field": "omega_diagnostics_val/argmax_histogram"
+ },
+ "s.wn.true": {
+  "value": [
+   234,
+   384,
+   388,
+   320,
+   260,
+   239
+  ],
+  "display": "[234, 384, 388, 320, 260, 239]",
+  "source": "results/fixes_v2/nz/sanity/repetition_0.json",
+  "field": "omega_diagnostics_val/true_histogram"
+ },
+ "s.wn.accuracy": {
+  "value": 0.17534246575342466,
+  "display": "0.175",
+  "source": "results/fixes_v2/nz/sanity/repetition_0.json",
+  "field": "omega_diagnostics_val/accuracy"
+ },
+ "s.wn.mean_max": {
+  "value": 1.0,
+  "display": "1.000",
+  "source": "results/fixes_v2/nz/sanity/repetition_0.json",
+  "field": "omega_diagnostics_val/mean_max_weight"
+ },
+ "s.wn.best_epoch": {
+  "value": 1,
+  "display": "1",
+  "source": "results/fixes_v2/nz/sanity/repetition_0.json",
+  "field": "omega/best_epoch"
+ },
+ "s.wn.epochs": {
+  "value": 16,
+  "display": "16",
+  "source": "results/fixes_v2/nz/sanity/repetition_0.json",
+  "field": "omega/epochs"
+ },
+ "s.test.qre.[0.0,1.0]": {
+  "value": 124.12879943847656,
+  "display": "124.13",
+  "source": "results/fixes_v2/nz/sanity/repetition_0.json",
+  "field": "metrics/test/qre/[0.0,1.0]/mse"
+ },
+ "s.test.qre.[0.0,0.2]": {
+  "value": 15.227923393249512,
+  "display": "15.23",
+  "source": "results/fixes_v2/nz/sanity/repetition_0.json",
+  "field": "metrics/test/qre/[0.0,0.2]/mse"
+ },
+ "s.test.qre.[0.9,1.0]": {
+  "value": 627.1869506835938,
+  "display": "627.19",
+  "source": "results/fixes_v2/nz/sanity/repetition_0.json",
+  "field": "metrics/test/qre/[0.9,1.0]/mse"
+ },
+ "s.test.bgnet.[0.0,1.0]": {
+  "value": 60.59623336791992,
+  "display": "60.60",
+  "source": "results/fixes_v2/nz/sanity/repetition_0.json",
+  "field": "metrics/test/bgnet/[0.0,1.0]/mse"
+ },
+ "s.test.bgnet.[0.0,0.2]": {
+  "value": 2.8542206287384033,
+  "display": "2.85",
+  "source": "results/fixes_v2/nz/sanity/repetition_0.json",
+  "field": "metrics/test/bgnet/[0.0,0.2]/mse"
+ },
+ "s.test.bgnet.[0.9,1.0]": {
+  "value": 231.78932189941406,
+  "display": "231.79",
+  "source": "results/fixes_v2/nz/sanity/repetition_0.json",
+  "field": "metrics/test/bgnet/[0.9,1.0]/mse"
+ },
+ "s.test.bgnet_minus.[0.0,1.0]": {
+  "value": 67.31122589111328,
+  "display": "67.31",
+  "source": "results/fixes_v2/nz/sanity/repetition_0.json",
+  "field": "metrics/test/bgnet_minus/[0.0,1.0]/mse"
+ },
+ "s.test.bgnet_minus.[0.0,0.2]": {
+  "value": 2.454155683517456,
+  "display": "2.45",
+  "source": "results/fixes_v2/nz/sanity/repetition_0.json",
+  "field": "metrics/test/bgnet_minus/[0.0,0.2]/mse"
+ },
+ "s.test.bgnet_minus.[0.9,1.0]": {
+  "value": 261.2900390625,
+  "display": "261.29",
+  "source": "results/fixes_v2/nz/sanity/repetition_0.json",
+  "field": "metrics/test/bgnet_minus/[0.9,1.0]/mse"
+ },
+ "s.test.bagging.[0.0,1.0]": {
+  "value": 134.36375427246094,
+  "display": "134.36",
+  "source": "results/fixes_v2/nz/sanity/repetition_0.json",
+  "field": "metrics/test/bagging/[0.0,1.0]/mse"
+ },
+ "s.test.bagging.[0.0,0.2]": {
+  "value": 17.351905822753906,
+  "display": "17.35",
+  "source": "results/fixes_v2/nz/sanity/repetition_0.json",
+  "field": "metrics/test/bagging/[0.0,0.2]/mse"
+ },
+ "s.test.bagging.[0.9,1.0]": {
+  "value": 674.4406127929688,
+  "display": "674.44",
+  "source": "results/fixes_v2/nz/sanity/repetition_0.json",
+  "field": "metrics/test/bagging/[0.9,1.0]/mse"
+ },
+ "s.test.probability.[0.0,1.0]": {
+  "value": 133.96221923828125,
+  "display": "133.96",
+  "source": "results/fixes_v2/nz/sanity/repetition_0.json",
+  "field": "metrics/test/probability/[0.0,1.0]/mse"
+ },
+ "s.test.probability.[0.0,0.2]": {
+  "value": 14.46793270111084,
+  "display": "14.47",
+  "source": "results/fixes_v2/nz/sanity/repetition_0.json",
+  "field": "metrics/test/probability/[0.0,0.2]/mse"
+ },
+ "s.test.probability.[0.9,1.0]": {
+  "value": 682.1498413085938,
+  "display": "682.15",
+  "source": "results/fixes_v2/nz/sanity/repetition_0.json",
+  "field": "metrics/test/probability/[0.9,1.0]/mse"
+ },
+ "s.own_ratio.0": {
+  "value": 1.1408129930496216,
+  "display": "1.14",
+  "source": "results/fixes_v2/nz/sanity/repetition_0.json",
+  "field": "member_vs_bgnet_own_interval_val/0/member_mse"
+ },
+ "s.own_bg.0": {
+  "value": 1.2679837942123413,
+  "display": "1.27",
+  "source": "results/fixes_v2/nz/sanity/repetition_0.json",
+  "field": "member_vs_bgnet_own_interval_val/0/bgnet_mse"
+ },
+ "s.own_ratio.1": {
+  "value": 8.750800132751465,
+  "display": "8.75",
+  "source": "results/fixes_v2/nz/sanity/repetition_0.json",
+  "field": "member_vs_bgnet_own_interval_val/1/member_mse"
+ },
+ "s.own_bg.1": {
+  "value": 10.738338470458984,
+  "display": "10.74",
+  "source": "results/fixes_v2/nz/sanity/repetition_0.json",
+  "field": "member_vs_bgnet_own_interval_val/1/bgnet_mse"
+ },
+ "s.own_ratio.2": {
+  "value": 31.214895248413086,
+  "display": "31.21",
+  "source": "results/fixes_v2/nz/sanity/repetition_0.json",
+  "field": "member_vs_bgnet_own_interval_val/2/member_mse"
+ },
+ "s.own_bg.2": {
+  "value": 29.393007278442383,
+  "display": "29.39",
+  "source": "results/fixes_v2/nz/sanity/repetition_0.json",
+  "field": "member_vs_bgnet_own_interval_val/2/bgnet_mse"
+ },
+ "s.own_ratio.3": {
+  "value": 77.15463256835938,
+  "display": "77.15",
+  "source": "results/fixes_v2/nz/sanity/repetition_0.json",
+  "field": "member_vs_bgnet_own_interval_val/3/member_mse"
+ },
+ "s.own_bg.3": {
+  "value": 58.064598083496094,
+  "display": "58.06",
+  "source": "results/fixes_v2/nz/sanity/repetition_0.json",
+  "field": "member_vs_bgnet_own_interval_val/3/bgnet_mse"
+ },
+ "s.own_ratio.4": {
+  "value": 170.15875244140625,
+  "display": "170.16",
+  "source": "results/fixes_v2/nz/sanity/repetition_0.json",
+  "field": "member_vs_bgnet_own_interval_val/4/member_mse"
+ },
+ "s.own_bg.4": {
+  "value": 96.3497543334961,
+  "display": "96.35",
+  "source": "results/fixes_v2/nz/sanity/repetition_0.json",
+  "field": "member_vs_bgnet_own_interval_val/4/bgnet_mse"
+ },
+ "s.own_ratio.5": {
+  "value": 537.1392211914062,
+  "display": "537.14",
+  "source": "results/fixes_v2/nz/sanity/repetition_0.json",
+  "field": "member_vs_bgnet_own_interval_val/5/member_mse"
+ },
+ "s.own_bg.5": {
+  "value": 215.62002563476562,
+  "display": "215.62",
+  "source": "results/fixes_v2/nz/sanity/repetition_0.json",
+  "field": "member_vs_bgnet_own_interval_val/5/bgnet_mse"
+ },
+ "s.bgnet.still_improving": {
+  "value": true,
+  "display": "True",
+  "source": "results/fixes_v2/nz/sanity/repetition_0.json",
+  "field": "bgnet/still_improving_at_cap"
+ },
+ "s.bgnet.epochs": {
+  "value": 10,
+  "display": "10",
+  "source": "results/fixes_v2/nz/sanity/repetition_0.json",
+  "field": "bgnet/epochs"
+ },
+ "wl.emd_paper.accuracy": {
+  "value": 0.17534246575342466,
+  "display": "0.175",
+  "source": "results/fixes_v2/nz_wn/sanity/weight_network_losses/results.json",
+  "field": "variants/emd_paper/diagnostics/accuracy"
+ },
+ "wl.emd_paper.within1": {
+  "value": 0.5304109589041096,
+  "display": "0.530",
+  "source": "results/fixes_v2/nz_wn/sanity/weight_network_losses/results.json",
+  "field": "variants/emd_paper/diagnostics/within_one_interval"
+ },
+ "wl.emd_paper.argmax": {
+  "value": [
+   0,
+   0,
+   0,
+   1825,
+   0,
+   0
+  ],
+  "display": "[0, 0, 0, 1825, 0, 0]",
+  "source": "results/fixes_v2/nz_wn/sanity/weight_network_losses/results.json",
+  "field": "variants/emd_paper/diagnostics/argmax_histogram"
+ },
+ "wl.emd_paper.mean_max": {
+  "value": 1.0,
+  "display": "1.000",
+  "source": "results/fixes_v2/nz_wn/sanity/weight_network_losses/results.json",
+  "field": "variants/emd_paper/diagnostics/mean_max_weight"
+ },
+ "wl.emd_paper.confusion": {
+  "value": [
+   [
+    0,
+    0,
+    0,
+    234,
+    0,
+    0
+   ],
+   [
+    0,
+    0,
+    0,
+    384,
+    0,
+    0
+   ],
+   [
+    0,
+    0,
+    0,
+    388,
+    0,
+    0
+   ],
+   [
+    0,
+    0,
+    0,
+    320,
+    0,
+    0
+   ],
+   [
+    0,
+    0,
+    0,
+    260,
+    0,
+    0
+   ],
+   [
+    0,
+    0,
+    0,
+    239,
+    0,
+    0
+   ]
+  ],
+  "display": "[[0, 0, 0, 234, 0, 0], [0, 0, 0, 384, 0, 0], [0, 0, 0, 388, 0, 0], [0, 0, 0, 320, 0, 0], [0, 0, 0, 260, 0, 0], [0, 0, 0, 239, 0, 0]]",
+  "source": "results/fixes_v2/nz_wn/sanity/weight_network_losses/results.json",
+  "field": "variants/emd_paper/diagnostics/confusion_matrix_rows_true_cols_pred"
+ },
+ "wl.emd_paper.val.[0.0,1.0]": {
+  "value": 134.9250946044922,
+  "display": "134.93",
+  "source": "results/fixes_v2/nz_wn/sanity/weight_network_losses/results.json",
+  "field": "variants/emd_paper/qre_val_mse/[0.0,1.0]/mse"
+ },
+ "wl.emd_paper.val.[0.0,0.2]": {
+  "value": 14.759720802307129,
+  "display": "14.76",
+  "source": "results/fixes_v2/nz_wn/sanity/weight_network_losses/results.json",
+  "field": "variants/emd_paper/qre_val_mse/[0.0,0.2]/mse"
+ },
+ "wl.emd_paper.val.[0.9,1.0]": {
+  "value": 693.2203369140625,
+  "display": "693.22",
+  "source": "results/fixes_v2/nz_wn/sanity/weight_network_losses/results.json",
+  "field": "variants/emd_paper/qre_val_mse/[0.9,1.0]/mse"
+ },
+ "wl.cross_entropy.accuracy": {
+  "value": 0.6487671232876713,
+  "display": "0.649",
+  "source": "results/fixes_v2/nz_wn/sanity/weight_network_losses/results.json",
+  "field": "variants/cross_entropy/diagnostics/accuracy"
+ },
+ "wl.cross_entropy.within1": {
+  "value": 0.9824657534246576,
+  "display": "0.982",
+  "source": "results/fixes_v2/nz_wn/sanity/weight_network_losses/results.json",
+  "field": "variants/cross_entropy/diagnostics/within_one_interval"
+ },
+ "wl.cross_entropy.argmax": {
+  "value": [
+   243,
+   395,
+   405,
+   326,
+   242,
+   214
+  ],
+  "display": "[243, 395, 405, 326, 242, 214]",
+  "source": "results/fixes_v2/nz_wn/sanity/weight_network_losses/results.json",
+  "field": "variants/cross_entropy/diagnostics/argmax_histogram"
+ },
+ "wl.cross_entropy.mean_max": {
+  "value": 0.6834530234336853,
+  "display": "0.683",
+  "source": "results/fixes_v2/nz_wn/sanity/weight_network_losses/results.json",
+  "field": "variants/cross_entropy/diagnostics/mean_max_weight"
+ },
+ "wl.cross_entropy.confusion": {
+  "value": [
+   [
+    181,
+    53,
+    0,
+    0,
+    0,
+    0
+   ],
+   [
+    53,
+    245,
+    81,
+    5,
+    0,
+    0
+   ],
+   [
+    7,
+    93,
+    234,
+    53,
+    1,
+    0
+   ],
+   [
+    2,
+    4,
+    82,
+    191,
+    40,
+    1
+   ],
+   [
+    0,
+    0,
+    7,
+    73,
+    150,
+    30
+   ],
+   [
+    0,
+    0,
+    1,
+    4,
+    51,
+    183
+   ]
+  ],
+  "display": "[[181, 53, 0, 0, 0, 0], [53, 245, 81, 5, 0, 0], [7, 93, 234, 53, 1, 0], [2, 4, 82, 191, 40, 1], [0, 0, 7, 73, 150, 30], [0, 0, 1, 4, 51, 183]]",
+  "source": "results/fixes_v2/nz_wn/sanity/weight_network_losses/results.json",
+  "field": "variants/cross_entropy/diagnostics/confusion_matrix_rows_true_cols_pred"
+ },
+ "wl.cross_entropy.val.[0.0,1.0]": {
+  "value": 116.55290985107422,
+  "display": "116.55",
+  "source": "results/fixes_v2/nz_wn/sanity/weight_network_losses/results.json",
+  "field": "variants/cross_entropy/qre_val_mse/[0.0,1.0]/mse"
+ },
+ "wl.cross_entropy.val.[0.0,0.2]": {
+  "value": 2.022203207015991,
+  "display": "2.02",
+  "source": "results/fixes_v2/nz_wn/sanity/weight_network_losses/results.json",
+  "field": "variants/cross_entropy/qre_val_mse/[0.0,0.2]/mse"
+ },
+ "wl.cross_entropy.val.[0.9,1.0]": {
+  "value": 580.19384765625,
+  "display": "580.19",
+  "source": "results/fixes_v2/nz_wn/sanity/weight_network_losses/results.json",
+  "field": "variants/cross_entropy/qre_val_mse/[0.9,1.0]/mse"
+ },
+ "wl.emd_squared_cdf.accuracy": {
+  "value": 0.6558904109589041,
+  "display": "0.656",
+  "source": "results/fixes_v2/nz_wn/sanity/weight_network_losses/results.json",
+  "field": "variants/emd_squared_cdf/diagnostics/accuracy"
+ },
+ "wl.emd_squared_cdf.within1": {
+  "value": 0.9797260273972602,
+  "display": "0.980",
+  "source": "results/fixes_v2/nz_wn/sanity/weight_network_losses/results.json",
+  "field": "variants/emd_squared_cdf/diagnostics/within_one_interval"
+ },
+ "wl.emd_squared_cdf.argmax": {
+  "value": [
+   229,
+   438,
+   349,
+   329,
+   267,
+   213
+  ],
+  "display": "[229, 438, 349, 329, 267, 213]",
+  "source": "results/fixes_v2/nz_wn/sanity/weight_network_losses/results.json",
+  "field": "variants/emd_squared_cdf/diagnostics/argmax_histogram"
+ },
+ "wl.emd_squared_cdf.mean_max": {
+  "value": 0.6854806542396545,
+  "display": "0.685",
+  "source": "results/fixes_v2/nz_wn/sanity/weight_network_losses/results.json",
+  "field": "variants/emd_squared_cdf/diagnostics/mean_max_weight"
+ },
+ "wl.emd_squared_cdf.confusion": {
+  "value": [
+   [
+    177,
+    54,
+    3,
+    0,
+    0,
+    0
+   ],
+   [
+    44,
+    274,
+    62,
+    4,
+    0,
+    0
+   ],
+   [
+    6,
+    103,
+    212,
+    64,
+    3,
+    0
+   ],
+   [
+    2,
+    7,
+    66,
+    192,
+    52,
+    1
+   ],
+   [
+    0,
+    0,
+    6,
+    64,
+    160,
+    30
+   ],
+   [
+    0,
+    0,
+    0,
+    5,
+    52,
+    182
+   ]
+  ],
+  "display": "[[177, 54, 3, 0, 0, 0], [44, 274, 62, 4, 0, 0], [6, 103, 212, 64, 3, 0], [2, 7, 66, 192, 52, 1], [0, 0, 6, 64, 160, 30], [0, 0, 0, 5, 52, 182]]",
+  "source": "results/fixes_v2/nz_wn/sanity/weight_network_losses/results.json",
+  "field": "variants/emd_squared_cdf/diagnostics/confusion_matrix_rows_true_cols_pred"
+ },
+ "wl.emd_squared_cdf.val.[0.0,1.0]": {
+  "value": 117.04159545898438,
+  "display": "117.04",
+  "source": "results/fixes_v2/nz_wn/sanity/weight_network_losses/results.json",
+  "field": "variants/emd_squared_cdf/qre_val_mse/[0.0,1.0]/mse"
+ },
+ "wl.emd_squared_cdf.val.[0.0,0.2]": {
+  "value": 1.9902502298355103,
+  "display": "1.99",
+  "source": "results/fixes_v2/nz_wn/sanity/weight_network_losses/results.json",
+  "field": "variants/emd_squared_cdf/qre_val_mse/[0.0,0.2]/mse"
+ },
+ "wl.emd_squared_cdf.val.[0.9,1.0]": {
+  "value": 581.4995727539062,
+  "display": "581.50",
+  "source": "results/fixes_v2/nz_wn/sanity/weight_network_losses/results.json",
+  "field": "variants/emd_squared_cdf/qre_val_mse/[0.9,1.0]/mse"
+ },
+ "wl.ce_plus_emd.accuracy": {
+  "value": 0.6536986301369863,
+  "display": "0.654",
+  "source": "results/fixes_v2/nz_wn/sanity/weight_network_losses/results.json",
+  "field": "variants/ce_plus_emd/diagnostics/accuracy"
+ },
+ "wl.ce_plus_emd.within1": {
+  "value": 0.9863013698630136,
+  "display": "0.986",
+  "source": "results/fixes_v2/nz_wn/sanity/weight_network_losses/results.json",
+  "field": "variants/ce_plus_emd/diagnostics/within_one_interval"
+ },
+ "wl.ce_plus_emd.argmax": {
+  "value": [
+   196,
+   426,
+   407,
+   322,
+   268,
+   206
+  ],
+  "display": "[196, 426, 407, 322, 268, 206]",
+  "source": "results/fixes_v2/nz_wn/sanity/weight_network_losses/results.json",
+  "field": "variants/ce_plus_emd/diagnostics/argmax_histogram"
+ },
+ "wl.ce_plus_emd.mean_max": {
+  "value": 0.7684309482574463,
+  "display": "0.768",
+  "source": "results/fixes_v2/nz_wn/sanity/weight_network_losses/results.json",
+  "field": "variants/ce_plus_emd/diagnostics/mean_max_weight"
+ },
+ "wl.ce_plus_emd.confusion": {
+  "value": [
+   [
+    157,
+    76,
+    1,
+    0,
+    0,
+    0
+   ],
+   [
+    33,
+    262,
+    87,
+    2,
+    0,
+    0
+   ],
+   [
+    4,
+    84,
+    238,
+    61,
+    1,
+    0
+   ],
+   [
+    2,
+    4,
+    74,
+    191,
+    49,
+    0
+   ],
+   [
+    0,
+    0,
+    7,
+    64,
+    164,
+    25
+   ],
+   [
+    0,
+    0,
+    0,
+    4,
+    54,
+    181
+   ]
+  ],
+  "display": "[[157, 76, 1, 0, 0, 0], [33, 262, 87, 2, 0, 0], [4, 84, 238, 61, 1, 0], [2, 4, 74, 191, 49, 0], [0, 0, 7, 64, 164, 25], [0, 0, 0, 4, 54, 181]]",
+  "source": "results/fixes_v2/nz_wn/sanity/weight_network_losses/results.json",
+  "field": "variants/ce_plus_emd/diagnostics/confusion_matrix_rows_true_cols_pred"
+ },
+ "wl.ce_plus_emd.val.[0.0,1.0]": {
+  "value": 116.9649429321289,
+  "display": "116.96",
+  "source": "results/fixes_v2/nz_wn/sanity/weight_network_losses/results.json",
+  "field": "variants/ce_plus_emd/qre_val_mse/[0.0,1.0]/mse"
+ },
+ "wl.ce_plus_emd.val.[0.0,0.2]": {
+  "value": 2.0342726707458496,
+  "display": "2.03",
+  "source": "results/fixes_v2/nz_wn/sanity/weight_network_losses/results.json",
+  "field": "variants/ce_plus_emd/qre_val_mse/[0.0,0.2]/mse"
+ },
+ "wl.ce_plus_emd.val.[0.9,1.0]": {
+  "value": 581.8080444335938,
+  "display": "581.81",
+  "source": "results/fixes_v2/nz_wn/sanity/weight_network_losses/results.json",
+  "field": "variants/ce_plus_emd/qre_val_mse/[0.9,1.0]/mse"
+ },
+ "wl.reference_bgnet_ceiling.accuracy": {
+  "value": 0.6268493150684932,
+  "display": "0.627",
+  "source": "results/fixes_v2/nz_wn/sanity/weight_network_losses/results.json",
+  "field": "reference_bgnet_ceiling/diagnostics/accuracy"
+ },
+ "wl.reference_bgnet_ceiling.val.[0.0,1.0]": {
+  "value": 117.88017272949219,
+  "display": "117.88",
+  "source": "results/fixes_v2/nz_wn/sanity/weight_network_losses/results.json",
+  "field": "reference_bgnet_ceiling/qre_val_mse/[0.0,1.0]/mse"
+ },
+ "wl.reference_perfect_member.accuracy": {
+  "value": 1.0,
+  "display": "1.000",
+  "source": "results/fixes_v2/nz_wn/sanity/weight_network_losses/results.json",
+  "field": "reference_perfect_member/diagnostics/accuracy"
+ },
+ "wl.reference_perfect_member.val.[0.0,1.0]": {
+  "value": 116.73733520507812,
+  "display": "116.74",
+  "source": "results/fixes_v2/nz_wn/sanity/weight_network_losses/results.json",
+  "field": "reference_perfect_member/qre_val_mse/[0.0,1.0]/mse"
+ },
+ "wl.chance.uniform": {
+  "value": 0.16666666666666666,
+  "display": "0.167",
+  "source": "results/fixes_v2/nz_wn/sanity/weight_network_losses/results.json",
+  "field": "chance/uniform_accuracy"
+ },
+ "wl.chance.majority": {
+  "value": 0.2126027397260274,
+  "display": "0.213",
+  "source": "results/fixes_v2/nz_wn/sanity/weight_network_losses/results.json",
+  "field": "chance/majority_class_accuracy"
+ },
+ "wl.bgnet_val.[0.0,1.0]": {
+  "value": 60.816139221191406,
+  "display": "60.82",
+  "source": "results/fixes_v2/nz_wn/sanity/weight_network_losses/results.json",
+  "field": "bgnet_val_mse/[0.0,1.0]/mse"
+ },
+ "wl.true_hist": {
+  "value": [
+   234,
+   384,
+   388,
+   320,
+   260,
+   239
+  ],
+  "display": "[234, 384, 388, 320, 260, 239]",
+  "source": "results/fixes_v2/nz_wn/sanity/weight_network_losses/results.json",
+  "field": "val_true_histogram"
+ },
+ "wl.test.qre_ce.[0.0,1.0]": {
+  "value": 109.02457427978516,
+  "display": "109.02",
+  "source": "results/fixes_v2/nz_wn/sanity/weight_network_losses/results.json",
+  "field": "test/qre_cross_entropy/[0.0,1.0]/mse"
+ },
+ "wl.test.qre_ce.[0.0,0.2]": {
+  "value": 2.405909299850464,
+  "display": "2.41",
+  "source": "results/fixes_v2/nz_wn/sanity/weight_network_losses/results.json",
+  "field": "test/qre_cross_entropy/[0.0,0.2]/mse"
+ },
+ "wl.test.qre_ce.[0.9,1.0]": {
+  "value": 531.3884887695312,
+  "display": "531.39",
+  "source": "results/fixes_v2/nz_wn/sanity/weight_network_losses/results.json",
+  "field": "test/qre_cross_entropy/[0.9,1.0]/mse"
+ },
+ "ms.warm_start.pm_val": {
+  "value": 51.43741989135742,
+  "display": "51.44",
+  "source": "results/fixes_v2/nz_wn/sanity/member_study/results.json",
+  "field": "warm_start/perfect_member_val_mse/[0.0,1.0]/mse"
+ },
+ "ms.warm_start.ratio.0": {
+  "value": 0.6885239231140494,
+  "display": "0.689",
+  "source": "results/fixes_v2/nz_wn/sanity/member_study/results.json",
+  "field": "warm_start/own_interval_val/0/ratio"
+ },
+ "ms.warm_start.best_epoch.0": {
+  "value": 32,
+  "display": "32",
+  "source": "results/fixes_v2/nz_wn/sanity/member_study/results.json",
+  "field": "warm_start/own_interval_val/0/best_epoch"
+ },
+ "ms.warm_start.ratio.1": {
+  "value": 0.6990865336896134,
+  "display": "0.699",
+  "source": "results/fixes_v2/nz_wn/sanity/member_study/results.json",
+  "field": "warm_start/own_interval_val/1/ratio"
+ },
+ "ms.warm_start.best_epoch.1": {
+  "value": 38,
+  "display": "38",
+  "source": "results/fixes_v2/nz_wn/sanity/member_study/results.json",
+  "field": "warm_start/own_interval_val/1/best_epoch"
+ },
+ "ms.warm_start.ratio.2": {
+  "value": 0.8450911834777147,
+  "display": "0.845",
+  "source": "results/fixes_v2/nz_wn/sanity/member_study/results.json",
+  "field": "warm_start/own_interval_val/2/ratio"
+ },
+ "ms.warm_start.best_epoch.2": {
+  "value": 32,
+  "display": "32",
+  "source": "results/fixes_v2/nz_wn/sanity/member_study/results.json",
+  "field": "warm_start/own_interval_val/2/best_epoch"
+ },
+ "ms.warm_start.ratio.3": {
+  "value": 0.829106952494141,
+  "display": "0.829",
+  "source": "results/fixes_v2/nz_wn/sanity/member_study/results.json",
+  "field": "warm_start/own_interval_val/3/ratio"
+ },
+ "ms.warm_start.best_epoch.3": {
+  "value": 43,
+  "display": "43",
+  "source": "results/fixes_v2/nz_wn/sanity/member_study/results.json",
+  "field": "warm_start/own_interval_val/3/best_epoch"
+ },
+ "ms.warm_start.ratio.4": {
+  "value": 0.8647113289122089,
+  "display": "0.865",
+  "source": "results/fixes_v2/nz_wn/sanity/member_study/results.json",
+  "field": "warm_start/own_interval_val/4/ratio"
+ },
+ "ms.warm_start.best_epoch.4": {
+  "value": 47,
+  "display": "47",
+  "source": "results/fixes_v2/nz_wn/sanity/member_study/results.json",
+  "field": "warm_start/own_interval_val/4/best_epoch"
+ },
+ "ms.warm_start.ratio.5": {
+  "value": 0.8552949354741849,
+  "display": "0.855",
+  "source": "results/fixes_v2/nz_wn/sanity/member_study/results.json",
+  "field": "warm_start/own_interval_val/5/ratio"
+ },
+ "ms.warm_start.best_epoch.5": {
+  "value": 28,
+  "display": "28",
+  "source": "results/fixes_v2/nz_wn/sanity/member_study/results.json",
+  "field": "warm_start/own_interval_val/5/best_epoch"
+ },
+ "ms.scratch.pm_val": {
+  "value": 55.85661697387695,
+  "display": "55.86",
+  "source": "results/fixes_v2/nz_wn/sanity/member_study/results.json",
+  "field": "scratch/perfect_member_val_mse/[0.0,1.0]/mse"
+ },
+ "ms.scratch.ratio.0": {
+  "value": 0.7110747114295981,
+  "display": "0.711",
+  "source": "results/fixes_v2/nz_wn/sanity/member_study/results.json",
+  "field": "scratch/own_interval_val/0/ratio"
+ },
+ "ms.scratch.best_epoch.0": {
+  "value": 47,
+  "display": "47",
+  "source": "results/fixes_v2/nz_wn/sanity/member_study/results.json",
+  "field": "scratch/own_interval_val/0/best_epoch"
+ },
+ "ms.scratch.ratio.1": {
+  "value": 0.7095433529614079,
+  "display": "0.710",
+  "source": "results/fixes_v2/nz_wn/sanity/member_study/results.json",
+  "field": "scratch/own_interval_val/1/ratio"
+ },
+ "ms.scratch.best_epoch.1": {
+  "value": 42,
+  "display": "42",
+  "source": "results/fixes_v2/nz_wn/sanity/member_study/results.json",
+  "field": "scratch/own_interval_val/1/best_epoch"
+ },
+ "ms.scratch.ratio.2": {
+  "value": 0.8717681575409657,
+  "display": "0.872",
+  "source": "results/fixes_v2/nz_wn/sanity/member_study/results.json",
+  "field": "scratch/own_interval_val/2/ratio"
+ },
+ "ms.scratch.best_epoch.2": {
+  "value": 54,
+  "display": "54",
+  "source": "results/fixes_v2/nz_wn/sanity/member_study/results.json",
+  "field": "scratch/own_interval_val/2/best_epoch"
+ },
+ "ms.scratch.ratio.3": {
+  "value": 0.873703818930504,
+  "display": "0.874",
+  "source": "results/fixes_v2/nz_wn/sanity/member_study/results.json",
+  "field": "scratch/own_interval_val/3/ratio"
+ },
+ "ms.scratch.best_epoch.3": {
+  "value": 49,
+  "display": "49",
+  "source": "results/fixes_v2/nz_wn/sanity/member_study/results.json",
+  "field": "scratch/own_interval_val/3/best_epoch"
+ },
+ "ms.scratch.ratio.4": {
+  "value": 0.9417399570598372,
+  "display": "0.942",
+  "source": "results/fixes_v2/nz_wn/sanity/member_study/results.json",
+  "field": "scratch/own_interval_val/4/ratio"
+ },
+ "ms.scratch.best_epoch.4": {
+  "value": 69,
+  "display": "69",
+  "source": "results/fixes_v2/nz_wn/sanity/member_study/results.json",
+  "field": "scratch/own_interval_val/4/best_epoch"
+ },
+ "ms.scratch.ratio.5": {
+  "value": 0.9513981648893427,
+  "display": "0.951",
+  "source": "results/fixes_v2/nz_wn/sanity/member_study/results.json",
+  "field": "scratch/own_interval_val/5/ratio"
+ },
+ "ms.scratch.best_epoch.5": {
+  "value": 82,
+  "display": "82",
+  "source": "results/fixes_v2/nz_wn/sanity/member_study/results.json",
+  "field": "scratch/own_interval_val/5/best_epoch"
+ },
+ "ms.sanity_10_epoch.pm_val": {
+  "value": 116.7363510131836,
+  "display": "116.74",
+  "source": "results/fixes_v2/nz_wn/sanity/member_study/results.json",
+  "field": "sanity_10_epoch/perfect_member_val_mse/[0.0,1.0]/mse"
+ },
+ "ms.sanity_10_epoch.ratio.0": {
+  "value": 0.8993040781008256,
+  "display": "0.899",
+  "source": "results/fixes_v2/nz_wn/sanity/member_study/results.json",
+  "field": "sanity_10_epoch/own_interval_val/0/ratio"
+ },
+ "ms.sanity_10_epoch.ratio.1": {
+  "value": 0.8146302872263866,
+  "display": "0.815",
+  "source": "results/fixes_v2/nz_wn/sanity/member_study/results.json",
+  "field": "sanity_10_epoch/own_interval_val/1/ratio"
+ },
+ "ms.sanity_10_epoch.ratio.2": {
+  "value": 1.0618176486159627,
+  "display": "1.062",
+  "source": "results/fixes_v2/nz_wn/sanity/member_study/results.json",
+  "field": "sanity_10_epoch/own_interval_val/2/ratio"
+ },
+ "ms.sanity_10_epoch.ratio.3": {
+  "value": 1.3285831328226432,
+  "display": "1.329",
+  "source": "results/fixes_v2/nz_wn/sanity/member_study/results.json",
+  "field": "sanity_10_epoch/own_interval_val/3/ratio"
+ },
+ "ms.sanity_10_epoch.ratio.4": {
+  "value": 1.7659479251552772,
+  "display": "1.766",
+  "source": "results/fixes_v2/nz_wn/sanity/member_study/results.json",
+  "field": "sanity_10_epoch/own_interval_val/4/ratio"
+ },
+ "ms.sanity_10_epoch.ratio.5": {
+  "value": 2.4911423714931056,
+  "display": "2.491",
+  "source": "results/fixes_v2/nz_wn/sanity/member_study/results.json",
+  "field": "sanity_10_epoch/own_interval_val/5/ratio"
+ },
+ "ms.selected": {
+  "value": "warm_start",
+  "display": "warm_start",
+  "source": "results/fixes_v2/nz_wn/sanity/member_study/results.json",
+  "field": "selection/best_by_perfect_member_val_mse_0_1"
+ },
+ "ms.test.qre_warm_start_squared_emd.[0.0,1.0]": {
+  "value": 52.03202819824219,
+  "display": "52.03",
+  "source": "results/fixes_v2/nz_wn/sanity/member_study/results.json",
+  "field": "selection/test/qre_warm_start_squared_emd/[0.0,1.0]/mse"
+ },
+ "ms.test.qre_warm_start_squared_emd.[0.0,0.2]": {
+  "value": 2.1342599391937256,
+  "display": "2.13",
+  "source": "results/fixes_v2/nz_wn/sanity/member_study/results.json",
+  "field": "selection/test/qre_warm_start_squared_emd/[0.0,0.2]/mse"
+ },
+ "ms.test.qre_warm_start_squared_emd.[0.9,1.0]": {
+  "value": 190.4635009765625,
+  "display": "190.46",
+  "source": "results/fixes_v2/nz_wn/sanity/member_study/results.json",
+  "field": "selection/test/qre_warm_start_squared_emd/[0.9,1.0]/mse"
+ },
+ "ms.test.perfect_member.[0.0,1.0]": {
+  "value": 50.30990219116211,
+  "display": "50.31",
+  "source": "results/fixes_v2/nz_wn/sanity/member_study/results.json",
+  "field": "selection/test/perfect_member/[0.0,1.0]/mse"
+ },
+ "ms.test.perfect_member.[0.0,0.2]": {
+  "value": 1.8895896673202515,
+  "display": "1.89",
+  "source": "results/fixes_v2/nz_wn/sanity/member_study/results.json",
+  "field": "selection/test/perfect_member/[0.0,0.2]/mse"
+ },
+ "ms.test.perfect_member.[0.9,1.0]": {
+  "value": 187.4296417236328,
+  "display": "187.43",
+  "source": "results/fixes_v2/nz_wn/sanity/member_study/results.json",
+  "field": "selection/test/perfect_member/[0.9,1.0]/mse"
+ },
+ "ms.test.bgnet.[0.0,1.0]": {
+  "value": 60.60047149658203,
+  "display": "60.60",
+  "source": "results/fixes_v2/nz_wn/sanity/member_study/results.json",
+  "field": "selection/test/bgnet/[0.0,1.0]/mse"
+ },
+ "ms.test.bgnet.[0.0,0.2]": {
+  "value": 2.8556909561157227,
+  "display": "2.86",
+  "source": "results/fixes_v2/nz_wn/sanity/member_study/results.json",
+  "field": "selection/test/bgnet/[0.0,0.2]/mse"
+ },
+ "ms.test.bgnet.[0.9,1.0]": {
+  "value": 231.79043579101562,
+  "display": "231.79",
+  "source": "results/fixes_v2/nz_wn/sanity/member_study/results.json",
+  "field": "selection/test/bgnet/[0.9,1.0]/mse"
+ },
+ "ms.test.bgnet_converged.[0.0,1.0]": {
+  "value": 50.873291015625,
+  "display": "50.87",
+  "source": "results/fixes_v2/nz_wn/sanity/member_study/results.json",
+  "field": "selection/test/bgnet_converged/[0.0,1.0]/mse"
+ },
+ "ms.test.bgnet_converged.[0.0,0.2]": {
+  "value": 2.2966463565826416,
+  "display": "2.30",
+  "source": "results/fixes_v2/nz_wn/sanity/member_study/results.json",
+  "field": "selection/test/bgnet_converged/[0.0,0.2]/mse"
+ },
+ "ms.test.bgnet_converged.[0.9,1.0]": {
+  "value": 186.33338928222656,
+  "display": "186.33",
+  "source": "results/fixes_v2/nz_wn/sanity/member_study/results.json",
+  "field": "selection/test/bgnet_converged/[0.9,1.0]/mse"
+ },
+ "ms.bgc.best_epoch": {
+  "value": 39,
+  "display": "39",
+  "source": "results/fixes_v2/nz_wn/sanity/member_study/results.json",
+  "field": "bgnet_converged_training/best_epoch"
+ },
+ "ms.bgc.epochs": {
+  "value": 43,
+  "display": "43",
+  "source": "results/fixes_v2/nz_wn/sanity/member_study/results.json",
+  "field": "bgnet_converged_training/epochs"
+ },
+ "ms.bgc_val": {
+  "value": 50.538272857666016,
+  "display": "50.54",
+  "source": "results/fixes_v2/nz_wn/sanity/member_study/results.json",
+  "field": "bgnet_converged_val_mse/[0.0,1.0]/mse"
+ },
+ "ms.bgnet10_val": {
+  "value": 60.81964111328125,
+  "display": "60.82",
+  "source": "results/fixes_v2/nz_wn/sanity/member_study/results.json",
+  "field": "bgnet_val_mse/[0.0,1.0]/mse"
+ },
+ "paper.pred_shape": {
+  "value": "T, Q, U, V, **W** at 850 hPa, (5, 36, 41)",
+  "display": "T, Q, U, V, W at 850 hPa, (5, 36, 41)",
+  "source": "README.md",
+  "field": "text: \"T, Q, U, V, **W** at 850 hPa, (5, 36, 41)\""
+ },
+ "paper.target": {
+  "value": "ERA5 → VCSN observations, 5 km, 11,491 points",
+  "display": "ERA5 → VCSN observations, 5 km, 11,491 points",
+  "source": "README.md",
+  "field": "text: \"ERA5 → VCSN observations, 5 km, 11,491 points\""
+ },
+ "paper.split": {
+  "value": "| Split | 32 / 6 / 8 years |",
+  "display": "32 / 6 / 8 years",
+  "source": "README.md",
+  "field": "text: \"| Split | 32 / 6 / 8 years |\""
+ },
+ "nz.v2.split_text": {
+  "value": "**1961–1988 / 1989–1993 / 1994–2000** (28 / 5 / 7 years)",
+  "display": "28 / 5 / 7 years",
+  "source": "README.md",
+  "field": "text: \"**1961–1988 / 1989–1993 / 1994–2000** (28 / 5 / 7 years)\""
+ },
+ "mt.collapse_text": {
+  "value": "100 % of validation days go to interval 3",
+  "display": "100 % of validation days in one interval",
+  "source": "README.md",
+  "field": "text: \"100 % of validation days go to interval 3\""
+ },
+ "in.top_member": {
+  "value": "the top one the top 7.7 %",
+  "display": "top 7.7 % of days",
+  "source": "README.md",
+  "field": "text: \"the top one the top 7.7 %\""
+ },
+ "in.res": {
+  "value": "4 × 4 block means of the 0.25° grid (1°)",
+  "display": "1°",
+  "source": "README.md",
+  "field": "text: \"4 × 4 block means of the 0.25° grid (1°)\""
+ },
+ "in.imd_res": {
+  "value": "IMD gridded rainfall (mm/day), 0.25°",
+  "display": "0.25°",
+  "source": "README.md",
+  "field": "text: \"IMD gridded rainfall (mm/day), 0.25°\""
+ },
+ "in.era5_two_machines": {
+  "value": "the 27 years present on both machines were byte-identical",
+  "display": "27 years",
+  "source": "README.md",
+  "field": "text: \"the 27 years present on both machines were byte-identical\""
+ },
+ "nz.zenodo_v4": {
+  "value": "[Zenodo record 17957264](https://zenodo.org/records/17957264)",
+  "display": "17957264",
+  "source": "README.md",
+  "field": "text: \"[Zenodo record 17957264](https://zenodo.org/records/17957264)\""
+ },
+ "nz.zenodo_v7": {
+  "value": "[Zenodo record 20985924](https://zenodo.org/records/20985924)",
+  "display": "20985924",
+  "source": "README.md",
+  "field": "text: \"[Zenodo record 20985924](https://zenodo.org/records/20985924)\""
+ },
+ "nz.sel.members_cost": {
+  "value": "they raised val MSE by 6–53 %",
+  "display": "6–53 %",
+  "source": "docs/STATUS.md",
+  "field": "text: \"they raised val MSE by 6–53 %\""
+ },
+ "nz.grid16": {
+  "value": "the CORDEX grid is 16 × 16",
+  "display": "16 × 16",
+  "source": "README.md",
+  "field": "text: \"the CORDEX grid is 16 × 16\""
+ },
+ "nz.rep.placement": {
+  "value": "ensemble",
+  "display": "ensemble",
+  "source": "results/fixes_v2/nz_wn/sanity/mass_study/repetitions/summary.json",
+  "field": "placement"
+ },
+ "nz.rep.lambda": {
+  "value": 10.0,
+  "display": "10",
+  "source": "results/fixes_v2/nz_wn/sanity/mass_study/repetitions/summary.json",
+  "field": "selected_lambda"
+ },
+ "nz.rep.n": {
+  "value": 10,
+  "display": "10",
+  "source": "results/fixes_v2/nz_wn/sanity/mass_study/repetitions/summary.json",
+  "field": "stats/n_repetitions"
+ },
+ "nz.rep.bgnet.mse_0_1.mean": {
+  "value": 50.510581970214844,
+  "display": "50.51",
+  "source": "results/fixes_v2/nz_wn/sanity/mass_study/repetitions/summary.json",
+  "field": "stats/summary/bgnet/mse_0_1/mean"
+ },
+ "nz.rep.bgnet.mse_0_1.std": {
+  "value": 1.0538611570109806,
+  "display": "1.05",
+  "source": "results/fixes_v2/nz_wn/sanity/mass_study/repetitions/summary.json",
+  "field": "stats/summary/bgnet/mse_0_1/std"
+ },
+ "nz.rep.bgnet.mse_0_1.values": {
+  "value": [
+   50.873291015625,
+   48.82339859008789,
+   50.027462005615234,
+   51.03920364379883,
+   52.33599090576172,
+   50.34846496582031,
+   51.686275482177734,
+   50.354087829589844,
+   49.19459915161133,
+   50.42304611206055
+  ],
+  "display": "[50.8733, 48.8234, 50.0275, 51.0392, 52.336, 50.3485, 51.6863, 50.3541, 49.1946, 50.423]",
+  "source": "results/fixes_v2/nz_wn/sanity/mass_study/repetitions/summary.json",
+  "field": "stats/summary/bgnet/mse_0_1/values"
+ },
+ "nz.rep.bgnet.mse_0_0.2.mean": {
+  "value": 2.2356802225112915,
+  "display": "2.24",
+  "source": "results/fixes_v2/nz_wn/sanity/mass_study/repetitions/summary.json",
+  "field": "stats/summary/bgnet/mse_0_0.2/mean"
+ },
+ "nz.rep.bgnet.mse_0_0.2.std": {
+  "value": 0.04738105918659031,
+  "display": "0.05",
+  "source": "results/fixes_v2/nz_wn/sanity/mass_study/repetitions/summary.json",
+  "field": "stats/summary/bgnet/mse_0_0.2/std"
+ },
+ "nz.rep.bgnet.mse_0_0.2.values": {
+  "value": [
+   2.2966463565826416,
+   2.2241766452789307,
+   2.223778009414673,
+   2.2293994426727295,
+   2.246324062347412,
+   2.1773126125335693,
+   2.28696608543396,
+   2.2144415378570557,
+   2.2977280616760254,
+   2.160029411315918
+  ],
+  "display": "[2.2966, 2.2242, 2.2238, 2.2294, 2.2463, 2.1773, 2.287, 2.2144, 2.2977, 2.16]",
+  "source": "results/fixes_v2/nz_wn/sanity/mass_study/repetitions/summary.json",
+  "field": "stats/summary/bgnet/mse_0_0.2/values"
+ },
+ "nz.rep.bgnet.mse_0.9_1.mean": {
+  "value": 185.4475311279297,
+  "display": "185.45",
+  "source": "results/fixes_v2/nz_wn/sanity/mass_study/repetitions/summary.json",
+  "field": "stats/summary/bgnet/mse_0.9_1/mean"
+ },
+ "nz.rep.bgnet.mse_0.9_1.std": {
+  "value": 4.01947304178576,
+  "display": "4.02",
+  "source": "results/fixes_v2/nz_wn/sanity/mass_study/repetitions/summary.json",
+  "field": "stats/summary/bgnet/mse_0.9_1/std"
+ },
+ "nz.rep.bgnet.mse_0.9_1.values": {
+  "value": [
+   186.33338928222656,
+   178.772216796875,
+   182.2547607421875,
+   186.64817810058594,
+   191.82659912109375,
+   184.1829071044922,
+   191.69464111328125,
+   183.73098754882812,
+   183.4147491455078,
+   185.61688232421875
+  ],
+  "display": "[186.3334, 178.7722, 182.2548, 186.6482, 191.8266, 184.1829, 191.6946, 183.731, 183.4147, 185.6169]",
+  "source": "results/fixes_v2/nz_wn/sanity/mass_study/repetitions/summary.json",
+  "field": "stats/summary/bgnet/mse_0.9_1/values"
+ },
+ "nz.rep.bgnet.daily_total_mae.mean": {
+  "value": 1.1316309349712137,
+  "display": "1.132",
+  "source": "results/fixes_v2/nz_wn/sanity/mass_study/repetitions/summary.json",
+  "field": "stats/summary/bgnet/daily_total_mae/mean"
+ },
+ "nz.rep.bgnet.daily_total_mae.std": {
+  "value": 0.024736799567012774,
+  "display": "0.025",
+  "source": "results/fixes_v2/nz_wn/sanity/mass_study/repetitions/summary.json",
+  "field": "stats/summary/bgnet/daily_total_mae/std"
+ },
+ "nz.rep.bgnet.daily_total_mae.values": {
+  "value": [
+   1.130762081170077,
+   1.0997182203386644,
+   1.1294021373320815,
+   1.1406434819792477,
+   1.180870677602616,
+   1.1433989679162957,
+   1.1419698326574075,
+   1.1259065030478104,
+   1.0904404022157443,
+   1.1331970454521927
+  ],
+  "display": "[1.1308, 1.0997, 1.1294, 1.1406, 1.1809, 1.1434, 1.142, 1.1259, 1.0904, 1.1332]",
+  "source": "results/fixes_v2/nz_wn/sanity/mass_study/repetitions/summary.json",
+  "field": "stats/summary/bgnet/daily_total_mae/values"
+ },
+ "nz.rep.bgnet.abs_total_rel_discrepancy.mean": {
+  "value": 0.023912456895428147,
+  "display": "0.024",
+  "source": "results/fixes_v2/nz_wn/sanity/mass_study/repetitions/summary.json",
+  "field": "stats/summary/bgnet/abs_total_rel_discrepancy/mean"
+ },
+ "nz.rep.bgnet.abs_total_rel_discrepancy.std": {
+  "value": 0.019847354234254027,
+  "display": "0.020",
+  "source": "results/fixes_v2/nz_wn/sanity/mass_study/repetitions/summary.json",
+  "field": "stats/summary/bgnet/abs_total_rel_discrepancy/std"
+ },
+ "nz.rep.bgnet.abs_total_rel_discrepancy.values": {
+  "value": [
+   0.005557378862210409,
+   0.01564732433065318,
+   0.05075995887808219,
+   0.010429593236790017,
+   0.040236269548239556,
+   0.004341395228805892,
+   0.022416634946557573,
+   0.018451361036430622,
+   0.01033693269953037,
+   0.06094772018698168
+  ],
+  "display": "[0.0056, 0.0156, 0.0508, 0.0104, 0.0402, 0.0043, 0.0224, 0.0185, 0.0103, 0.0609]",
+  "source": "results/fixes_v2/nz_wn/sanity/mass_study/repetitions/summary.json",
+  "field": "stats/summary/bgnet/abs_total_rel_discrepancy/values"
+ },
+ "nz.rep.qre.mse_0_1.mean": {
+  "value": 53.51434593200683,
+  "display": "53.51",
+  "source": "results/fixes_v2/nz_wn/sanity/mass_study/repetitions/summary.json",
+  "field": "stats/summary/qre/mse_0_1/mean"
+ },
+ "nz.rep.qre.mse_0_1.std": {
+  "value": 0.659480231119051,
+  "display": "0.66",
+  "source": "results/fixes_v2/nz_wn/sanity/mass_study/repetitions/summary.json",
+  "field": "stats/summary/qre/mse_0_1/std"
+ },
+ "nz.rep.qre.mse_0_1.values": {
+  "value": [
+   52.03202819824219,
+   53.90556335449219,
+   53.257259368896484,
+   54.010921478271484,
+   53.347503662109375,
+   53.024627685546875,
+   54.44453811645508,
+   53.69379425048828,
+   53.65574645996094,
+   53.77147674560547
+  ],
+  "display": "[52.032, 53.9056, 53.2573, 54.0109, 53.3475, 53.0246, 54.4445, 53.6938, 53.6557, 53.7715]",
+  "source": "results/fixes_v2/nz_wn/sanity/mass_study/repetitions/summary.json",
+  "field": "stats/summary/qre/mse_0_1/values"
+ },
+ "nz.rep.qre.mse_0_0.2.mean": {
+  "value": 2.214901351928711,
+  "display": "2.21",
+  "source": "results/fixes_v2/nz_wn/sanity/mass_study/repetitions/summary.json",
+  "field": "stats/summary/qre/mse_0_0.2/mean"
+ },
+ "nz.rep.qre.mse_0_0.2.std": {
+  "value": 0.04832199397726103,
+  "display": "0.05",
+  "source": "results/fixes_v2/nz_wn/sanity/mass_study/repetitions/summary.json",
+  "field": "stats/summary/qre/mse_0_0.2/std"
+ },
+ "nz.rep.qre.mse_0_0.2.values": {
+  "value": [
+   2.1342599391937256,
+   2.227508783340454,
+   2.190427303314209,
+   2.2078301906585693,
+   2.286550760269165,
+   2.1801257133483887,
+   2.228073835372925,
+   2.276794910430908,
+   2.1682212352752686,
+   2.249220848083496
+  ],
+  "display": "[2.1343, 2.2275, 2.1904, 2.2078, 2.2866, 2.1801, 2.2281, 2.2768, 2.1682, 2.2492]",
+  "source": "results/fixes_v2/nz_wn/sanity/mass_study/repetitions/summary.json",
+  "field": "stats/summary/qre/mse_0_0.2/values"
+ },
+ "nz.rep.qre.mse_0.9_1.mean": {
+  "value": 195.8073257446289,
+  "display": "195.81",
+  "source": "results/fixes_v2/nz_wn/sanity/mass_study/repetitions/summary.json",
+  "field": "stats/summary/qre/mse_0.9_1/mean"
+ },
+ "nz.rep.qre.mse_0.9_1.std": {
+  "value": 3.437858338117433,
+  "display": "3.44",
+  "source": "results/fixes_v2/nz_wn/sanity/mass_study/repetitions/summary.json",
+  "field": "stats/summary/qre/mse_0.9_1/std"
+ },
+ "nz.rep.qre.mse_0.9_1.values": {
+  "value": [
+   190.4635009765625,
+   195.45428466796875,
+   193.55902099609375,
+   198.15464782714844,
+   196.8806915283203,
+   191.31800842285156,
+   202.11663818359375,
+   198.13668823242188,
+   195.4878692626953,
+   196.5019073486328
+  ],
+  "display": "[190.4635, 195.4543, 193.559, 198.1546, 196.8807, 191.318, 202.1166, 198.1367, 195.4879, 196.5019]",
+  "source": "results/fixes_v2/nz_wn/sanity/mass_study/repetitions/summary.json",
+  "field": "stats/summary/qre/mse_0.9_1/values"
+ },
+ "nz.rep.qre.daily_total_mae.mean": {
+  "value": 1.1313620254348136,
+  "display": "1.131",
+  "source": "results/fixes_v2/nz_wn/sanity/mass_study/repetitions/summary.json",
+  "field": "stats/summary/qre/daily_total_mae/mean"
+ },
+ "nz.rep.qre.daily_total_mae.std": {
+  "value": 0.015499710600952891,
+  "display": "0.015",
+  "source": "results/fixes_v2/nz_wn/sanity/mass_study/repetitions/summary.json",
+  "field": "stats/summary/qre/daily_total_mae/std"
+ },
+ "nz.rep.qre.daily_total_mae.values": {
+  "value": [
+   1.0992673846138508,
+   1.1261667944990106,
+   1.135158056701683,
+   1.1565299057432619,
+   1.1315429009027254,
+   1.1498023754825832,
+   1.1316606813220016,
+   1.120580888986041,
+   1.1321121248083024,
+   1.1307991412886778
+  ],
+  "display": "[1.0993, 1.1262, 1.1352, 1.1565, 1.1315, 1.1498, 1.1317, 1.1206, 1.1321, 1.1308]",
+  "source": "results/fixes_v2/nz_wn/sanity/mass_study/repetitions/summary.json",
+  "field": "stats/summary/qre/daily_total_mae/values"
+ },
+ "nz.rep.qre.abs_total_rel_discrepancy.mean": {
+  "value": 0.022552064046013637,
+  "display": "0.023",
+  "source": "results/fixes_v2/nz_wn/sanity/mass_study/repetitions/summary.json",
+  "field": "stats/summary/qre/abs_total_rel_discrepancy/mean"
+ },
+ "nz.rep.qre.abs_total_rel_discrepancy.std": {
+  "value": 0.014432219188212858,
+  "display": "0.014",
+  "source": "results/fixes_v2/nz_wn/sanity/mass_study/repetitions/summary.json",
+  "field": "stats/summary/qre/abs_total_rel_discrepancy/std"
+ },
+ "nz.rep.qre.abs_total_rel_discrepancy.values": {
+  "value": [
+   0.03184690509720041,
+   0.010734819602554423,
+   0.02341165222659875,
+   0.04552908238484161,
+   0.03973847958937245,
+   0.0029953701232014727,
+   0.011540792961842704,
+   0.0240721638589745,
+   0.029526194377763253,
+   0.006125180237786796
+  ],
+  "display": "[0.0318, 0.0107, 0.0234, 0.0455, 0.0397, 0.003, 0.0115, 0.0241, 0.0295, 0.0061]",
+  "source": "results/fixes_v2/nz_wn/sanity/mass_study/repetitions/summary.json",
+  "field": "stats/summary/qre/abs_total_rel_discrepancy/values"
+ },
+ "nz.rep.control.mse_0_1.mean": {
+  "value": 53.58584747314453,
+  "display": "53.59",
+  "source": "results/fixes_v2/nz_wn/sanity/mass_study/repetitions/summary.json",
+  "field": "stats/summary/control/mse_0_1/mean"
+ },
+ "nz.rep.control.mse_0_1.std": {
+  "value": 0.7098198253219233,
+  "display": "0.71",
+  "source": "results/fixes_v2/nz_wn/sanity/mass_study/repetitions/summary.json",
+  "field": "stats/summary/control/mse_0_1/std"
+ },
+ "nz.rep.control.mse_0_1.values": {
+  "value": [
+   52.16947555541992,
+   53.92581558227539,
+   53.262046813964844,
+   54.81661605834961,
+   53.38181686401367,
+   53.198551177978516,
+   54.35976028442383,
+   53.57481384277344,
+   53.54887390136719,
+   53.620704650878906
+  ],
+  "display": "[52.1695, 53.9258, 53.262, 54.8166, 53.3818, 53.1986, 54.3598, 53.5748, 53.5489, 53.6207]",
+  "source": "results/fixes_v2/nz_wn/sanity/mass_study/repetitions/summary.json",
+  "field": "stats/summary/control/mse_0_1/values"
+ },
+ "nz.rep.control.mse_0_0.2.mean": {
+  "value": 2.2276729345321655,
+  "display": "2.23",
+  "source": "results/fixes_v2/nz_wn/sanity/mass_study/repetitions/summary.json",
+  "field": "stats/summary/control/mse_0_0.2/mean"
+ },
+ "nz.rep.control.mse_0_0.2.std": {
+  "value": 0.06533222079801147,
+  "display": "0.07",
+  "source": "results/fixes_v2/nz_wn/sanity/mass_study/repetitions/summary.json",
+  "field": "stats/summary/control/mse_0_0.2/std"
+ },
+ "nz.rep.control.mse_0_0.2.values": {
+  "value": [
+   2.1366240978240967,
+   2.272355318069458,
+   2.199193239212036,
+   2.2031140327453613,
+   2.252981185913086,
+   2.1679468154907227,
+   2.169095993041992,
+   2.3187615871429443,
+   2.2251968383789062,
+   2.3314602375030518
+  ],
+  "display": "[2.1366, 2.2724, 2.1992, 2.2031, 2.253, 2.1679, 2.1691, 2.3188, 2.2252, 2.3315]",
+  "source": "results/fixes_v2/nz_wn/sanity/mass_study/repetitions/summary.json",
+  "field": "stats/summary/control/mse_0_0.2/values"
+ },
+ "nz.rep.control.mse_0.9_1.mean": {
+  "value": 196.24469909667968,
+  "display": "196.24",
+  "source": "results/fixes_v2/nz_wn/sanity/mass_study/repetitions/summary.json",
+  "field": "stats/summary/control/mse_0.9_1/mean"
+ },
+ "nz.rep.control.mse_0.9_1.std": {
+  "value": 4.600272008263527,
+  "display": "4.60",
+  "source": "results/fixes_v2/nz_wn/sanity/mass_study/repetitions/summary.json",
+  "field": "stats/summary/control/mse_0.9_1/std"
+ },
+ "nz.rep.control.mse_0.9_1.values": {
+  "value": [
+   190.00643920898438,
+   195.0654296875,
+   192.4741973876953,
+   204.8940887451172,
+   195.91094970703125,
+   191.4860382080078,
+   201.98670959472656,
+   198.3785400390625,
+   195.48309326171875,
+   196.76150512695312
+  ],
+  "display": "[190.0064, 195.0654, 192.4742, 204.8941, 195.9109, 191.486, 201.9867, 198.3785, 195.4831, 196.7615]",
+  "source": "results/fixes_v2/nz_wn/sanity/mass_study/repetitions/summary.json",
+  "field": "stats/summary/control/mse_0.9_1/values"
+ },
+ "nz.rep.control.daily_total_mae.mean": {
+  "value": 1.1357422990307142,
+  "display": "1.136",
+  "source": "results/fixes_v2/nz_wn/sanity/mass_study/repetitions/summary.json",
+  "field": "stats/summary/control/daily_total_mae/mean"
+ },
+ "nz.rep.control.daily_total_mae.std": {
+  "value": 0.02545200072326755,
+  "display": "0.025",
+  "source": "results/fixes_v2/nz_wn/sanity/mass_study/repetitions/summary.json",
+  "field": "stats/summary/control/daily_total_mae/std"
+ },
+ "nz.rep.control.daily_total_mae.values": {
+  "value": [
+   1.1089491286213005,
+   1.130511870404816,
+   1.1361682743262318,
+   1.1986158407674927,
+   1.1290217240227227,
+   1.157577620603723,
+   1.128916435694561,
+   1.117299960118973,
+   1.125231659958453,
+   1.1251304757888703
+  ],
+  "display": "[1.1089, 1.1305, 1.1362, 1.1986, 1.129, 1.1576, 1.1289, 1.1173, 1.1252, 1.1251]",
+  "source": "results/fixes_v2/nz_wn/sanity/mass_study/repetitions/summary.json",
+  "field": "stats/summary/control/daily_total_mae/values"
+ },
+ "nz.rep.control.abs_total_rel_discrepancy.mean": {
+  "value": 0.022611378004134777,
+  "display": "0.023",
+  "source": "results/fixes_v2/nz_wn/sanity/mass_study/repetitions/summary.json",
+  "field": "stats/summary/control/abs_total_rel_discrepancy/mean"
+ },
+ "nz.rep.control.abs_total_rel_discrepancy.std": {
+  "value": 0.02342651130055374,
+  "display": "0.023",
+  "source": "results/fixes_v2/nz_wn/sanity/mass_study/repetitions/summary.json",
+  "field": "stats/summary/control/abs_total_rel_discrepancy/std"
+ },
+ "nz.rep.control.abs_total_rel_discrepancy.values": {
+  "value": [
+   0.014472095692278258,
+   0.008664638083832549,
+   9.082563401943234e-05,
+   0.08212588679697752,
+   0.01781701214317334,
+   0.009358777377785284,
+   0.024491200063625228,
+   0.033181321549154284,
+   0.02961966635875762,
+   0.0062923563417442395
+  ],
+  "display": "[0.0145, 0.0087, 0.0001, 0.0821, 0.0178, 0.0094, 0.0245, 0.0332, 0.0296, 0.0063]",
+  "source": "results/fixes_v2/nz_wn/sanity/mass_study/repetitions/summary.json",
+  "field": "stats/summary/control/abs_total_rel_discrepancy/values"
+ },
+ "nz.rep.qre_mass.mse_0_1.mean": {
+  "value": 53.19192962646484,
+  "display": "53.19",
+  "source": "results/fixes_v2/nz_wn/sanity/mass_study/repetitions/summary.json",
+  "field": "stats/summary/qre_mass/mse_0_1/mean"
+ },
+ "nz.rep.qre_mass.mse_0_1.std": {
+  "value": 0.5601179386607981,
+  "display": "0.56",
+  "source": "results/fixes_v2/nz_wn/sanity/mass_study/repetitions/summary.json",
+  "field": "stats/summary/qre_mass/mse_0_1/std"
+ },
+ "nz.rep.qre_mass.mse_0_1.values": {
+  "value": [
+   51.9796257019043,
+   53.46865463256836,
+   53.087955474853516,
+   53.60980987548828,
+   53.274375915527344,
+   52.65870666503906,
+   54.06052780151367,
+   53.356239318847656,
+   53.11544418334961,
+   53.30795669555664
+  ],
+  "display": "[51.9796, 53.4687, 53.088, 53.6098, 53.2744, 52.6587, 54.0605, 53.3562, 53.1154, 53.308]",
+  "source": "results/fixes_v2/nz_wn/sanity/mass_study/repetitions/summary.json",
+  "field": "stats/summary/qre_mass/mse_0_1/values"
+ },
+ "nz.rep.qre_mass.mse_0_0.2.mean": {
+  "value": 2.239438533782959,
+  "display": "2.24",
+  "source": "results/fixes_v2/nz_wn/sanity/mass_study/repetitions/summary.json",
+  "field": "stats/summary/qre_mass/mse_0_0.2/mean"
+ },
+ "nz.rep.qre_mass.mse_0_0.2.std": {
+  "value": 0.05228905649965899,
+  "display": "0.05",
+  "source": "results/fixes_v2/nz_wn/sanity/mass_study/repetitions/summary.json",
+  "field": "stats/summary/qre_mass/mse_0_0.2/std"
+ },
+ "nz.rep.qre_mass.mse_0_0.2.values": {
+  "value": [
+   2.2187602519989014,
+   2.2110071182250977,
+   2.2791836261749268,
+   2.2858242988586426,
+   2.212892770767212,
+   2.2677347660064697,
+   2.1870453357696533,
+   2.3406693935394287,
+   2.1700968742370605,
+   2.2211709022521973
+  ],
+  "display": "[2.2188, 2.211, 2.2792, 2.2858, 2.2129, 2.2677, 2.187, 2.3407, 2.1701, 2.2212]",
+  "source": "results/fixes_v2/nz_wn/sanity/mass_study/repetitions/summary.json",
+  "field": "stats/summary/qre_mass/mse_0_0.2/values"
+ },
+ "nz.rep.qre_mass.mse_0.9_1.mean": {
+  "value": 195.10493927001954,
+  "display": "195.10",
+  "source": "results/fixes_v2/nz_wn/sanity/mass_study/repetitions/summary.json",
+  "field": "stats/summary/qre_mass/mse_0.9_1/mean"
+ },
+ "nz.rep.qre_mass.mse_0.9_1.std": {
+  "value": 3.2003636385587106,
+  "display": "3.20",
+  "source": "results/fixes_v2/nz_wn/sanity/mass_study/repetitions/summary.json",
+  "field": "stats/summary/qre_mass/mse_0.9_1/std"
+ },
+ "nz.rep.qre_mass.mse_0.9_1.values": {
+  "value": [
+   190.52049255371094,
+   195.86158752441406,
+   193.625732421875,
+   197.01707458496094,
+   196.23446655273438,
+   190.70782470703125,
+   200.94349670410156,
+   197.24380493164062,
+   192.9294891357422,
+   195.96542358398438
+  ],
+  "display": "[190.5205, 195.8616, 193.6257, 197.0171, 196.2345, 190.7078, 200.9435, 197.2438, 192.9295, 195.9654]",
+  "source": "results/fixes_v2/nz_wn/sanity/mass_study/repetitions/summary.json",
+  "field": "stats/summary/qre_mass/mse_0.9_1/values"
+ },
+ "nz.rep.qre_mass.daily_total_mae.mean": {
+  "value": 1.1155279523180943,
+  "display": "1.116",
+  "source": "results/fixes_v2/nz_wn/sanity/mass_study/repetitions/summary.json",
+  "field": "stats/summary/qre_mass/daily_total_mae/mean"
+ },
+ "nz.rep.qre_mass.daily_total_mae.std": {
+  "value": 0.013411017302448262,
+  "display": "0.013",
+  "source": "results/fixes_v2/nz_wn/sanity/mass_study/repetitions/summary.json",
+  "field": "stats/summary/qre_mass/daily_total_mae/std"
+ },
+ "nz.rep.qre_mass.daily_total_mae.values": {
+  "value": [
+   1.0957330097787545,
+   1.1141238548257804,
+   1.1233429653185736,
+   1.134860329283195,
+   1.116804943462176,
+   1.1322198829180783,
+   1.1189537108953018,
+   1.1011614598861619,
+   1.1192252995256469,
+   1.098854067287275
+  ],
+  "display": "[1.0957, 1.1141, 1.1233, 1.1349, 1.1168, 1.1322, 1.119, 1.1012, 1.1192, 1.0989]",
+  "source": "results/fixes_v2/nz_wn/sanity/mass_study/repetitions/summary.json",
+  "field": "stats/summary/qre_mass/daily_total_mae/values"
+ },
+ "nz.rep.qre_mass.abs_total_rel_discrepancy.mean": {
+  "value": 0.02727341906343155,
+  "display": "0.027",
+  "source": "results/fixes_v2/nz_wn/sanity/mass_study/repetitions/summary.json",
+  "field": "stats/summary/qre_mass/abs_total_rel_discrepancy/mean"
+ },
+ "nz.rep.qre_mass.abs_total_rel_discrepancy.std": {
+  "value": 0.015461349320507724,
+  "display": "0.015",
+  "source": "results/fixes_v2/nz_wn/sanity/mass_study/repetitions/summary.json",
+  "field": "stats/summary/qre_mass/abs_total_rel_discrepancy/std"
+ },
+ "nz.rep.qre_mass.abs_total_rel_discrepancy.values": {
+  "value": [
+   0.030095758539366434,
+   0.05863570297941907,
+   0.0037867027572856373,
+   0.02667675858277019,
+   0.04659336917452139,
+   0.024059946892825566,
+   0.017929172629221373,
+   0.02195066576727384,
+   0.026091734122481915,
+   0.01691437918915006
+  ],
+  "display": "[0.0301, 0.0586, 0.0038, 0.0267, 0.0466, 0.0241, 0.0179, 0.022, 0.0261, 0.0169]",
+  "source": "results/fixes_v2/nz_wn/sanity/mass_study/repetitions/summary.json",
+  "field": "stats/summary/qre_mass/abs_total_rel_discrepancy/values"
+ },
+ "nz.rep.p.qre_vs_bgnet.mse_0_1": {
+  "value": 0.001953125,
+  "display": "0.00195",
+  "source": "results/fixes_v2/nz_wn/sanity/mass_study/repetitions/summary.json",
+  "field": "stats/wilcoxon/qre_vs_bgnet/mse_0_1/p_value"
+ },
+ "nz.rep.med.qre_vs_bgnet.mse_0_1": {
+  "value": 3.100757598876953,
+  "display": "+3.1",
+  "source": "results/fixes_v2/nz_wn/sanity/mass_study/repetitions/summary.json",
+  "field": "stats/wilcoxon/qre_vs_bgnet/mse_0_1/median_difference"
+ },
+ "nz.rep.p.qre_vs_bgnet.mse_0_0.2": {
+  "value": 0.6953125,
+  "display": "0.695",
+  "source": "results/fixes_v2/nz_wn/sanity/mass_study/repetitions/summary.json",
+  "field": "stats/wilcoxon/qre_vs_bgnet/mse_0_0.2/p_value"
+ },
+ "nz.rep.med.qre_vs_bgnet.mse_0_0.2": {
+  "value": -0.00937807559967041,
+  "display": "-0.00938",
+  "source": "results/fixes_v2/nz_wn/sanity/mass_study/repetitions/summary.json",
+  "field": "stats/wilcoxon/qre_vs_bgnet/mse_0_0.2/median_difference"
+ },
+ "nz.rep.p.qre_vs_bgnet.mse_0.9_1": {
+  "value": 0.001953125,
+  "display": "0.00195",
+  "source": "results/fixes_v2/nz_wn/sanity/mass_study/repetitions/summary.json",
+  "field": "stats/wilcoxon/qre_vs_bgnet/mse_0.9_1/p_value"
+ },
+ "nz.rep.med.qre_vs_bgnet.mse_0.9_1": {
+  "value": 11.094642639160156,
+  "display": "+11.1",
+  "source": "results/fixes_v2/nz_wn/sanity/mass_study/repetitions/summary.json",
+  "field": "stats/wilcoxon/qre_vs_bgnet/mse_0.9_1/median_difference"
+ },
+ "nz.rep.p.qre_vs_bgnet.daily_total_mae": {
+  "value": 0.921875,
+  "display": "0.922",
+  "source": "results/fixes_v2/nz_wn/sanity/mass_study/repetitions/summary.json",
+  "field": "stats/wilcoxon/qre_vs_bgnet/daily_total_mae/p_value"
+ },
+ "nz.rep.med.qre_vs_bgnet.daily_total_mae": {
+  "value": 0.001679007603043292,
+  "display": "+0.00168",
+  "source": "results/fixes_v2/nz_wn/sanity/mass_study/repetitions/summary.json",
+  "field": "stats/wilcoxon/qre_vs_bgnet/daily_total_mae/median_difference"
+ },
+ "nz.rep.p.qre_vs_bgnet.abs_total_rel_discrepancy": {
+  "value": 0.921875,
+  "display": "0.922",
+  "source": "results/fixes_v2/nz_wn/sanity/mass_study/repetitions/summary.json",
+  "field": "stats/wilcoxon/qre_vs_bgnet/abs_total_rel_discrepancy/p_value"
+ },
+ "nz.rep.med.qre_vs_bgnet.abs_total_rel_discrepancy": {
+  "value": -0.0009219075322357644,
+  "display": "-0.000922",
+  "source": "results/fixes_v2/nz_wn/sanity/mass_study/repetitions/summary.json",
+  "field": "stats/wilcoxon/qre_vs_bgnet/abs_total_rel_discrepancy/median_difference"
+ },
+ "nz.rep.p.qre_mass_vs_qre.mse_0_1": {
+  "value": 0.001953125,
+  "display": "0.00195",
+  "source": "results/fixes_v2/nz_wn/sanity/mass_study/repetitions/summary.json",
+  "field": "stats/wilcoxon/qre_mass_vs_qre/mse_0_1/p_value"
+ },
+ "nz.rep.med.qre_mass_vs_qre.mse_0_1": {
+  "value": -0.3749656677246094,
+  "display": "-0.375",
+  "source": "results/fixes_v2/nz_wn/sanity/mass_study/repetitions/summary.json",
+  "field": "stats/wilcoxon/qre_mass_vs_qre/mse_0_1/median_difference"
+ },
+ "nz.rep.p.qre_mass_vs_qre.mse_0_0.2": {
+  "value": 0.232421875,
+  "display": "0.232",
+  "source": "results/fixes_v2/nz_wn/sanity/mass_study/repetitions/summary.json",
+  "field": "stats/wilcoxon/qre_mass_vs_qre/mse_0_0.2/p_value"
+ },
+ "nz.rep.med.qre_mass_vs_qre.mse_0_0.2": {
+  "value": 0.03287506103515625,
+  "display": "+0.0329",
+  "source": "results/fixes_v2/nz_wn/sanity/mass_study/repetitions/summary.json",
+  "field": "stats/wilcoxon/qre_mass_vs_qre/mse_0_0.2/median_difference"
+ },
+ "nz.rep.p.qre_mass_vs_qre.mse_0.9_1": {
+  "value": 0.02734375,
+  "display": "0.0273",
+  "source": "results/fixes_v2/nz_wn/sanity/mass_study/repetitions/summary.json",
+  "field": "stats/wilcoxon/qre_mass_vs_qre/mse_0.9_1/p_value"
+ },
+ "nz.rep.med.qre_mass_vs_qre.mse_0.9_1": {
+  "value": -0.628204345703125,
+  "display": "-0.628",
+  "source": "results/fixes_v2/nz_wn/sanity/mass_study/repetitions/summary.json",
+  "field": "stats/wilcoxon/qre_mass_vs_qre/mse_0.9_1/median_difference"
+ },
+ "nz.rep.p.qre_mass_vs_qre.daily_total_mae": {
+  "value": 0.001953125,
+  "display": "0.00195",
+  "source": "results/fixes_v2/nz_wn/sanity/mass_study/repetitions/summary.json",
+  "field": "stats/wilcoxon/qre_mass_vs_qre/daily_total_mae/p_value"
+ },
+ "nz.rep.med.qre_mass_vs_qre.daily_total_mae": {
+  "value": -0.013812391361602394,
+  "display": "-0.0138",
+  "source": "results/fixes_v2/nz_wn/sanity/mass_study/repetitions/summary.json",
+  "field": "stats/wilcoxon/qre_mass_vs_qre/daily_total_mae/median_difference"
+ },
+ "nz.rep.p.qre_mass_vs_qre.abs_total_rel_discrepancy": {
+  "value": 0.556640625,
+  "display": "0.557",
+  "source": "results/fixes_v2/nz_wn/sanity/mass_study/repetitions/summary.json",
+  "field": "stats/wilcoxon/qre_mass_vs_qre/abs_total_rel_discrepancy/p_value"
+ },
+ "nz.rep.med.qre_mass_vs_qre.abs_total_rel_discrepancy": {
+  "value": 0.002318616554772347,
+  "display": "+0.00232",
+  "source": "results/fixes_v2/nz_wn/sanity/mass_study/repetitions/summary.json",
+  "field": "stats/wilcoxon/qre_mass_vs_qre/abs_total_rel_discrepancy/median_difference"
+ },
+ "nz.rep.p.qre_mass_vs_control.mse_0_1": {
+  "value": 0.001953125,
+  "display": "0.00195",
+  "source": "results/fixes_v2/nz_wn/sanity/mass_study/repetitions/summary.json",
+  "field": "stats/wilcoxon/qre_mass_vs_control/mse_0_1/p_value"
+ },
+ "nz.rep.med.qre_mass_vs_control.mse_0_1": {
+  "value": -0.30599021911621094,
+  "display": "-0.306",
+  "source": "results/fixes_v2/nz_wn/sanity/mass_study/repetitions/summary.json",
+  "field": "stats/wilcoxon/qre_mass_vs_control/mse_0_1/median_difference"
+ },
+ "nz.rep.p.qre_mass_vs_control.mse_0_0.2": {
+  "value": 0.625,
+  "display": "0.625",
+  "source": "results/fixes_v2/nz_wn/sanity/mass_study/repetitions/summary.json",
+  "field": "stats/wilcoxon/qre_mass_vs_control/mse_0_0.2/p_value"
+ },
+ "nz.rep.med.qre_mass_vs_control.mse_0_0.2": {
+  "value": 0.019928574562072754,
+  "display": "+0.0199",
+  "source": "results/fixes_v2/nz_wn/sanity/mass_study/repetitions/summary.json",
+  "field": "stats/wilcoxon/qre_mass_vs_control/mse_0_0.2/median_difference"
+ },
+ "nz.rep.p.qre_mass_vs_control.mse_0.9_1": {
+  "value": 0.275390625,
+  "display": "0.275",
+  "source": "results/fixes_v2/nz_wn/sanity/mass_study/repetitions/summary.json",
+  "field": "stats/wilcoxon/qre_mass_vs_control/mse_0.9_1/p_value"
+ },
+ "nz.rep.med.qre_mass_vs_control.mse_0.9_1": {
+  "value": -0.7871475219726562,
+  "display": "-0.787",
+  "source": "results/fixes_v2/nz_wn/sanity/mass_study/repetitions/summary.json",
+  "field": "stats/wilcoxon/qre_mass_vs_control/mse_0.9_1/median_difference"
+ },
+ "nz.rep.p.qre_mass_vs_control.daily_total_mae": {
+  "value": 0.001953125,
+  "display": "0.00195",
+  "source": "results/fixes_v2/nz_wn/sanity/mass_study/repetitions/summary.json",
+  "field": "stats/wilcoxon/qre_mass_vs_control/daily_total_mae/p_value"
+ },
+ "nz.rep.med.qre_mass_vs_control.daily_total_mae": {
+  "value": -0.01467730953767854,
+  "display": "-0.0147",
+  "source": "results/fixes_v2/nz_wn/sanity/mass_study/repetitions/summary.json",
+  "field": "stats/wilcoxon/qre_mass_vs_control/daily_total_mae/median_difference"
+ },
+ "nz.rep.p.qre_mass_vs_control.abs_total_rel_discrepancy": {
+  "value": 0.431640625,
+  "display": "0.432",
+  "source": "results/fixes_v2/nz_wn/sanity/mass_study/repetitions/summary.json",
+  "field": "stats/wilcoxon/qre_mass_vs_control/abs_total_rel_discrepancy/p_value"
+ },
+ "nz.rep.med.qre_mass_vs_control.abs_total_rel_discrepancy": {
+  "value": 0.007158949985336013,
+  "display": "+0.00716",
+  "source": "results/fixes_v2/nz_wn/sanity/mass_study/repetitions/summary.json",
+  "field": "stats/wilcoxon/qre_mass_vs_control/abs_total_rel_discrepancy/median_difference"
+ },
+ "in.rep.placement": {
+  "value": "members",
+  "display": "members",
+  "source": "results/india/qre_mass_v1/repetitions/summary.json",
+  "field": "placement"
+ },
+ "in.rep.lambda": {
+  "value": 0.1,
+  "display": "0.1",
+  "source": "results/india/qre_mass_v1/repetitions/summary.json",
+  "field": "selected_lambda"
+ },
+ "in.rep.n": {
+  "value": 10,
+  "display": "10",
+  "source": "results/india/qre_mass_v1/repetitions/summary.json",
+  "field": "stats/n_repetitions"
+ },
+ "in.rep.bgnet.mse_0_1.mean": {
+  "value": 179.5051071166992,
+  "display": "179.51",
+  "source": "results/india/qre_mass_v1/repetitions/summary.json",
+  "field": "stats/summary/bgnet/mse_0_1/mean"
+ },
+ "in.rep.bgnet.mse_0_1.std": {
+  "value": 3.7355222083228004,
+  "display": "3.74",
+  "source": "results/india/qre_mass_v1/repetitions/summary.json",
+  "field": "stats/summary/bgnet/mse_0_1/std"
+ },
+ "in.rep.bgnet.mse_0_1.values": {
+  "value": [
+   176.91246032714844,
+   181.6017303466797,
+   180.96690368652344,
+   177.6533966064453,
+   178.10748291015625,
+   188.2967071533203,
+   177.1705780029297,
+   181.49400329589844,
+   177.2191619873047,
+   175.62864685058594
+  ],
+  "display": "[176.9125, 181.6017, 180.9669, 177.6534, 178.1075, 188.2967, 177.1706, 181.494, 177.2192, 175.6286]",
+  "source": "results/india/qre_mass_v1/repetitions/summary.json",
+  "field": "stats/summary/bgnet/mse_0_1/values"
+ },
+ "in.rep.bgnet.mse_0_0.2.mean": {
+  "value": 58.028436279296876,
+  "display": "58.03",
+  "source": "results/india/qre_mass_v1/repetitions/summary.json",
+  "field": "stats/summary/bgnet/mse_0_0.2/mean"
+ },
+ "in.rep.bgnet.mse_0_0.2.std": {
+  "value": 0.716953227855344,
+  "display": "0.72",
+  "source": "results/india/qre_mass_v1/repetitions/summary.json",
+  "field": "stats/summary/bgnet/mse_0_0.2/std"
+ },
+ "in.rep.bgnet.mse_0_0.2.values": {
+  "value": [
+   57.355194091796875,
+   58.603172302246094,
+   58.5590705871582,
+   57.96933364868164,
+   57.8353385925293,
+   58.61189651489258,
+   58.042625427246094,
+   59.17757797241211,
+   57.10375213623047,
+   57.02640151977539
+  ],
+  "display": "[57.3552, 58.6032, 58.5591, 57.9693, 57.8353, 58.6119, 58.0426, 59.1776, 57.1038, 57.0264]",
+  "source": "results/india/qre_mass_v1/repetitions/summary.json",
+  "field": "stats/summary/bgnet/mse_0_0.2/values"
+ },
+ "in.rep.bgnet.mse_0.9_1.mean": {
+  "value": 387.1058807373047,
+  "display": "387.11",
+  "source": "results/india/qre_mass_v1/repetitions/summary.json",
+  "field": "stats/summary/bgnet/mse_0.9_1/mean"
+ },
+ "in.rep.bgnet.mse_0.9_1.std": {
+  "value": 9.19085519109006,
+  "display": "9.19",
+  "source": "results/india/qre_mass_v1/repetitions/summary.json",
+  "field": "stats/summary/bgnet/mse_0.9_1/std"
+ },
+ "in.rep.bgnet.mse_0.9_1.values": {
+  "value": [
+   383.5988464355469,
+   393.7685852050781,
+   389.9863586425781,
+   380.3592834472656,
+   383.62841796875,
+   407.85638427734375,
+   380.2178649902344,
+   392.4674072265625,
+   382.5738525390625,
+   376.601806640625
+  ],
+  "display": "[383.5988, 393.7686, 389.9864, 380.3593, 383.6284, 407.8564, 380.2179, 392.4674, 382.5739, 376.6018]",
+  "source": "results/india/qre_mass_v1/repetitions/summary.json",
+  "field": "stats/summary/bgnet/mse_0.9_1/values"
+ },
+ "in.rep.bgnet.daily_total_mae.mean": {
+  "value": 1.0398741609693254,
+  "display": "1.040",
+  "source": "results/india/qre_mass_v1/repetitions/summary.json",
+  "field": "stats/summary/bgnet/daily_total_mae/mean"
+ },
+ "in.rep.bgnet.daily_total_mae.std": {
+  "value": 0.01622821631502163,
+  "display": "0.016",
+  "source": "results/india/qre_mass_v1/repetitions/summary.json",
+  "field": "stats/summary/bgnet/daily_total_mae/std"
+ },
+ "in.rep.bgnet.daily_total_mae.values": {
+  "value": [
+   1.0222885105202828,
+   1.050159141600919,
+   1.034465422477888,
+   1.0256885050048568,
+   1.0399206103842984,
+   1.0642503260905085,
+   1.0358218432417956,
+   1.0681747831018331,
+   1.0228205289509034,
+   1.035151938319969
+  ],
+  "display": "[1.0223, 1.0502, 1.0345, 1.0257, 1.0399, 1.0643, 1.0358, 1.0682, 1.0228, 1.0352]",
+  "source": "results/india/qre_mass_v1/repetitions/summary.json",
+  "field": "stats/summary/bgnet/daily_total_mae/values"
+ },
+ "in.rep.bgnet.abs_total_rel_discrepancy.mean": {
+  "value": 0.02880907732216626,
+  "display": "0.029",
+  "source": "results/india/qre_mass_v1/repetitions/summary.json",
+  "field": "stats/summary/bgnet/abs_total_rel_discrepancy/mean"
+ },
+ "in.rep.bgnet.abs_total_rel_discrepancy.std": {
+  "value": 0.016798770836342222,
+  "display": "0.017",
+  "source": "results/india/qre_mass_v1/repetitions/summary.json",
+  "field": "stats/summary/bgnet/abs_total_rel_discrepancy/std"
+ },
+ "in.rep.bgnet.abs_total_rel_discrepancy.values": {
+  "value": [
+   0.042582756233685376,
+   0.020274002640061926,
+   0.021918707209276952,
+   0.007069779207332371,
+   0.019937268051077123,
+   0.04398153700542717,
+   0.022068295708945137,
+   0.00857440679079542,
+   0.04749092984305914,
+   0.05419309053200199
+  ],
+  "display": "[0.0426, 0.0203, 0.0219, 0.0071, 0.0199, 0.044, 0.0221, 0.0086, 0.0475, 0.0542]",
+  "source": "results/india/qre_mass_v1/repetitions/summary.json",
+  "field": "stats/summary/bgnet/abs_total_rel_discrepancy/values"
+ },
+ "in.rep.qre.mse_0_1.mean": {
+  "value": 179.07210540771484,
+  "display": "179.07",
+  "source": "results/india/qre_mass_v1/repetitions/summary.json",
+  "field": "stats/summary/qre/mse_0_1/mean"
+ },
+ "in.rep.qre.mse_0_1.std": {
+  "value": 3.3593255064353884,
+  "display": "3.36",
+  "source": "results/india/qre_mass_v1/repetitions/summary.json",
+  "field": "stats/summary/qre/mse_0_1/std"
+ },
+ "in.rep.qre.mse_0_1.values": {
+  "value": [
+   176.9037322998047,
+   181.26683044433594,
+   180.92095947265625,
+   177.567626953125,
+   177.57424926757812,
+   186.48577880859375,
+   176.96517944335938,
+   181.13931274414062,
+   176.63250732421875,
+   175.26487731933594
+  ],
+  "display": "[176.9037, 181.2668, 180.921, 177.5676, 177.5742, 186.4858, 176.9652, 181.1393, 176.6325, 175.2649]",
+  "source": "results/india/qre_mass_v1/repetitions/summary.json",
+  "field": "stats/summary/qre/mse_0_1/values"
+ },
+ "in.rep.qre.mse_0_0.2.mean": {
+  "value": 57.515018463134766,
+  "display": "57.52",
+  "source": "results/india/qre_mass_v1/repetitions/summary.json",
+  "field": "stats/summary/qre/mse_0_0.2/mean"
+ },
+ "in.rep.qre.mse_0_0.2.std": {
+  "value": 0.4517423881493126,
+  "display": "0.45",
+  "source": "results/india/qre_mass_v1/repetitions/summary.json",
+  "field": "stats/summary/qre/mse_0_0.2/std"
+ },
+ "in.rep.qre.mse_0_0.2.values": {
+  "value": [
+   57.57508850097656,
+   58.195098876953125,
+   57.84856414794922,
+   57.00363540649414,
+   57.44218444824219,
+   58.06096267700195,
+   57.424320220947266,
+   57.65630340576172,
+   57.1675910949707,
+   56.77643585205078
+  ],
+  "display": "[57.5751, 58.1951, 57.8486, 57.0036, 57.4422, 58.061, 57.4243, 57.6563, 57.1676, 56.7764]",
+  "source": "results/india/qre_mass_v1/repetitions/summary.json",
+  "field": "stats/summary/qre/mse_0_0.2/values"
+ },
+ "in.rep.qre.mse_0.9_1.mean": {
+  "value": 384.5799224853516,
+  "display": "384.58",
+  "source": "results/india/qre_mass_v1/repetitions/summary.json",
+  "field": "stats/summary/qre/mse_0.9_1/mean"
+ },
+ "in.rep.qre.mse_0.9_1.std": {
+  "value": 8.134356064049824,
+  "display": "8.13",
+  "source": "results/india/qre_mass_v1/repetitions/summary.json",
+  "field": "stats/summary/qre/mse_0.9_1/std"
+ },
+ "in.rep.qre.mse_0.9_1.values": {
+  "value": [
+   382.7149963378906,
+   390.9483642578125,
+   388.2369079589844,
+   378.9116516113281,
+   381.35870361328125,
+   401.02642822265625,
+   378.43377685546875,
+   391.2171325683594,
+   378.9170837402344,
+   374.0341796875
+  ],
+  "display": "[382.715, 390.9484, 388.2369, 378.9117, 381.3587, 401.0264, 378.4338, 391.2171, 378.9171, 374.0342]",
+  "source": "results/india/qre_mass_v1/repetitions/summary.json",
+  "field": "stats/summary/qre/mse_0.9_1/values"
+ },
+ "in.rep.qre.daily_total_mae.mean": {
+  "value": 1.0262217145946608,
+  "display": "1.026",
+  "source": "results/india/qre_mass_v1/repetitions/summary.json",
+  "field": "stats/summary/qre/daily_total_mae/mean"
+ },
+ "in.rep.qre.daily_total_mae.std": {
+  "value": 0.013736150450056123,
+  "display": "0.014",
+  "source": "results/india/qre_mass_v1/repetitions/summary.json",
+  "field": "stats/summary/qre/daily_total_mae/std"
+ },
+ "in.rep.qre.daily_total_mae.values": {
+  "value": [
+   1.04046232204512,
+   1.0341910671657877,
+   1.027851233522297,
+   1.0014855212135867,
+   1.0259780341330755,
+   1.0424791428238898,
+   1.022690520225674,
+   1.0391987809198806,
+   1.0080076701150693,
+   1.019872853782229
+  ],
+  "display": "[1.0405, 1.0342, 1.0279, 1.0015, 1.026, 1.0425, 1.0227, 1.0392, 1.008, 1.0199]",
+  "source": "results/india/qre_mass_v1/repetitions/summary.json",
+  "field": "stats/summary/qre/daily_total_mae/values"
+ },
+ "in.rep.qre.abs_total_rel_discrepancy.mean": {
+  "value": 0.031567549663185375,
+  "display": "0.032",
+  "source": "results/india/qre_mass_v1/repetitions/summary.json",
+  "field": "stats/summary/qre/abs_total_rel_discrepancy/mean"
+ },
+ "in.rep.qre.abs_total_rel_discrepancy.std": {
+  "value": 0.010499340077601324,
+  "display": "0.010",
+  "source": "results/india/qre_mass_v1/repetitions/summary.json",
+  "field": "stats/summary/qre/abs_total_rel_discrepancy/std"
+ },
+ "in.rep.qre.abs_total_rel_discrepancy.values": {
+  "value": [
+   0.03652519363582242,
+   0.025390156447649616,
+   0.025819564346045657,
+   0.03731151262192299,
+   0.019652791528291233,
+   0.049827623834802284,
+   0.017952574860608632,
+   0.03511873450956141,
+   0.02461075393744495,
+   0.04346659090970458
+  ],
+  "display": "[0.0365, 0.0254, 0.0258, 0.0373, 0.0197, 0.0498, 0.018, 0.0351, 0.0246, 0.0435]",
+  "source": "results/india/qre_mass_v1/repetitions/summary.json",
+  "field": "stats/summary/qre/abs_total_rel_discrepancy/values"
+ },
+ "in.rep.control.mse_0_1.mean": {
+  "value": 179.07210540771484,
+  "display": "179.07",
+  "source": "results/india/qre_mass_v1/repetitions/summary.json",
+  "field": "stats/summary/control/mse_0_1/mean"
+ },
+ "in.rep.control.mse_0_1.std": {
+  "value": 3.3593255064353884,
+  "display": "3.36",
+  "source": "results/india/qre_mass_v1/repetitions/summary.json",
+  "field": "stats/summary/control/mse_0_1/std"
+ },
+ "in.rep.control.mse_0_1.values": {
+  "value": [
+   176.9037322998047,
+   181.26683044433594,
+   180.92095947265625,
+   177.567626953125,
+   177.57424926757812,
+   186.48577880859375,
+   176.96517944335938,
+   181.13931274414062,
+   176.63250732421875,
+   175.26487731933594
+  ],
+  "display": "[176.9037, 181.2668, 180.921, 177.5676, 177.5742, 186.4858, 176.9652, 181.1393, 176.6325, 175.2649]",
+  "source": "results/india/qre_mass_v1/repetitions/summary.json",
+  "field": "stats/summary/control/mse_0_1/values"
+ },
+ "in.rep.control.mse_0_0.2.mean": {
+  "value": 57.515018463134766,
+  "display": "57.52",
+  "source": "results/india/qre_mass_v1/repetitions/summary.json",
+  "field": "stats/summary/control/mse_0_0.2/mean"
+ },
+ "in.rep.control.mse_0_0.2.std": {
+  "value": 0.4517423881493126,
+  "display": "0.45",
+  "source": "results/india/qre_mass_v1/repetitions/summary.json",
+  "field": "stats/summary/control/mse_0_0.2/std"
+ },
+ "in.rep.control.mse_0_0.2.values": {
+  "value": [
+   57.57508850097656,
+   58.195098876953125,
+   57.84856414794922,
+   57.00363540649414,
+   57.44218444824219,
+   58.06096267700195,
+   57.424320220947266,
+   57.65630340576172,
+   57.1675910949707,
+   56.77643585205078
+  ],
+  "display": "[57.5751, 58.1951, 57.8486, 57.0036, 57.4422, 58.061, 57.4243, 57.6563, 57.1676, 56.7764]",
+  "source": "results/india/qre_mass_v1/repetitions/summary.json",
+  "field": "stats/summary/control/mse_0_0.2/values"
+ },
+ "in.rep.control.mse_0.9_1.mean": {
+  "value": 384.5799224853516,
+  "display": "384.58",
+  "source": "results/india/qre_mass_v1/repetitions/summary.json",
+  "field": "stats/summary/control/mse_0.9_1/mean"
+ },
+ "in.rep.control.mse_0.9_1.std": {
+  "value": 8.134356064049824,
+  "display": "8.13",
+  "source": "results/india/qre_mass_v1/repetitions/summary.json",
+  "field": "stats/summary/control/mse_0.9_1/std"
+ },
+ "in.rep.control.mse_0.9_1.values": {
+  "value": [
+   382.7149963378906,
+   390.9483642578125,
+   388.2369079589844,
+   378.9116516113281,
+   381.35870361328125,
+   401.02642822265625,
+   378.43377685546875,
+   391.2171325683594,
+   378.9170837402344,
+   374.0341796875
+  ],
+  "display": "[382.715, 390.9484, 388.2369, 378.9117, 381.3587, 401.0264, 378.4338, 391.2171, 378.9171, 374.0342]",
+  "source": "results/india/qre_mass_v1/repetitions/summary.json",
+  "field": "stats/summary/control/mse_0.9_1/values"
+ },
+ "in.rep.control.daily_total_mae.mean": {
+  "value": 1.0262217145946608,
+  "display": "1.026",
+  "source": "results/india/qre_mass_v1/repetitions/summary.json",
+  "field": "stats/summary/control/daily_total_mae/mean"
+ },
+ "in.rep.control.daily_total_mae.std": {
+  "value": 0.013736150450056123,
+  "display": "0.014",
+  "source": "results/india/qre_mass_v1/repetitions/summary.json",
+  "field": "stats/summary/control/daily_total_mae/std"
+ },
+ "in.rep.control.daily_total_mae.values": {
+  "value": [
+   1.04046232204512,
+   1.0341910671657877,
+   1.027851233522297,
+   1.0014855212135867,
+   1.0259780341330755,
+   1.0424791428238898,
+   1.022690520225674,
+   1.0391987809198806,
+   1.0080076701150693,
+   1.019872853782229
+  ],
+  "display": "[1.0405, 1.0342, 1.0279, 1.0015, 1.026, 1.0425, 1.0227, 1.0392, 1.008, 1.0199]",
+  "source": "results/india/qre_mass_v1/repetitions/summary.json",
+  "field": "stats/summary/control/daily_total_mae/values"
+ },
+ "in.rep.control.abs_total_rel_discrepancy.mean": {
+  "value": 0.031567549663185375,
+  "display": "0.032",
+  "source": "results/india/qre_mass_v1/repetitions/summary.json",
+  "field": "stats/summary/control/abs_total_rel_discrepancy/mean"
+ },
+ "in.rep.control.abs_total_rel_discrepancy.std": {
+  "value": 0.010499340077601324,
+  "display": "0.010",
+  "source": "results/india/qre_mass_v1/repetitions/summary.json",
+  "field": "stats/summary/control/abs_total_rel_discrepancy/std"
+ },
+ "in.rep.control.abs_total_rel_discrepancy.values": {
+  "value": [
+   0.03652519363582242,
+   0.025390156447649616,
+   0.025819564346045657,
+   0.03731151262192299,
+   0.019652791528291233,
+   0.049827623834802284,
+   0.017952574860608632,
+   0.03511873450956141,
+   0.02461075393744495,
+   0.04346659090970458
+  ],
+  "display": "[0.0365, 0.0254, 0.0258, 0.0373, 0.0197, 0.0498, 0.018, 0.0351, 0.0246, 0.0435]",
+  "source": "results/india/qre_mass_v1/repetitions/summary.json",
+  "field": "stats/summary/control/abs_total_rel_discrepancy/values"
+ },
+ "in.rep.qre_mass.mse_0_1.mean": {
+  "value": 182.08775177001954,
+  "display": "182.09",
+  "source": "results/india/qre_mass_v1/repetitions/summary.json",
+  "field": "stats/summary/qre_mass/mse_0_1/mean"
+ },
+ "in.rep.qre_mass.mse_0_1.std": {
+  "value": 3.412974890312773,
+  "display": "3.41",
+  "source": "results/india/qre_mass_v1/repetitions/summary.json",
+  "field": "stats/summary/qre_mass/mse_0_1/std"
+ },
+ "in.rep.qre_mass.mse_0_1.values": {
+  "value": [
+   179.8779754638672,
+   183.8765869140625,
+   184.52593994140625,
+   179.78945922851562,
+   180.91273498535156,
+   189.36526489257812,
+   180.28726196289062,
+   184.39999389648438,
+   180.0480499267578,
+   177.79425048828125
+  ],
+  "display": "[179.878, 183.8766, 184.5259, 179.7895, 180.9127, 189.3653, 180.2873, 184.4, 180.048, 177.7943]",
+  "source": "results/india/qre_mass_v1/repetitions/summary.json",
+  "field": "stats/summary/qre_mass/mse_0_1/values"
+ },
+ "in.rep.qre_mass.mse_0_0.2.mean": {
+  "value": 57.78865737915039,
+  "display": "57.79",
+  "source": "results/india/qre_mass_v1/repetitions/summary.json",
+  "field": "stats/summary/qre_mass/mse_0_0.2/mean"
+ },
+ "in.rep.qre_mass.mse_0_0.2.std": {
+  "value": 0.4598280170443754,
+  "display": "0.46",
+  "source": "results/india/qre_mass_v1/repetitions/summary.json",
+  "field": "stats/summary/qre_mass/mse_0_0.2/std"
+ },
+ "in.rep.qre_mass.mse_0_0.2.values": {
+  "value": [
+   57.30153274536133,
+   58.35060501098633,
+   57.870643615722656,
+   57.42593765258789,
+   57.66440200805664,
+   58.63132095336914,
+   57.54660415649414,
+   58.10533905029297,
+   57.773353576660156,
+   57.216835021972656
+  ],
+  "display": "[57.3015, 58.3506, 57.8706, 57.4259, 57.6644, 58.6313, 57.5466, 58.1053, 57.7734, 57.2168]",
+  "source": "results/india/qre_mass_v1/repetitions/summary.json",
+  "field": "stats/summary/qre_mass/mse_0_0.2/values"
+ },
+ "in.rep.qre_mass.mse_0.9_1.mean": {
+  "value": 392.9050689697266,
+  "display": "392.91",
+  "source": "results/india/qre_mass_v1/repetitions/summary.json",
+  "field": "stats/summary/qre_mass/mse_0.9_1/mean"
+ },
+ "in.rep.qre_mass.mse_0.9_1.std": {
+  "value": 8.596864826569139,
+  "display": "8.60",
+  "source": "results/india/qre_mass_v1/repetitions/summary.json",
+  "field": "stats/summary/qre_mass/mse_0.9_1/std"
+ },
+ "in.rep.qre_mass.mse_0.9_1.values": {
+  "value": [
+   387.45416259765625,
+   398.58740234375,
+   399.6786804199219,
+   387.50543212890625,
+   392.8645935058594,
+   407.6588134765625,
+   387.8145446777344,
+   400.4320983886719,
+   388.62615966796875,
+   378.4288024902344
+  ],
+  "display": "[387.4542, 398.5874, 399.6787, 387.5054, 392.8646, 407.6588, 387.8145, 400.4321, 388.6262, 378.4288]",
+  "source": "results/india/qre_mass_v1/repetitions/summary.json",
+  "field": "stats/summary/qre_mass/mse_0.9_1/values"
+ },
+ "in.rep.qre_mass.daily_total_mae.mean": {
+  "value": 1.0268551565883095,
+  "display": "1.027",
+  "source": "results/india/qre_mass_v1/repetitions/summary.json",
+  "field": "stats/summary/qre_mass/daily_total_mae/mean"
+ },
+ "in.rep.qre_mass.daily_total_mae.std": {
+  "value": 0.012662514063302665,
+  "display": "0.013",
+  "source": "results/india/qre_mass_v1/repetitions/summary.json",
+  "field": "stats/summary/qre_mass/daily_total_mae/std"
+ },
+ "in.rep.qre_mass.daily_total_mae.values": {
+  "value": [
+   1.0272555984914074,
+   1.0119757937661755,
+   1.0379198099427385,
+   1.0055825185716594,
+   1.0246511289578033,
+   1.0191817556269873,
+   1.0399751498982106,
+   1.0461962293498281,
+   1.0320531070403152,
+   1.0237604742379693
+  ],
+  "display": "[1.0273, 1.012, 1.0379, 1.0056, 1.0247, 1.0192, 1.04, 1.0462, 1.0321, 1.0238]",
+  "source": "results/india/qre_mass_v1/repetitions/summary.json",
+  "field": "stats/summary/qre_mass/daily_total_mae/values"
+ },
+ "in.rep.qre_mass.abs_total_rel_discrepancy.mean": {
+  "value": 0.006743594688697403,
+  "display": "0.007",
+  "source": "results/india/qre_mass_v1/repetitions/summary.json",
+  "field": "stats/summary/qre_mass/abs_total_rel_discrepancy/mean"
+ },
+ "in.rep.qre_mass.abs_total_rel_discrepancy.std": {
+  "value": 0.0050388463096171995,
+  "display": "0.005",
+  "source": "results/india/qre_mass_v1/repetitions/summary.json",
+  "field": "stats/summary/qre_mass/abs_total_rel_discrepancy/std"
+ },
+ "in.rep.qre_mass.abs_total_rel_discrepancy.values": {
+  "value": [
+   0.00646108658186166,
+   0.0003889703174199466,
+   0.0008620003508134953,
+   0.015168068448245928,
+   0.005122223949076837,
+   0.00937402497798847,
+   0.00711246095313336,
+   0.005835930113005999,
+   0.0028367972309904636,
+   0.014274383964437877
+  ],
+  "display": "[0.0065, 0.0004, 0.0009, 0.0152, 0.0051, 0.0094, 0.0071, 0.0058, 0.0028, 0.0143]",
+  "source": "results/india/qre_mass_v1/repetitions/summary.json",
+  "field": "stats/summary/qre_mass/abs_total_rel_discrepancy/values"
+ },
+ "in.rep.p.qre_vs_bgnet.mse_0_1": {
+  "value": 0.001953125,
+  "display": "0.00195",
+  "source": "results/india/qre_mass_v1/repetitions/summary.json",
+  "field": "stats/wilcoxon/qre_vs_bgnet/mse_0_1/p_value"
+ },
+ "in.rep.med.qre_vs_bgnet.mse_0_1": {
+  "value": -0.34479522705078125,
+  "display": "-0.345",
+  "source": "results/india/qre_mass_v1/repetitions/summary.json",
+  "field": "stats/wilcoxon/qre_vs_bgnet/mse_0_1/median_difference"
+ },
+ "in.rep.p.qre_vs_bgnet.mse_0_0.2": {
+  "value": 0.009765625,
+  "display": "0.00977",
+  "source": "results/india/qre_mass_v1/repetitions/summary.json",
+  "field": "stats/wilcoxon/qre_vs_bgnet/mse_0_0.2/p_value"
+ },
+ "in.rep.med.qre_vs_bgnet.mse_0_0.2": {
+  "value": -0.4795036315917969,
+  "display": "-0.48",
+  "source": "results/india/qre_mass_v1/repetitions/summary.json",
+  "field": "stats/wilcoxon/qre_vs_bgnet/mse_0_0.2/median_difference"
+ },
+ "in.rep.p.qre_vs_bgnet.mse_0.9_1": {
+  "value": 0.001953125,
+  "display": "0.00195",
+  "source": "results/india/qre_mass_v1/repetitions/summary.json",
+  "field": "stats/wilcoxon/qre_vs_bgnet/mse_0.9_1/p_value"
+ },
+ "in.rep.med.qre_vs_bgnet.mse_0.9_1": {
+  "value": -2.0269012451171875,
+  "display": "-2.03",
+  "source": "results/india/qre_mass_v1/repetitions/summary.json",
+  "field": "stats/wilcoxon/qre_vs_bgnet/mse_0.9_1/median_difference"
+ },
+ "in.rep.p.qre_vs_bgnet.daily_total_mae": {
+  "value": 0.037109375,
+  "display": "0.0371",
+  "source": "results/india/qre_mass_v1/repetitions/summary.json",
+  "field": "stats/wilcoxon/qre_vs_bgnet/daily_total_mae/p_value"
+ },
+ "in.rep.med.qre_vs_bgnet.daily_total_mae": {
+  "value": -0.015045971686787007,
+  "display": "-0.015",
+  "source": "results/india/qre_mass_v1/repetitions/summary.json",
+  "field": "stats/wilcoxon/qre_vs_bgnet/daily_total_mae/median_difference"
+ },
+ "in.rep.p.qre_vs_bgnet.abs_total_rel_discrepancy": {
+  "value": 0.845703125,
+  "display": "0.846",
+  "source": "results/india/qre_mass_v1/repetitions/summary.json",
+  "field": "stats/wilcoxon/qre_vs_bgnet/abs_total_rel_discrepancy/p_value"
+ },
+ "in.rep.med.qre_vs_bgnet.abs_total_rel_discrepancy": {
+  "value": 0.0018081903069914074,
+  "display": "+0.00181",
+  "source": "results/india/qre_mass_v1/repetitions/summary.json",
+  "field": "stats/wilcoxon/qre_vs_bgnet/abs_total_rel_discrepancy/median_difference"
+ },
+ "in.rep.p.qre_mass_vs_qre.mse_0_1": {
+  "value": 0.001953125,
+  "display": "0.00195",
+  "source": "results/india/qre_mass_v1/repetitions/summary.json",
+  "field": "stats/wilcoxon/qre_mass_vs_qre/mse_0_1/p_value"
+ },
+ "in.rep.med.qre_mass_vs_qre.mse_0_1": {
+  "value": 3.117462158203125,
+  "display": "+3.12",
+  "source": "results/india/qre_mass_v1/repetitions/summary.json",
+  "field": "stats/wilcoxon/qre_mass_vs_qre/mse_0_1/median_difference"
+ },
+ "in.rep.p.qre_mass_vs_qre.mse_0_0.2": {
+  "value": 0.01953125,
+  "display": "0.0195",
+  "source": "results/india/qre_mass_v1/repetitions/summary.json",
+  "field": "stats/wilcoxon/qre_mass_vs_qre/mse_0_0.2/p_value"
+ },
+ "in.rep.med.qre_mass_vs_qre.mse_0_0.2": {
+  "value": 0.32225990295410156,
+  "display": "+0.322",
+  "source": "results/india/qre_mass_v1/repetitions/summary.json",
+  "field": "stats/wilcoxon/qre_mass_vs_qre/mse_0_0.2/median_difference"
+ },
+ "in.rep.p.qre_mass_vs_qre.mse_0.9_1": {
+  "value": 0.001953125,
+  "display": "0.00195",
+  "source": "results/india/qre_mass_v1/repetitions/summary.json",
+  "field": "stats/wilcoxon/qre_mass_vs_qre/mse_0.9_1/p_value"
+ },
+ "in.rep.med.qre_mass_vs_qre.mse_0.9_1": {
+  "value": 8.904373168945312,
+  "display": "+8.9",
+  "source": "results/india/qre_mass_v1/repetitions/summary.json",
+  "field": "stats/wilcoxon/qre_mass_vs_qre/mse_0.9_1/median_difference"
+ },
+ "in.rep.p.qre_mass_vs_qre.daily_total_mae": {
+  "value": 0.76953125,
+  "display": "0.77",
+  "source": "results/india/qre_mass_v1/repetitions/summary.json",
+  "field": "stats/wilcoxon/qre_mass_vs_qre/daily_total_mae/p_value"
+ },
+ "in.rep.med.qre_mass_vs_qre.daily_total_mae": {
+  "value": 0.003992308906906494,
+  "display": "+0.00399",
+  "source": "results/india/qre_mass_v1/repetitions/summary.json",
+  "field": "stats/wilcoxon/qre_mass_vs_qre/daily_total_mae/median_difference"
+ },
+ "in.rep.p.qre_mass_vs_qre.abs_total_rel_discrepancy": {
+  "value": 0.001953125,
+  "display": "0.00195",
+  "source": "results/india/qre_mass_v1/repetitions/summary.json",
+  "field": "stats/wilcoxon/qre_mass_vs_qre/abs_total_rel_discrepancy/p_value"
+ },
+ "in.rep.med.qre_mass_vs_qre.abs_total_rel_discrepancy": {
+  "value": -0.024979375062730916,
+  "display": "-0.025",
+  "source": "results/india/qre_mass_v1/repetitions/summary.json",
+  "field": "stats/wilcoxon/qre_mass_vs_qre/abs_total_rel_discrepancy/median_difference"
+ },
+ "in.rep.p.qre_mass_vs_control.mse_0_1": {
+  "value": 0.001953125,
+  "display": "0.00195",
+  "source": "results/india/qre_mass_v1/repetitions/summary.json",
+  "field": "stats/wilcoxon/qre_mass_vs_control/mse_0_1/p_value"
+ },
+ "in.rep.med.qre_mass_vs_control.mse_0_1": {
+  "value": 3.117462158203125,
+  "display": "+3.12",
+  "source": "results/india/qre_mass_v1/repetitions/summary.json",
+  "field": "stats/wilcoxon/qre_mass_vs_control/mse_0_1/median_difference"
+ },
+ "in.rep.p.qre_mass_vs_control.mse_0_0.2": {
+  "value": 0.01953125,
+  "display": "0.0195",
+  "source": "results/india/qre_mass_v1/repetitions/summary.json",
+  "field": "stats/wilcoxon/qre_mass_vs_control/mse_0_0.2/p_value"
+ },
+ "in.rep.med.qre_mass_vs_control.mse_0_0.2": {
+  "value": 0.32225990295410156,
+  "display": "+0.322",
+  "source": "results/india/qre_mass_v1/repetitions/summary.json",
+  "field": "stats/wilcoxon/qre_mass_vs_control/mse_0_0.2/median_difference"
+ },
+ "in.rep.p.qre_mass_vs_control.mse_0.9_1": {
+  "value": 0.001953125,
+  "display": "0.00195",
+  "source": "results/india/qre_mass_v1/repetitions/summary.json",
+  "field": "stats/wilcoxon/qre_mass_vs_control/mse_0.9_1/p_value"
+ },
+ "in.rep.med.qre_mass_vs_control.mse_0.9_1": {
+  "value": 8.904373168945312,
+  "display": "+8.9",
+  "source": "results/india/qre_mass_v1/repetitions/summary.json",
+  "field": "stats/wilcoxon/qre_mass_vs_control/mse_0.9_1/median_difference"
+ },
+ "in.rep.p.qre_mass_vs_control.daily_total_mae": {
+  "value": 0.76953125,
+  "display": "0.77",
+  "source": "results/india/qre_mass_v1/repetitions/summary.json",
+  "field": "stats/wilcoxon/qre_mass_vs_control/daily_total_mae/p_value"
+ },
+ "in.rep.med.qre_mass_vs_control.daily_total_mae": {
+  "value": 0.003992308906906494,
+  "display": "+0.00399",
+  "source": "results/india/qre_mass_v1/repetitions/summary.json",
+  "field": "stats/wilcoxon/qre_mass_vs_control/daily_total_mae/median_difference"
+ },
+ "in.rep.p.qre_mass_vs_control.abs_total_rel_discrepancy": {
+  "value": 0.001953125,
+  "display": "0.00195",
+  "source": "results/india/qre_mass_v1/repetitions/summary.json",
+  "field": "stats/wilcoxon/qre_mass_vs_control/abs_total_rel_discrepancy/p_value"
+ },
+ "in.rep.med.qre_mass_vs_control.abs_total_rel_discrepancy": {
+  "value": -0.024979375062730916,
+  "display": "-0.025",
+  "source": "results/india/qre_mass_v1/repetitions/summary.json",
+  "field": "stats/wilcoxon/qre_mass_vs_control/abs_total_rel_discrepancy/median_difference"
+ },
+ "rep.signed.in.qre": {
+  "value": "| QRE | −0.032 ± 0.010 | −0.022 ± 0.015 |",
+  "display": "−0.032 ± 0.010",
+  "source": "docs/STATUS.md",
+  "field": "text: \"| QRE | −0.032 ± 0.010 | −0.022 ± 0.015 |\""
+ },
+ "rep.signed.in.mass": {
+  "value": "| QRE + mass | −0.003 ± 0.008 | −0.022 ± 0.022 |",
+  "display": "−0.003 ± 0.008",
+  "source": "docs/STATUS.md",
+  "field": "text: \"| QRE + mass | −0.003 ± 0.008 | −0.022 ± 0.022 |\""
+ },
+ "rep.signed.in.bgnet": {
+  "value": "| BGNet | −0.029 ± 0.017 | +0.007 ± 0.031 |",
+  "display": "−0.029 ± 0.017",
+  "source": "docs/STATUS.md",
+  "field": "text: \"| BGNet | −0.029 ± 0.017 | +0.007 ± 0.031 |\""
+ },
+ "rep.signed.nz.qre": {
+  "value": "| QRE | −0.032 ± 0.010 | −0.022 ± 0.015 |",
+  "display": "−0.022 ± 0.015",
+  "source": "docs/STATUS.md",
+  "field": "text: \"| QRE | −0.032 ± 0.010 | −0.022 ± 0.015 |\""
+ },
+ "rep.signed.nz.mass": {
+  "value": "| QRE + mass | −0.003 ± 0.008 | −0.022 ± 0.022 |",
+  "display": "−0.022 ± 0.022",
+  "source": "docs/STATUS.md",
+  "field": "text: \"| QRE + mass | −0.003 ± 0.008 | −0.022 ± 0.022 |\""
+ },
+ "rep.signed.nz.bgnet": {
+  "value": "| BGNet | −0.029 ± 0.017 | +0.007 ± 0.031 |",
+  "display": "+0.007 ± 0.031",
+  "source": "docs/STATUS.md",
+  "field": "text: \"| BGNet | −0.029 ± 0.017 | +0.007 ± 0.031 |\""
+ },
+ "rep.in.bias_change": {
+  "value": "Signed, the bias goes from −3.2 % to −0.3 %.",
+  "display": "−3.2 % → −0.3 %",
+  "source": "docs/STATUS.md",
+  "field": "text: \"Signed, the bias goes from −3.2 % to −0.3 %.\""
+ },
+ "rep.in.mse_cost": {
+  "value": "That is +1.7 % and +2.2 %.",
+  "display": "+1.7 % (MSE [0,1]), +2.2 % (MSE [0.9,1])",
+  "source": "docs/STATUS.md",
+  "field": "text: \"That is +1.7 % and +2.2 %.\""
+ },
+ "in.signed.bgnet.values": {
+  "value": [
+   -0.042582756233685376,
+   -0.020274002640061926,
+   -0.021918707209276952,
+   -0.007069779207332371,
+   -0.019937268051077123,
+   -0.04398153700542717,
+   -0.022068295708945137,
+   -0.00857440679079542,
+   -0.04749092984305914,
+   -0.05419309053200199
+  ],
+  "display": "[-0.0426, -0.0203, -0.0219, -0.0071, -0.0199, -0.044, -0.0221, -0.0086, -0.0475, -0.0542]",
+  "source": "results/india/qre_mass_v1/repetitions/rep_0.json … rep_9.json",
+  "field": "test/bgnet/total_rel_discrepancy"
+ },
+ "in.signed.qre.values": {
+  "value": [
+   -0.03652519363582242,
+   -0.025390156447649616,
+   -0.025819564346045657,
+   -0.03731151262192299,
+   -0.019652791528291233,
+   -0.049827623834802284,
+   -0.017952574860608632,
+   -0.03511873450956141,
+   -0.02461075393744495,
+   -0.04346659090970458
+  ],
+  "display": "[-0.0365, -0.0254, -0.0258, -0.0373, -0.0197, -0.0498, -0.018, -0.0351, -0.0246, -0.0435]",
+  "source": "results/india/qre_mass_v1/repetitions/rep_0.json … rep_9.json",
+  "field": "test/qre/total_rel_discrepancy"
+ },
+ "in.signed.qre_mass.values": {
+  "value": [
+   -0.00646108658186166,
+   0.0003889703174199466,
+   0.0008620003508134953,
+   -0.015168068448245928,
+   -0.005122223949076837,
+   -0.00937402497798847,
+   0.00711246095313336,
+   0.005835930113005999,
+   0.0028367972309904636,
+   -0.014274383964437877
+  ],
+  "display": "[-0.0065, 0.0004, 0.0009, -0.0152, -0.0051, -0.0094, 0.0071, 0.0058, 0.0028, -0.0143]",
+  "source": "results/india/qre_mass_v1/repetitions/rep_0.json … rep_9.json",
+  "field": "test/qre_mass/total_rel_discrepancy"
+ },
+ "nz.signed.bgnet.values": {
+  "value": [
+   0.005557378862210409,
+   -0.01564732433065318,
+   0.05075995887808219,
+   0.010429593236790017,
+   0.040236269548239556,
+   0.004341395228805892,
+   0.022416634946557573,
+   0.018451361036430622,
+   -0.01033693269953037,
+   -0.06094772018698168
+  ],
+  "display": "[0.0056, -0.0156, 0.0508, 0.0104, 0.0402, 0.0043, 0.0224, 0.0185, -0.0103, -0.0609]",
+  "source": "results/fixes_v2/nz_wn/sanity/mass_study/repetitions/rep_0.json … rep_9.json",
+  "field": "test/bgnet/total_rel_discrepancy"
+ },
+ "nz.signed.qre.values": {
+  "value": [
+   -0.03184690509720041,
+   -0.010734819602554423,
+   -0.02341165222659875,
+   -0.04552908238484161,
+   -0.03973847958937245,
+   0.0029953701232014727,
+   -0.011540792961842704,
+   -0.0240721638589745,
+   -0.029526194377763253,
+   -0.006125180237786796
+  ],
+  "display": "[-0.0318, -0.0107, -0.0234, -0.0455, -0.0397, 0.003, -0.0115, -0.0241, -0.0295, -0.0061]",
+  "source": "results/fixes_v2/nz_wn/sanity/mass_study/repetitions/rep_0.json … rep_9.json",
+  "field": "test/qre/total_rel_discrepancy"
+ },
+ "nz.signed.qre_mass.values": {
+  "value": [
+   -0.030095758539366434,
+   -0.05863570297941907,
+   -0.0037867027572856373,
+   -0.02667675858277019,
+   -0.04659336917452139,
+   0.024059946892825566,
+   -0.017929172629221373,
+   -0.02195066576727384,
+   -0.026091734122481915,
+   -0.01691437918915006
+  ],
+  "display": "[-0.0301, -0.0586, -0.0038, -0.0267, -0.0466, 0.0241, -0.0179, -0.022, -0.0261, -0.0169]",
+  "source": "results/fixes_v2/nz_wn/sanity/mass_study/repetitions/rep_0.json … rep_9.json",
+  "field": "test/qre_mass/total_rel_discrepancy"
+ },
+ "nz.sel.placement": {
+  "value": "ensemble",
+  "display": "ensemble",
+  "source": "results/fixes_v2/nz_wn/sanity/mass_study/placements/selection.json",
+  "field": "placement"
+ },
+ "nz.sel.lambda": {
+  "value": 10.0,
+  "display": "10",
+  "source": "results/fixes_v2/nz_wn/sanity/mass_study/placements/selection.json",
+  "field": "selected_lambda"
+ },
+ "nz.sel.tolerance_met": {
+  "value": true,
+  "display": "True",
+  "source": "results/fixes_v2/nz_wn/sanity/mass_study/placements/selection.json",
+  "field": "tolerance_met"
+ },
+ "nz.cand.ensemble.0.1.ratio": {
+  "value": 1.0008774744801707,
+  "display": "1.0009",
+  "source": "results/fixes_v2/nz_wn/sanity/mass_study/placements/selection.json",
+  "field": "candidates/0/val_mse_ratio"
+ },
+ "nz.cand.ensemble.0.1.val_mse": {
+  "value": 53.61082077026367,
+  "display": "53.611",
+  "source": "results/fixes_v2/nz_wn/sanity/mass_study/placements/selection.json",
+  "field": "candidates/0/val_mse"
+ },
+ "nz.cand.ensemble.0.1.control_mse": {
+  "value": 53.563819885253906,
+  "display": "53.564",
+  "source": "results/fixes_v2/nz_wn/sanity/mass_study/placements/selection.json",
+  "field": "candidates/0/val_mse_control"
+ },
+ "nz.cand.ensemble.0.1.mae": {
+  "value": 1.0855280556951397,
+  "display": "1.0855",
+  "source": "results/fixes_v2/nz_wn/sanity/mass_study/placements/selection.json",
+  "field": "candidates/0/val_daily_mae_mm_per_day"
+ },
+ "nz.cand.ensemble.0.1.control_mae": {
+  "value": 1.0780369001993886,
+  "display": "1.0780",
+  "source": "results/fixes_v2/nz_wn/sanity/mass_study/placements/selection.json",
+  "field": "candidates/0/val_daily_mae_mm_per_day_control"
+ },
+ "nz.cand.ensemble.0.1.ok": {
+  "value": true,
+  "display": "True",
+  "source": "results/fixes_v2/nz_wn/sanity/mass_study/placements/selection.json",
+  "field": "candidates/0/within_tolerance"
+ },
+ "nz.cand.ensemble.1.ratio": {
+  "value": 0.9959098906849543,
+  "display": "0.9959",
+  "source": "results/fixes_v2/nz_wn/sanity/mass_study/placements/selection.json",
+  "field": "candidates/1/val_mse_ratio"
+ },
+ "nz.cand.ensemble.1.val_mse": {
+  "value": 53.3447380065918,
+  "display": "53.345",
+  "source": "results/fixes_v2/nz_wn/sanity/mass_study/placements/selection.json",
+  "field": "candidates/1/val_mse"
+ },
+ "nz.cand.ensemble.1.control_mse": {
+  "value": 53.563819885253906,
+  "display": "53.564",
+  "source": "results/fixes_v2/nz_wn/sanity/mass_study/placements/selection.json",
+  "field": "candidates/1/val_mse_control"
+ },
+ "nz.cand.ensemble.1.mae": {
+  "value": 1.067691608020104,
+  "display": "1.0677",
+  "source": "results/fixes_v2/nz_wn/sanity/mass_study/placements/selection.json",
+  "field": "candidates/1/val_daily_mae_mm_per_day"
+ },
+ "nz.cand.ensemble.1.control_mae": {
+  "value": 1.0780369001993886,
+  "display": "1.0780",
+  "source": "results/fixes_v2/nz_wn/sanity/mass_study/placements/selection.json",
+  "field": "candidates/1/val_daily_mae_mm_per_day_control"
+ },
+ "nz.cand.ensemble.1.ok": {
+  "value": true,
+  "display": "True",
+  "source": "results/fixes_v2/nz_wn/sanity/mass_study/placements/selection.json",
+  "field": "candidates/1/within_tolerance"
+ },
+ "nz.cand.ensemble.3.ratio": {
+  "value": 0.9969214682773854,
+  "display": "0.9969",
+  "source": "results/fixes_v2/nz_wn/sanity/mass_study/placements/selection.json",
+  "field": "candidates/2/val_mse_ratio"
+ },
+ "nz.cand.ensemble.3.val_mse": {
+  "value": 53.398921966552734,
+  "display": "53.399",
+  "source": "results/fixes_v2/nz_wn/sanity/mass_study/placements/selection.json",
+  "field": "candidates/2/val_mse"
+ },
+ "nz.cand.ensemble.3.control_mse": {
+  "value": 53.563819885253906,
+  "display": "53.564",
+  "source": "results/fixes_v2/nz_wn/sanity/mass_study/placements/selection.json",
+  "field": "candidates/2/val_mse_control"
+ },
+ "nz.cand.ensemble.3.mae": {
+  "value": 1.0675639237501466,
+  "display": "1.0676",
+  "source": "results/fixes_v2/nz_wn/sanity/mass_study/placements/selection.json",
+  "field": "candidates/2/val_daily_mae_mm_per_day"
+ },
+ "nz.cand.ensemble.3.control_mae": {
+  "value": 1.0780369001993886,
+  "display": "1.0780",
+  "source": "results/fixes_v2/nz_wn/sanity/mass_study/placements/selection.json",
+  "field": "candidates/2/val_daily_mae_mm_per_day_control"
+ },
+ "nz.cand.ensemble.3.ok": {
+  "value": true,
+  "display": "True",
+  "source": "results/fixes_v2/nz_wn/sanity/mass_study/placements/selection.json",
+  "field": "candidates/2/within_tolerance"
+ },
+ "nz.cand.ensemble.10.ratio": {
+  "value": 0.9965304825703699,
+  "display": "0.9965",
+  "source": "results/fixes_v2/nz_wn/sanity/mass_study/placements/selection.json",
+  "field": "candidates/3/val_mse_ratio"
+ },
+ "nz.cand.ensemble.10.val_mse": {
+  "value": 53.37797927856445,
+  "display": "53.378",
+  "source": "results/fixes_v2/nz_wn/sanity/mass_study/placements/selection.json",
+  "field": "candidates/3/val_mse"
+ },
+ "nz.cand.ensemble.10.control_mse": {
+  "value": 53.563819885253906,
+  "display": "53.564",
+  "source": "results/fixes_v2/nz_wn/sanity/mass_study/placements/selection.json",
+  "field": "candidates/3/val_mse_control"
+ },
+ "nz.cand.ensemble.10.mae": {
+  "value": 1.055396045649509,
+  "display": "1.0554",
+  "source": "results/fixes_v2/nz_wn/sanity/mass_study/placements/selection.json",
+  "field": "candidates/3/val_daily_mae_mm_per_day"
+ },
+ "nz.cand.ensemble.10.control_mae": {
+  "value": 1.0780369001993886,
+  "display": "1.0780",
+  "source": "results/fixes_v2/nz_wn/sanity/mass_study/placements/selection.json",
+  "field": "candidates/3/val_daily_mae_mm_per_day_control"
+ },
+ "nz.cand.ensemble.10.ok": {
+  "value": true,
+  "display": "True",
+  "source": "results/fixes_v2/nz_wn/sanity/mass_study/placements/selection.json",
+  "field": "candidates/3/within_tolerance"
+ },
+ "nz.cand.members.0.1.ratio": {
+  "value": 1.0681088103307357,
+  "display": "1.0681",
+  "source": "results/fixes_v2/nz_wn/sanity/mass_study/placements/selection.json",
+  "field": "candidates/4/val_mse_ratio"
+ },
+ "nz.cand.members.0.1.val_mse": {
+  "value": 57.26407241821289,
+  "display": "57.264",
+  "source": "results/fixes_v2/nz_wn/sanity/mass_study/placements/selection.json",
+  "field": "candidates/4/val_mse"
+ },
+ "nz.cand.members.0.1.control_mse": {
+  "value": 53.61258316040039,
+  "display": "53.613",
+  "source": "results/fixes_v2/nz_wn/sanity/mass_study/placements/selection.json",
+  "field": "candidates/4/val_mse_control"
+ },
+ "nz.cand.members.0.1.mae": {
+  "value": 1.0595884459519267,
+  "display": "1.0596",
+  "source": "results/fixes_v2/nz_wn/sanity/mass_study/placements/selection.json",
+  "field": "candidates/4/val_daily_mae_mm_per_day"
+ },
+ "nz.cand.members.0.1.control_mae": {
+  "value": 1.0694588213504101,
+  "display": "1.0695",
+  "source": "results/fixes_v2/nz_wn/sanity/mass_study/placements/selection.json",
+  "field": "candidates/4/val_daily_mae_mm_per_day_control"
+ },
+ "nz.cand.members.0.1.ok": {
+  "value": false,
+  "display": "False",
+  "source": "results/fixes_v2/nz_wn/sanity/mass_study/placements/selection.json",
+  "field": "candidates/4/within_tolerance"
+ },
+ "nz.cand.members.1.ratio": {
+  "value": 1.2014889196601988,
+  "display": "1.2015",
+  "source": "results/fixes_v2/nz_wn/sanity/mass_study/placements/selection.json",
+  "field": "candidates/5/val_mse_ratio"
+ },
+ "nz.cand.members.1.val_mse": {
+  "value": 64.41492462158203,
+  "display": "64.415",
+  "source": "results/fixes_v2/nz_wn/sanity/mass_study/placements/selection.json",
+  "field": "candidates/5/val_mse"
+ },
+ "nz.cand.members.1.control_mse": {
+  "value": 53.61258316040039,
+  "display": "53.613",
+  "source": "results/fixes_v2/nz_wn/sanity/mass_study/placements/selection.json",
+  "field": "candidates/5/val_mse_control"
+ },
+ "nz.cand.members.1.mae": {
+  "value": 1.0665423103319747,
+  "display": "1.0665",
+  "source": "results/fixes_v2/nz_wn/sanity/mass_study/placements/selection.json",
+  "field": "candidates/5/val_daily_mae_mm_per_day"
+ },
+ "nz.cand.members.1.control_mae": {
+  "value": 1.0694588213504101,
+  "display": "1.0695",
+  "source": "results/fixes_v2/nz_wn/sanity/mass_study/placements/selection.json",
+  "field": "candidates/5/val_daily_mae_mm_per_day_control"
+ },
+ "nz.cand.members.1.ok": {
+  "value": false,
+  "display": "False",
+  "source": "results/fixes_v2/nz_wn/sanity/mass_study/placements/selection.json",
+  "field": "candidates/5/within_tolerance"
+ },
+ "nz.cand.members.3.ratio": {
+  "value": 1.30567359248829,
+  "display": "1.3057",
+  "source": "results/fixes_v2/nz_wn/sanity/mass_study/placements/selection.json",
+  "field": "candidates/6/val_mse_ratio"
+ },
+ "nz.cand.members.3.val_mse": {
+  "value": 70.00053405761719,
+  "display": "70.001",
+  "source": "results/fixes_v2/nz_wn/sanity/mass_study/placements/selection.json",
+  "field": "candidates/6/val_mse"
+ },
+ "nz.cand.members.3.control_mse": {
+  "value": 53.61258316040039,
+  "display": "53.613",
+  "source": "results/fixes_v2/nz_wn/sanity/mass_study/placements/selection.json",
+  "field": "candidates/6/val_mse_control"
+ },
+ "nz.cand.members.3.mae": {
+  "value": 1.077116885774949,
+  "display": "1.0771",
+  "source": "results/fixes_v2/nz_wn/sanity/mass_study/placements/selection.json",
+  "field": "candidates/6/val_daily_mae_mm_per_day"
+ },
+ "nz.cand.members.3.control_mae": {
+  "value": 1.0694588213504101,
+  "display": "1.0695",
+  "source": "results/fixes_v2/nz_wn/sanity/mass_study/placements/selection.json",
+  "field": "candidates/6/val_daily_mae_mm_per_day_control"
+ },
+ "nz.cand.members.3.ok": {
+  "value": false,
+  "display": "False",
+  "source": "results/fixes_v2/nz_wn/sanity/mass_study/placements/selection.json",
+  "field": "candidates/6/within_tolerance"
+ },
+ "nz.cand.members.10.ratio": {
+  "value": 1.420383362516745,
+  "display": "1.4204",
+  "source": "results/fixes_v2/nz_wn/sanity/mass_study/placements/selection.json",
+  "field": "candidates/7/val_mse_ratio"
+ },
+ "nz.cand.members.10.val_mse": {
+  "value": 76.15042114257812,
+  "display": "76.150",
+  "source": "results/fixes_v2/nz_wn/sanity/mass_study/placements/selection.json",
+  "field": "candidates/7/val_mse"
+ },
+ "nz.cand.members.10.control_mse": {
+  "value": 53.61258316040039,
+  "display": "53.613",
+  "source": "results/fixes_v2/nz_wn/sanity/mass_study/placements/selection.json",
+  "field": "candidates/7/val_mse_control"
+ },
+ "nz.cand.members.10.mae": {
+  "value": 1.079778369033103,
+  "display": "1.0798",
+  "source": "results/fixes_v2/nz_wn/sanity/mass_study/placements/selection.json",
+  "field": "candidates/7/val_daily_mae_mm_per_day"
+ },
+ "nz.cand.members.10.control_mae": {
+  "value": 1.0694588213504101,
+  "display": "1.0695",
+  "source": "results/fixes_v2/nz_wn/sanity/mass_study/placements/selection.json",
+  "field": "candidates/7/val_daily_mae_mm_per_day_control"
+ },
+ "nz.cand.members.10.ok": {
+  "value": false,
+  "display": "False",
+  "source": "results/fixes_v2/nz_wn/sanity/mass_study/placements/selection.json",
+  "field": "candidates/7/within_tolerance"
+ },
+ "nz.cand.both.0.1.ratio": {
+  "value": 1.0615753389533542,
+  "display": "1.0616",
+  "source": "results/fixes_v2/nz_wn/sanity/mass_study/placements/selection.json",
+  "field": "candidates/8/val_mse_ratio"
+ },
+ "nz.cand.both.0.1.val_mse": {
+  "value": 56.857357025146484,
+  "display": "56.857",
+  "source": "results/fixes_v2/nz_wn/sanity/mass_study/placements/selection.json",
+  "field": "candidates/8/val_mse"
+ },
+ "nz.cand.both.0.1.control_mse": {
+  "value": 53.559417724609375,
+  "display": "53.559",
+  "source": "results/fixes_v2/nz_wn/sanity/mass_study/placements/selection.json",
+  "field": "candidates/8/val_mse_control"
+ },
+ "nz.cand.both.0.1.mae": {
+  "value": 1.067330371028468,
+  "display": "1.0673",
+  "source": "results/fixes_v2/nz_wn/sanity/mass_study/placements/selection.json",
+  "field": "candidates/8/val_daily_mae_mm_per_day"
+ },
+ "nz.cand.both.0.1.control_mae": {
+  "value": 1.0801075239696467,
+  "display": "1.0801",
+  "source": "results/fixes_v2/nz_wn/sanity/mass_study/placements/selection.json",
+  "field": "candidates/8/val_daily_mae_mm_per_day_control"
+ },
+ "nz.cand.both.0.1.ok": {
+  "value": false,
+  "display": "False",
+  "source": "results/fixes_v2/nz_wn/sanity/mass_study/placements/selection.json",
+  "field": "candidates/8/within_tolerance"
+ },
+ "nz.cand.both.1.ratio": {
+  "value": 1.1820532069161014,
+  "display": "1.1821",
+  "source": "results/fixes_v2/nz_wn/sanity/mass_study/placements/selection.json",
+  "field": "candidates/9/val_mse_ratio"
+ },
+ "nz.cand.both.1.val_mse": {
+  "value": 63.310081481933594,
+  "display": "63.310",
+  "source": "results/fixes_v2/nz_wn/sanity/mass_study/placements/selection.json",
+  "field": "candidates/9/val_mse"
+ },
+ "nz.cand.both.1.control_mse": {
+  "value": 53.559417724609375,
+  "display": "53.559",
+  "source": "results/fixes_v2/nz_wn/sanity/mass_study/placements/selection.json",
+  "field": "candidates/9/val_mse_control"
+ },
+ "nz.cand.both.1.mae": {
+  "value": 1.0754146898170307,
+  "display": "1.0754",
+  "source": "results/fixes_v2/nz_wn/sanity/mass_study/placements/selection.json",
+  "field": "candidates/9/val_daily_mae_mm_per_day"
+ },
+ "nz.cand.both.1.control_mae": {
+  "value": 1.0801075239696467,
+  "display": "1.0801",
+  "source": "results/fixes_v2/nz_wn/sanity/mass_study/placements/selection.json",
+  "field": "candidates/9/val_daily_mae_mm_per_day_control"
+ },
+ "nz.cand.both.1.ok": {
+  "value": false,
+  "display": "False",
+  "source": "results/fixes_v2/nz_wn/sanity/mass_study/placements/selection.json",
+  "field": "candidates/9/within_tolerance"
+ },
+ "nz.cand.both.3.ratio": {
+  "value": 1.3383928240747336,
+  "display": "1.3384",
+  "source": "results/fixes_v2/nz_wn/sanity/mass_study/placements/selection.json",
+  "field": "candidates/10/val_mse_ratio"
+ },
+ "nz.cand.both.3.val_mse": {
+  "value": 71.68354034423828,
+  "display": "71.684",
+  "source": "results/fixes_v2/nz_wn/sanity/mass_study/placements/selection.json",
+  "field": "candidates/10/val_mse"
+ },
+ "nz.cand.both.3.control_mse": {
+  "value": 53.559417724609375,
+  "display": "53.559",
+  "source": "results/fixes_v2/nz_wn/sanity/mass_study/placements/selection.json",
+  "field": "candidates/10/val_mse_control"
+ },
+ "nz.cand.both.3.mae": {
+  "value": 1.073584188672096,
+  "display": "1.0736",
+  "source": "results/fixes_v2/nz_wn/sanity/mass_study/placements/selection.json",
+  "field": "candidates/10/val_daily_mae_mm_per_day"
+ },
+ "nz.cand.both.3.control_mae": {
+  "value": 1.0801075239696467,
+  "display": "1.0801",
+  "source": "results/fixes_v2/nz_wn/sanity/mass_study/placements/selection.json",
+  "field": "candidates/10/val_daily_mae_mm_per_day_control"
+ },
+ "nz.cand.both.3.ok": {
+  "value": false,
+  "display": "False",
+  "source": "results/fixes_v2/nz_wn/sanity/mass_study/placements/selection.json",
+  "field": "candidates/10/within_tolerance"
+ },
+ "nz.cand.both.10.ratio": {
+  "value": 1.5332333828100295,
+  "display": "1.5332",
+  "source": "results/fixes_v2/nz_wn/sanity/mass_study/placements/selection.json",
+  "field": "candidates/11/val_mse_ratio"
+ },
+ "nz.cand.both.10.val_mse": {
+  "value": 82.11908721923828,
+  "display": "82.119",
+  "source": "results/fixes_v2/nz_wn/sanity/mass_study/placements/selection.json",
+  "field": "candidates/11/val_mse"
+ },
+ "nz.cand.both.10.control_mse": {
+  "value": 53.559417724609375,
+  "display": "53.559",
+  "source": "results/fixes_v2/nz_wn/sanity/mass_study/placements/selection.json",
+  "field": "candidates/11/val_mse_control"
+ },
+ "nz.cand.both.10.mae": {
+  "value": 1.055158955947765,
+  "display": "1.0552",
+  "source": "results/fixes_v2/nz_wn/sanity/mass_study/placements/selection.json",
+  "field": "candidates/11/val_daily_mae_mm_per_day"
+ },
+ "nz.cand.both.10.control_mae": {
+  "value": 1.0801075239696467,
+  "display": "1.0801",
+  "source": "results/fixes_v2/nz_wn/sanity/mass_study/placements/selection.json",
+  "field": "candidates/11/val_daily_mae_mm_per_day_control"
+ },
+ "nz.cand.both.10.ok": {
+  "value": false,
+  "display": "False",
+  "source": "results/fixes_v2/nz_wn/sanity/mass_study/placements/selection.json",
+  "field": "candidates/11/within_tolerance"
+ },
+ "in.sel.placement": {
+  "value": "members",
+  "display": "members",
+  "source": "results/india/qre_mass_v1/placements/selection.json",
+  "field": "placement"
+ },
+ "in.sel.lambda": {
+  "value": 0.1,
+  "display": "0.1",
+  "source": "results/india/qre_mass_v1/placements/selection.json",
+  "field": "selected_lambda"
+ },
+ "in.sel.tolerance_met": {
+  "value": true,
+  "display": "True",
+  "source": "results/india/qre_mass_v1/placements/selection.json",
+  "field": "tolerance_met"
+ },
+ "in.cand.ensemble.0.1.ratio": {
+  "value": 0.9998789550588999,
+  "display": "0.9999",
+  "source": "results/india/qre_mass_v1/placements/selection.json",
+  "field": "candidates/0/val_mse_ratio"
+ },
+ "in.cand.ensemble.0.1.val_mse": {
+  "value": 193.9811248779297,
+  "display": "193.981",
+  "source": "results/india/qre_mass_v1/placements/selection.json",
+  "field": "candidates/0/val_mse"
+ },
+ "in.cand.ensemble.0.1.control_mse": {
+  "value": 194.00460815429688,
+  "display": "194.005",
+  "source": "results/india/qre_mass_v1/placements/selection.json",
+  "field": "candidates/0/val_mse_control"
+ },
+ "in.cand.ensemble.0.1.mae": {
+  "value": 0.9293654250194394,
+  "display": "0.9294",
+  "source": "results/india/qre_mass_v1/placements/selection.json",
+  "field": "candidates/0/val_daily_mae_mm_per_day"
+ },
+ "in.cand.ensemble.0.1.control_mae": {
+  "value": 0.9375436061896547,
+  "display": "0.9375",
+  "source": "results/india/qre_mass_v1/placements/selection.json",
+  "field": "candidates/0/val_daily_mae_mm_per_day_control"
+ },
+ "in.cand.ensemble.0.1.ok": {
+  "value": true,
+  "display": "True",
+  "source": "results/india/qre_mass_v1/placements/selection.json",
+  "field": "candidates/0/within_tolerance"
+ },
+ "in.cand.ensemble.1.ratio": {
+  "value": 0.9992757752971736,
+  "display": "0.9993",
+  "source": "results/india/qre_mass_v1/placements/selection.json",
+  "field": "candidates/1/val_mse_ratio"
+ },
+ "in.cand.ensemble.1.val_mse": {
+  "value": 193.86410522460938,
+  "display": "193.864",
+  "source": "results/india/qre_mass_v1/placements/selection.json",
+  "field": "candidates/1/val_mse"
+ },
+ "in.cand.ensemble.1.control_mse": {
+  "value": 194.00460815429688,
+  "display": "194.005",
+  "source": "results/india/qre_mass_v1/placements/selection.json",
+  "field": "candidates/1/val_mse_control"
+ },
+ "in.cand.ensemble.1.mae": {
+  "value": 0.9083263786574154,
+  "display": "0.9083",
+  "source": "results/india/qre_mass_v1/placements/selection.json",
+  "field": "candidates/1/val_daily_mae_mm_per_day"
+ },
+ "in.cand.ensemble.1.control_mae": {
+  "value": 0.9375436061896547,
+  "display": "0.9375",
+  "source": "results/india/qre_mass_v1/placements/selection.json",
+  "field": "candidates/1/val_daily_mae_mm_per_day_control"
+ },
+ "in.cand.ensemble.1.ok": {
+  "value": true,
+  "display": "True",
+  "source": "results/india/qre_mass_v1/placements/selection.json",
+  "field": "candidates/1/within_tolerance"
+ },
+ "in.cand.ensemble.3.ratio": {
+  "value": 0.9984262584623312,
+  "display": "0.9984",
+  "source": "results/india/qre_mass_v1/placements/selection.json",
+  "field": "candidates/2/val_mse_ratio"
+ },
+ "in.cand.ensemble.3.val_mse": {
+  "value": 193.6992950439453,
+  "display": "193.699",
+  "source": "results/india/qre_mass_v1/placements/selection.json",
+  "field": "candidates/2/val_mse"
+ },
+ "in.cand.ensemble.3.control_mse": {
+  "value": 194.00460815429688,
+  "display": "194.005",
+  "source": "results/india/qre_mass_v1/placements/selection.json",
+  "field": "candidates/2/val_mse_control"
+ },
+ "in.cand.ensemble.3.mae": {
+  "value": 0.8884579656518243,
+  "display": "0.8885",
+  "source": "results/india/qre_mass_v1/placements/selection.json",
+  "field": "candidates/2/val_daily_mae_mm_per_day"
+ },
+ "in.cand.ensemble.3.control_mae": {
+  "value": 0.9375436061896547,
+  "display": "0.9375",
+  "source": "results/india/qre_mass_v1/placements/selection.json",
+  "field": "candidates/2/val_daily_mae_mm_per_day_control"
+ },
+ "in.cand.ensemble.3.ok": {
+  "value": true,
+  "display": "True",
+  "source": "results/india/qre_mass_v1/placements/selection.json",
+  "field": "candidates/2/within_tolerance"
+ },
+ "in.cand.ensemble.10.ratio": {
+  "value": 0.9988734719354276,
+  "display": "0.9989",
+  "source": "results/india/qre_mass_v1/placements/selection.json",
+  "field": "candidates/3/val_mse_ratio"
+ },
+ "in.cand.ensemble.10.val_mse": {
+  "value": 193.7860565185547,
+  "display": "193.786",
+  "source": "results/india/qre_mass_v1/placements/selection.json",
+  "field": "candidates/3/val_mse"
+ },
+ "in.cand.ensemble.10.control_mse": {
+  "value": 194.00460815429688,
+  "display": "194.005",
+  "source": "results/india/qre_mass_v1/placements/selection.json",
+  "field": "candidates/3/val_mse_control"
+ },
+ "in.cand.ensemble.10.mae": {
+  "value": 0.9033724068963097,
+  "display": "0.9034",
+  "source": "results/india/qre_mass_v1/placements/selection.json",
+  "field": "candidates/3/val_daily_mae_mm_per_day"
+ },
+ "in.cand.ensemble.10.control_mae": {
+  "value": 0.9375436061896547,
+  "display": "0.9375",
+  "source": "results/india/qre_mass_v1/placements/selection.json",
+  "field": "candidates/3/val_daily_mae_mm_per_day_control"
+ },
+ "in.cand.ensemble.10.ok": {
+  "value": true,
+  "display": "True",
+  "source": "results/india/qre_mass_v1/placements/selection.json",
+  "field": "candidates/3/within_tolerance"
+ },
+ "in.cand.members.0.1.ratio": {
+  "value": 1.0141574836362421,
+  "display": "1.0142",
+  "source": "results/india/qre_mass_v1/placements/selection.json",
+  "field": "candidates/4/val_mse_ratio"
+ },
+ "in.cand.members.0.1.val_mse": {
+  "value": 196.497314453125,
+  "display": "196.497",
+  "source": "results/india/qre_mass_v1/placements/selection.json",
+  "field": "candidates/4/val_mse"
+ },
+ "in.cand.members.0.1.control_mse": {
+  "value": 193.75424194335938,
+  "display": "193.754",
+  "source": "results/india/qre_mass_v1/placements/selection.json",
+  "field": "candidates/4/val_mse_control"
+ },
+ "in.cand.members.0.1.mae": {
+  "value": 0.8453237273354434,
+  "display": "0.8453",
+  "source": "results/india/qre_mass_v1/placements/selection.json",
+  "field": "candidates/4/val_daily_mae_mm_per_day"
+ },
+ "in.cand.members.0.1.control_mae": {
+  "value": 0.9050518932103173,
+  "display": "0.9051",
+  "source": "results/india/qre_mass_v1/placements/selection.json",
+  "field": "candidates/4/val_daily_mae_mm_per_day_control"
+ },
+ "in.cand.members.0.1.ok": {
+  "value": true,
+  "display": "True",
+  "source": "results/india/qre_mass_v1/placements/selection.json",
+  "field": "candidates/4/within_tolerance"
+ },
+ "in.cand.members.1.ratio": {
+  "value": 1.0931362704855094,
+  "display": "1.0931",
+  "source": "results/india/qre_mass_v1/placements/selection.json",
+  "field": "candidates/5/val_mse_ratio"
+ },
+ "in.cand.members.1.val_mse": {
+  "value": 211.79978942871094,
+  "display": "211.800",
+  "source": "results/india/qre_mass_v1/placements/selection.json",
+  "field": "candidates/5/val_mse"
+ },
+ "in.cand.members.1.control_mse": {
+  "value": 193.75424194335938,
+  "display": "193.754",
+  "source": "results/india/qre_mass_v1/placements/selection.json",
+  "field": "candidates/5/val_mse_control"
+ },
+ "in.cand.members.1.mae": {
+  "value": 0.8759189754090972,
+  "display": "0.8759",
+  "source": "results/india/qre_mass_v1/placements/selection.json",
+  "field": "candidates/5/val_daily_mae_mm_per_day"
+ },
+ "in.cand.members.1.control_mae": {
+  "value": 0.9050518932103173,
+  "display": "0.9051",
+  "source": "results/india/qre_mass_v1/placements/selection.json",
+  "field": "candidates/5/val_daily_mae_mm_per_day_control"
+ },
+ "in.cand.members.1.ok": {
+  "value": false,
+  "display": "False",
+  "source": "results/india/qre_mass_v1/placements/selection.json",
+  "field": "candidates/5/within_tolerance"
+ },
+ "in.cand.members.3.ratio": {
+  "value": 1.118990511642969,
+  "display": "1.1190",
+  "source": "results/india/qre_mass_v1/placements/selection.json",
+  "field": "candidates/6/val_mse_ratio"
+ },
+ "in.cand.members.3.val_mse": {
+  "value": 216.8091583251953,
+  "display": "216.809",
+  "source": "results/india/qre_mass_v1/placements/selection.json",
+  "field": "candidates/6/val_mse"
+ },
+ "in.cand.members.3.control_mse": {
+  "value": 193.75424194335938,
+  "display": "193.754",
+  "source": "results/india/qre_mass_v1/placements/selection.json",
+  "field": "candidates/6/val_mse_control"
+ },
+ "in.cand.members.3.mae": {
+  "value": 0.8724874200488238,
+  "display": "0.8725",
+  "source": "results/india/qre_mass_v1/placements/selection.json",
+  "field": "candidates/6/val_daily_mae_mm_per_day"
+ },
+ "in.cand.members.3.control_mae": {
+  "value": 0.9050518932103173,
+  "display": "0.9051",
+  "source": "results/india/qre_mass_v1/placements/selection.json",
+  "field": "candidates/6/val_daily_mae_mm_per_day_control"
+ },
+ "in.cand.members.3.ok": {
+  "value": false,
+  "display": "False",
+  "source": "results/india/qre_mass_v1/placements/selection.json",
+  "field": "candidates/6/within_tolerance"
+ },
+ "in.cand.members.10.ratio": {
+  "value": 1.1543856382932645,
+  "display": "1.1544",
+  "source": "results/india/qre_mass_v1/placements/selection.json",
+  "field": "candidates/7/val_mse_ratio"
+ },
+ "in.cand.members.10.val_mse": {
+  "value": 223.6671142578125,
+  "display": "223.667",
+  "source": "results/india/qre_mass_v1/placements/selection.json",
+  "field": "candidates/7/val_mse"
+ },
+ "in.cand.members.10.control_mse": {
+  "value": 193.75424194335938,
+  "display": "193.754",
+  "source": "results/india/qre_mass_v1/placements/selection.json",
+  "field": "candidates/7/val_mse_control"
+ },
+ "in.cand.members.10.mae": {
+  "value": 0.872370960637143,
+  "display": "0.8724",
+  "source": "results/india/qre_mass_v1/placements/selection.json",
+  "field": "candidates/7/val_daily_mae_mm_per_day"
+ },
+ "in.cand.members.10.control_mae": {
+  "value": 0.9050518932103173,
+  "display": "0.9051",
+  "source": "results/india/qre_mass_v1/placements/selection.json",
+  "field": "candidates/7/val_daily_mae_mm_per_day_control"
+ },
+ "in.cand.members.10.ok": {
+  "value": false,
+  "display": "False",
+  "source": "results/india/qre_mass_v1/placements/selection.json",
+  "field": "candidates/7/within_tolerance"
+ },
+ "in.cand.both.0.1.ratio": {
+  "value": 1.0221170409146052,
+  "display": "1.0221",
+  "source": "results/india/qre_mass_v1/placements/selection.json",
+  "field": "candidates/8/val_mse_ratio"
+ },
+ "in.cand.both.0.1.val_mse": {
+  "value": 198.14141845703125,
+  "display": "198.141",
+  "source": "results/india/qre_mass_v1/placements/selection.json",
+  "field": "candidates/8/val_mse"
+ },
+ "in.cand.both.0.1.control_mse": {
+  "value": 193.85394287109375,
+  "display": "193.854",
+  "source": "results/india/qre_mass_v1/placements/selection.json",
+  "field": "candidates/8/val_mse_control"
+ },
+ "in.cand.both.0.1.mae": {
+  "value": 0.9063145222071547,
+  "display": "0.9063",
+  "source": "results/india/qre_mass_v1/placements/selection.json",
+  "field": "candidates/8/val_daily_mae_mm_per_day"
+ },
+ "in.cand.both.0.1.control_mae": {
+  "value": 0.8998364345801972,
+  "display": "0.8998",
+  "source": "results/india/qre_mass_v1/placements/selection.json",
+  "field": "candidates/8/val_daily_mae_mm_per_day_control"
+ },
+ "in.cand.both.0.1.ok": {
+  "value": false,
+  "display": "False",
+  "source": "results/india/qre_mass_v1/placements/selection.json",
+  "field": "candidates/8/within_tolerance"
+ },
+ "in.cand.both.1.ratio": {
+  "value": 1.1125925387180453,
+  "display": "1.1126",
+  "source": "results/india/qre_mass_v1/placements/selection.json",
+  "field": "candidates/9/val_mse_ratio"
+ },
+ "in.cand.both.1.val_mse": {
+  "value": 215.68045043945312,
+  "display": "215.680",
+  "source": "results/india/qre_mass_v1/placements/selection.json",
+  "field": "candidates/9/val_mse"
+ },
+ "in.cand.both.1.control_mse": {
+  "value": 193.85394287109375,
+  "display": "193.854",
+  "source": "results/india/qre_mass_v1/placements/selection.json",
+  "field": "candidates/9/val_mse_control"
+ },
+ "in.cand.both.1.mae": {
+  "value": 0.9193173477652204,
+  "display": "0.9193",
+  "source": "results/india/qre_mass_v1/placements/selection.json",
+  "field": "candidates/9/val_daily_mae_mm_per_day"
+ },
+ "in.cand.both.1.control_mae": {
+  "value": 0.8998364345801972,
+  "display": "0.8998",
+  "source": "results/india/qre_mass_v1/placements/selection.json",
+  "field": "candidates/9/val_daily_mae_mm_per_day_control"
+ },
+ "in.cand.both.1.ok": {
+  "value": false,
+  "display": "False",
+  "source": "results/india/qre_mass_v1/placements/selection.json",
+  "field": "candidates/9/within_tolerance"
+ },
+ "in.cand.both.3.ratio": {
+  "value": 1.1301230627596146,
+  "display": "1.1301",
+  "source": "results/india/qre_mass_v1/placements/selection.json",
+  "field": "candidates/10/val_mse_ratio"
+ },
+ "in.cand.both.3.val_mse": {
+  "value": 219.0788116455078,
+  "display": "219.079",
+  "source": "results/india/qre_mass_v1/placements/selection.json",
+  "field": "candidates/10/val_mse"
+ },
+ "in.cand.both.3.control_mse": {
+  "value": 193.85394287109375,
+  "display": "193.854",
+  "source": "results/india/qre_mass_v1/placements/selection.json",
+  "field": "candidates/10/val_mse_control"
+ },
+ "in.cand.both.3.mae": {
+  "value": 0.9034724273305517,
+  "display": "0.9035",
+  "source": "results/india/qre_mass_v1/placements/selection.json",
+  "field": "candidates/10/val_daily_mae_mm_per_day"
+ },
+ "in.cand.both.3.control_mae": {
+  "value": 0.8998364345801972,
+  "display": "0.8998",
+  "source": "results/india/qre_mass_v1/placements/selection.json",
+  "field": "candidates/10/val_daily_mae_mm_per_day_control"
+ },
+ "in.cand.both.3.ok": {
+  "value": false,
+  "display": "False",
+  "source": "results/india/qre_mass_v1/placements/selection.json",
+  "field": "candidates/10/within_tolerance"
+ },
+ "in.cand.both.10.ratio": {
+  "value": 1.130212559227456,
+  "display": "1.1302",
+  "source": "results/india/qre_mass_v1/placements/selection.json",
+  "field": "candidates/11/val_mse_ratio"
+ },
+ "in.cand.both.10.val_mse": {
+  "value": 219.09616088867188,
+  "display": "219.096",
+  "source": "results/india/qre_mass_v1/placements/selection.json",
+  "field": "candidates/11/val_mse"
+ },
+ "in.cand.both.10.control_mse": {
+  "value": 193.85394287109375,
+  "display": "193.854",
+  "source": "results/india/qre_mass_v1/placements/selection.json",
+  "field": "candidates/11/val_mse_control"
+ },
+ "in.cand.both.10.mae": {
+  "value": 0.8806077968925062,
+  "display": "0.8806",
+  "source": "results/india/qre_mass_v1/placements/selection.json",
+  "field": "candidates/11/val_daily_mae_mm_per_day"
+ },
+ "in.cand.both.10.control_mae": {
+  "value": 0.8998364345801972,
+  "display": "0.8998",
+  "source": "results/india/qre_mass_v1/placements/selection.json",
+  "field": "candidates/11/val_daily_mae_mm_per_day_control"
+ },
+ "in.cand.both.10.ok": {
+  "value": false,
+  "display": "False",
+  "source": "results/india/qre_mass_v1/placements/selection.json",
+  "field": "candidates/11/within_tolerance"
+ },
+ "nz.check.qre": {
+  "value": 0.0,
+  "display": "0",
+  "source": "results/fixes_v2/nz_wn/sanity/mass_study/placements/comparison.json",
+  "field": "member_study_check/qre/max_relative_difference"
+ },
+ "in.files.era5": {
+  "value": 46,
+  "display": "46",
+  "source": "results/india/qre_mass_v1/data_report.json",
+  "field": "era5_files"
+ },
+ "in.files.imd": {
+  "value": 46,
+  "display": "46",
+  "source": "results/india/qre_mass_v1/data_report.json",
+  "field": "imd_files"
+ },
+ "in.imd_grid": {
+  "value": [
+   129,
+   135
+  ],
+  "display": "129 × 135",
+  "source": "results/india/qre_mass_v1/data_report.json",
+  "field": "imd_grid"
+ },
+ "in.cells": {
+  "value": 4964,
+  "display": "4,964",
+  "source": "results/india/qre_mass_v1/data_report.json",
+  "field": "imd_valid_cells"
+ },
+ "in.input_grid": {
+  "value": [
+   32,
+   33
+  ],
+  "display": "32 × 33",
+  "source": "results/india/qre_mass_v1/data_report.json",
+  "field": "input_grid"
+ },
+ "in.days_per_file": {
+  "value": 122,
+  "display": "122",
+  "source": "results/india/qre_mass_v1/data_check.json",
+  "field": "era5/days_per_file"
+ },
+ "in.n_days": {
+  "value": 5612,
+  "display": "5,612",
+  "source": "results/india/qre_mass_v1/data_report.json",
+  "field": "n_days"
+ },
+ "in.day_offset": {
+  "value": 0,
+  "display": "0",
+  "source": "results/india/qre_mass_v1/data_report.json",
+  "field": "days/day_offset"
+ },
+ "in.train_days": {
+  "value": 3904,
+  "display": "3,904",
+  "source": "results/india/qre_mass_v1/data_report.json",
+  "field": "split/train/days"
+ },
+ "in.train_first": {
+  "value": "1971-06-01",
+  "display": "1971",
+  "source": "results/india/qre_mass_v1/data_report.json",
+  "field": "split/train/first"
+ },
+ "in.train_last": {
+  "value": "2002-09-30",
+  "display": "2002",
+  "source": "results/india/qre_mass_v1/data_report.json",
+  "field": "split/train/last"
+ },
+ "in.val_days": {
+  "value": 732,
+  "display": "732",
+  "source": "results/india/qre_mass_v1/data_report.json",
+  "field": "split/val/days"
+ },
+ "in.val_first": {
+  "value": "2003-06-01",
+  "display": "2003",
+  "source": "results/india/qre_mass_v1/data_report.json",
+  "field": "split/val/first"
+ },
+ "in.val_last": {
+  "value": "2008-09-30",
+  "display": "2008",
+  "source": "results/india/qre_mass_v1/data_report.json",
+  "field": "split/val/last"
+ },
+ "in.test_days": {
+  "value": 976,
+  "display": "976",
+  "source": "results/india/qre_mass_v1/data_report.json",
+  "field": "split/test/days"
+ },
+ "in.test_first": {
+  "value": "2009-06-01",
+  "display": "2009",
+  "source": "results/india/qre_mass_v1/data_report.json",
+  "field": "split/test/first"
+ },
+ "in.test_last": {
+  "value": "2016-09-30",
+  "display": "2016",
+  "source": "results/india/qre_mass_v1/data_report.json",
+  "field": "split/test/last"
+ },
+ "in.zero_frac": {
+  "value": 0.44047629613545397,
+  "display": "44.0 %",
+  "source": "results/india/qre_mass_v1/data_check.json",
+  "field": "imd/rain_train_years/fraction_exact_zero"
+ },
+ "in.mean_rain": {
+  "value": 6.961233139038086,
+  "display": "6.96",
+  "source": "results/india/qre_mass_v1/data_check.json",
+  "field": "imd/rain_train_years/mean_mm_per_day"
+ },
+ "in.p99": {
+  "value": 75.38999710082993,
+  "display": "75.4",
+  "source": "results/india/qre_mass_v1/data_check.json",
+  "field": "imd/rain_train_years/p99_mm_per_day"
+ },
+ "in.p999": {
+  "value": 163.69690338135388,
+  "display": "163.7",
+  "source": "results/india/qre_mass_v1/data_check.json",
+  "field": "imd/rain_train_years/p99_9_mm_per_day"
+ },
+ "in.max_rain": {
+  "value": 939.4461669921875,
+  "display": "939.4",
+  "source": "results/india/qre_mass_v1/data_check.json",
+  "field": "imd/rain_train_years/max_mm_per_day"
+ },
+ "in.area_total": {
+  "value": 3495340.7685211534,
+  "display": "3.50 M",
+  "source": "results/india/qre_mass_v1/data_report.json",
+  "field": "cell_areas_km2/total_valid"
+ },
+ "in.area_min": {
+  "value": 615.1255671804903,
+  "display": "615",
+  "source": "results/india/qre_mass_v1/data_report.json",
+  "field": "cell_areas_km2/min"
+ },
+ "in.area_max": {
+  "value": 764.7717828472876,
+  "display": "765",
+  "source": "results/india/qre_mass_v1/data_report.json",
+  "field": "cell_areas_km2/max"
+ },
+ "in.seg.method": {
+  "value": "fixed",
+  "display": "fixed",
+  "source": "results/india/qre_mass_v1/segmentation.json",
+  "field": "method"
+ },
+ "in.seg.train_days": {
+  "value": [
+   648,
+   882,
+   851,
+   789,
+   433,
+   301
+  ],
+  "display": "648 / 882 / 851 / 789 / 433 / 301",
+  "source": "results/india/qre_mass_v1/segmentation.json",
+  "field": "train_days_per_interval"
+ },
+ "in.seg.val_days": {
+  "value": [
+   117,
+   149,
+   167,
+   148,
+   82,
+   69
+  ],
+  "display": "117 / 149 / 167 / 148 / 82 / 69",
+  "source": "results/india/qre_mass_v1/segmentation.json",
+  "field": "val_days_per_interval"
+ },
+ "in.seg.test_days": {
+  "value": [
+   185,
+   220,
+   196,
+   181,
+   109,
+   85
+  ],
+  "display": "185 / 220 / 196 / 181 / 109 / 85",
+  "source": "results/india/qre_mass_v1/segmentation.json",
+  "field": "test_days_per_interval"
+ },
+ "in.gmm.degenerate": {
+  "value": "47 of 100 runs degenerate",
+  "display": "47 of 100 runs degenerate",
+  "source": "docs/STATUS.md",
+  "field": "text: \"47 of 100 runs degenerate\""
+ },
+ "in.gmm.top28": {
+  "value": "top interval = top 28 % of days",
+  "display": "top 28 % of days",
+  "source": "docs/STATUS.md",
+  "field": "text: \"top interval = top 28 % of days\""
+ },
+ "in.offset.recommended": {
+  "value": 0,
+  "display": "0",
+  "source": "results/india/qre_mass_v1/day_offset/day_offset.json",
+  "field": "recommended_day_offset"
+ },
+ "in.offset.score_diff": {
+  "value": 0.03529723325973935,
+  "display": "0.0353",
+  "source": "results/india/qre_mass_v1/day_offset/day_offset.json",
+  "field": "score_difference"
+ },
+ "in.params": {
+  "value": "This also shrinks BGNet from 147 M to 13 M parameters.",
+  "display": "147 M → 13 M",
+  "source": "README.md",
+  "field": "text: \"This also shrinks BGNet from 147 M to 13 M parameters.\""
+ },
+ "in.mass.R": {
+  "value": "with $R = 6371$ km",
+  "display": "6371 km",
+  "source": "README.md",
+  "field": "text: \"with $R = 6371$ km\""
+ },
+ "in.mass.eps": {
+  "value": 0.1,
+  "display": "0.1",
+  "source": "configs/india_v1.json",
+  "field": "mass/eps_mm_per_day"
+ },
+ "in.study.lambdas": {
+  "value": [
+   0,
+   0.1,
+   1,
+   3,
+   10
+  ],
+  "display": "0, 0.1, 1, 3, 10",
+  "source": "configs/india_v1.json",
+  "field": "study/lambdas"
+ },
+ "in.sel.tolerance": {
+  "value": 0.02,
+  "display": "2 %",
+  "source": "configs/india_v1.json",
+  "field": "selection/mse_tolerance"
+ },
+ "in.study.reps": {
+  "value": 10,
+  "display": "10",
+  "source": "configs/india_v1.json",
+  "field": "study/repetitions"
+ },
+ "in.kernel": {
+  "value": 6,
+  "display": "6",
+  "source": "configs/india_v1.json",
+  "field": "architecture/kernel"
+ },
+ "in.padding": {
+  "value": "valid",
+  "display": "valid",
+  "source": "configs/india_v1.json",
+  "field": "architecture/padding"
+ },
+ "im.bgnet_val": {
+  "value": 194.26992797851562,
+  "display": "194.27",
+  "source": "results/india/qre_mass_v1/member_study/results.json",
+  "field": "bgnet_val/mse/[0.0,1.0]"
+ },
+ "im.scratch.pm_val": {
+  "value": 227.16151428222656,
+  "display": "227.16",
+  "source": "results/india/qre_mass_v1/member_study/results.json",
+  "field": "scratch/perfect_member_val/mse/[0.0,1.0]"
+ },
+ "im.scratch.ratio.0": {
+  "value": 1.032709185249598,
+  "display": "1.033",
+  "source": "results/india/qre_mass_v1/member_study/results.json",
+  "field": "scratch/own_interval_val/0/ratio"
+ },
+ "im.scratch.best_epoch.0": {
+  "value": 83,
+  "display": "83",
+  "source": "results/india/qre_mass_v1/member_study/results.json",
+  "field": "scratch/own_interval_val/0/best_epoch"
+ },
+ "im.scratch.epochs.0": {
+  "value": 87,
+  "display": "87",
+  "source": "results/india/qre_mass_v1/member_study/results.json",
+  "field": "scratch/own_interval_val/0/epochs"
+ },
+ "im.scratch.ratio.1": {
+  "value": 1.2161627405109974,
+  "display": "1.216",
+  "source": "results/india/qre_mass_v1/member_study/results.json",
+  "field": "scratch/own_interval_val/1/ratio"
+ },
+ "im.scratch.best_epoch.1": {
+  "value": 29,
+  "display": "29",
+  "source": "results/india/qre_mass_v1/member_study/results.json",
+  "field": "scratch/own_interval_val/1/best_epoch"
+ },
+ "im.scratch.epochs.1": {
+  "value": 33,
+  "display": "33",
+  "source": "results/india/qre_mass_v1/member_study/results.json",
+  "field": "scratch/own_interval_val/1/epochs"
+ },
+ "im.scratch.ratio.2": {
+  "value": 1.0676716100360943,
+  "display": "1.068",
+  "source": "results/india/qre_mass_v1/member_study/results.json",
+  "field": "scratch/own_interval_val/2/ratio"
+ },
+ "im.scratch.best_epoch.2": {
+  "value": 100,
+  "display": "100",
+  "source": "results/india/qre_mass_v1/member_study/results.json",
+  "field": "scratch/own_interval_val/2/best_epoch"
+ },
+ "im.scratch.epochs.2": {
+  "value": 100,
+  "display": "100",
+  "source": "results/india/qre_mass_v1/member_study/results.json",
+  "field": "scratch/own_interval_val/2/epochs"
+ },
+ "im.scratch.ratio.3": {
+  "value": 1.0689867570478324,
+  "display": "1.069",
+  "source": "results/india/qre_mass_v1/member_study/results.json",
+  "field": "scratch/own_interval_val/3/ratio"
+ },
+ "im.scratch.best_epoch.3": {
+  "value": 96,
+  "display": "96",
+  "source": "results/india/qre_mass_v1/member_study/results.json",
+  "field": "scratch/own_interval_val/3/best_epoch"
+ },
+ "im.scratch.epochs.3": {
+  "value": 100,
+  "display": "100",
+  "source": "results/india/qre_mass_v1/member_study/results.json",
+  "field": "scratch/own_interval_val/3/epochs"
+ },
+ "im.scratch.ratio.4": {
+  "value": 1.1742689035061251,
+  "display": "1.174",
+  "source": "results/india/qre_mass_v1/member_study/results.json",
+  "field": "scratch/own_interval_val/4/ratio"
+ },
+ "im.scratch.best_epoch.4": {
+  "value": 100,
+  "display": "100",
+  "source": "results/india/qre_mass_v1/member_study/results.json",
+  "field": "scratch/own_interval_val/4/best_epoch"
+ },
+ "im.scratch.epochs.4": {
+  "value": 100,
+  "display": "100",
+  "source": "results/india/qre_mass_v1/member_study/results.json",
+  "field": "scratch/own_interval_val/4/epochs"
+ },
+ "im.scratch.ratio.5": {
+  "value": 1.3461426946371544,
+  "display": "1.346",
+  "source": "results/india/qre_mass_v1/member_study/results.json",
+  "field": "scratch/own_interval_val/5/ratio"
+ },
+ "im.scratch.best_epoch.5": {
+  "value": 55,
+  "display": "55",
+  "source": "results/india/qre_mass_v1/member_study/results.json",
+  "field": "scratch/own_interval_val/5/best_epoch"
+ },
+ "im.scratch.epochs.5": {
+  "value": 59,
+  "display": "59",
+  "source": "results/india/qre_mass_v1/member_study/results.json",
+  "field": "scratch/own_interval_val/5/epochs"
+ },
+ "im.scratch.train_days.0": {
+  "value": 648,
+  "display": "648",
+  "source": "results/india/qre_mass_v1/member_study/results.json",
+  "field": "scratch/training/0/train_days"
+ },
+ "im.scratch.train_days.1": {
+  "value": 882,
+  "display": "882",
+  "source": "results/india/qre_mass_v1/member_study/results.json",
+  "field": "scratch/training/1/train_days"
+ },
+ "im.scratch.train_days.2": {
+  "value": 851,
+  "display": "851",
+  "source": "results/india/qre_mass_v1/member_study/results.json",
+  "field": "scratch/training/2/train_days"
+ },
+ "im.scratch.train_days.3": {
+  "value": 789,
+  "display": "789",
+  "source": "results/india/qre_mass_v1/member_study/results.json",
+  "field": "scratch/training/3/train_days"
+ },
+ "im.scratch.train_days.4": {
+  "value": 433,
+  "display": "433",
+  "source": "results/india/qre_mass_v1/member_study/results.json",
+  "field": "scratch/training/4/train_days"
+ },
+ "im.scratch.train_days.5": {
+  "value": 301,
+  "display": "301",
+  "source": "results/india/qre_mass_v1/member_study/results.json",
+  "field": "scratch/training/5/train_days"
+ },
+ "im.warm_start.pm_val": {
+  "value": 192.9538116455078,
+  "display": "192.95",
+  "source": "results/india/qre_mass_v1/member_study/results.json",
+  "field": "warm_start/perfect_member_val/mse/[0.0,1.0]"
+ },
+ "im.warm_start.ratio.0": {
+  "value": 0.9829034521701919,
+  "display": "0.983",
+  "source": "results/india/qre_mass_v1/member_study/results.json",
+  "field": "warm_start/own_interval_val/0/ratio"
+ },
+ "im.warm_start.best_epoch.0": {
+  "value": 2,
+  "display": "2",
+  "source": "results/india/qre_mass_v1/member_study/results.json",
+  "field": "warm_start/own_interval_val/0/best_epoch"
+ },
+ "im.warm_start.epochs.0": {
+  "value": 6,
+  "display": "6",
+  "source": "results/india/qre_mass_v1/member_study/results.json",
+  "field": "warm_start/own_interval_val/0/epochs"
+ },
+ "im.warm_start.ratio.1": {
+  "value": 0.9932958906110418,
+  "display": "0.993",
+  "source": "results/india/qre_mass_v1/member_study/results.json",
+  "field": "warm_start/own_interval_val/1/ratio"
+ },
+ "im.warm_start.best_epoch.1": {
+  "value": 3,
+  "display": "3",
+  "source": "results/india/qre_mass_v1/member_study/results.json",
+  "field": "warm_start/own_interval_val/1/best_epoch"
+ },
+ "im.warm_start.epochs.1": {
+  "value": 7,
+  "display": "7",
+  "source": "results/india/qre_mass_v1/member_study/results.json",
+  "field": "warm_start/own_interval_val/1/epochs"
+ },
+ "im.warm_start.ratio.2": {
+  "value": 0.9952456464621072,
+  "display": "0.995",
+  "source": "results/india/qre_mass_v1/member_study/results.json",
+  "field": "warm_start/own_interval_val/2/ratio"
+ },
+ "im.warm_start.best_epoch.2": {
+  "value": 3,
+  "display": "3",
+  "source": "results/india/qre_mass_v1/member_study/results.json",
+  "field": "warm_start/own_interval_val/2/best_epoch"
+ },
+ "im.warm_start.epochs.2": {
+  "value": 7,
+  "display": "7",
+  "source": "results/india/qre_mass_v1/member_study/results.json",
+  "field": "warm_start/own_interval_val/2/epochs"
+ },
+ "im.warm_start.ratio.3": {
+  "value": 0.9979380436652026,
+  "display": "0.998",
+  "source": "results/india/qre_mass_v1/member_study/results.json",
+  "field": "warm_start/own_interval_val/3/ratio"
+ },
+ "im.warm_start.best_epoch.3": {
+  "value": 7,
+  "display": "7",
+  "source": "results/india/qre_mass_v1/member_study/results.json",
+  "field": "warm_start/own_interval_val/3/best_epoch"
+ },
+ "im.warm_start.epochs.3": {
+  "value": 11,
+  "display": "11",
+  "source": "results/india/qre_mass_v1/member_study/results.json",
+  "field": "warm_start/own_interval_val/3/epochs"
+ },
+ "im.warm_start.ratio.4": {
+  "value": 0.9906682356727616,
+  "display": "0.991",
+  "source": "results/india/qre_mass_v1/member_study/results.json",
+  "field": "warm_start/own_interval_val/4/ratio"
+ },
+ "im.warm_start.best_epoch.4": {
+  "value": 6,
+  "display": "6",
+  "source": "results/india/qre_mass_v1/member_study/results.json",
+  "field": "warm_start/own_interval_val/4/best_epoch"
+ },
+ "im.warm_start.epochs.4": {
+  "value": 10,
+  "display": "10",
+  "source": "results/india/qre_mass_v1/member_study/results.json",
+  "field": "warm_start/own_interval_val/4/epochs"
+ },
+ "im.warm_start.ratio.5": {
+  "value": 0.9906261122371489,
+  "display": "0.991",
+  "source": "results/india/qre_mass_v1/member_study/results.json",
+  "field": "warm_start/own_interval_val/5/ratio"
+ },
+ "im.warm_start.best_epoch.5": {
+  "value": 4,
+  "display": "4",
+  "source": "results/india/qre_mass_v1/member_study/results.json",
+  "field": "warm_start/own_interval_val/5/best_epoch"
+ },
+ "im.warm_start.epochs.5": {
+  "value": 8,
+  "display": "8",
+  "source": "results/india/qre_mass_v1/member_study/results.json",
+  "field": "warm_start/own_interval_val/5/epochs"
+ },
+ "im.warm_start.train_days.0": {
+  "value": 648,
+  "display": "648",
+  "source": "results/india/qre_mass_v1/member_study/results.json",
+  "field": "warm_start/training/0/train_days"
+ },
+ "im.warm_start.train_days.1": {
+  "value": 882,
+  "display": "882",
+  "source": "results/india/qre_mass_v1/member_study/results.json",
+  "field": "warm_start/training/1/train_days"
+ },
+ "im.warm_start.train_days.2": {
+  "value": 851,
+  "display": "851",
+  "source": "results/india/qre_mass_v1/member_study/results.json",
+  "field": "warm_start/training/2/train_days"
+ },
+ "im.warm_start.train_days.3": {
+  "value": 789,
+  "display": "789",
+  "source": "results/india/qre_mass_v1/member_study/results.json",
+  "field": "warm_start/training/3/train_days"
+ },
+ "im.warm_start.train_days.4": {
+  "value": 433,
+  "display": "433",
+  "source": "results/india/qre_mass_v1/member_study/results.json",
+  "field": "warm_start/training/4/train_days"
+ },
+ "im.warm_start.train_days.5": {
+  "value": 301,
+  "display": "301",
+  "source": "results/india/qre_mass_v1/member_study/results.json",
+  "field": "warm_start/training/5/train_days"
+ },
+ "im.scratch.still_improving.2": {
+  "value": true,
+  "display": "True",
+  "source": "results/india/qre_mass_v1/member_study/results.json",
+  "field": "scratch/training/2/still_improving_at_cap"
+ },
+ "im.scratch.still_improving.4": {
+  "value": true,
+  "display": "True",
+  "source": "results/india/qre_mass_v1/member_study/results.json",
+  "field": "scratch/training/4/still_improving_at_cap"
+ },
+ "im.selected": {
+  "value": "warm_start",
+  "display": "warm_start",
+  "source": "results/india/qre_mass_v1/member_study/selection.json",
+  "field": "selected_init"
+ },
+ "in.A.bgnet.best_epoch": {
+  "value": 62,
+  "display": "62",
+  "source": "results/india/qre_mass_v1/A/training_log.json",
+  "field": "bgnet/best_epoch"
+ },
+ "in.A.bgnet.epochs": {
+  "value": 66,
+  "display": "66",
+  "source": "results/india/qre_mass_v1/A/training_log.json",
+  "field": "bgnet/epochs"
+ },
+ "cfg.nz.member_lr": {
+  "value": 0.0001,
+  "display": "0.0001",
+  "source": "configs/cordex_v2.json",
+  "field": "members/learning_rate"
+ },
+ "cfg.nz.decay": {
+  "value": 0.7,
+  "display": "0.7",
+  "source": "configs/cordex_v2.json",
+  "field": "members/decay_rate"
+ },
+ "cfg.nz.decay_steps": {
+  "value": 6000,
+  "display": "6,000",
+  "source": "configs/cordex_v2.json",
+  "field": "members/decay_steps"
+ },
+ "cfg.nz.patience": {
+  "value": 4,
+  "display": "4",
+  "source": "configs/cordex_v2.json",
+  "field": "members/patience"
+ },
+ "cfg.nz.batch": {
+  "value": 91,
+  "display": "91",
+  "source": "configs/cordex_v2.json",
+  "field": "members/batch_size"
+ },
+ "cfg.nz.max_epochs": {
+  "value": 100,
+  "display": "100",
+  "source": "configs/cordex_v2.json",
+  "field": "members/max_epochs"
+ },
+ "cfg.nz.max_epochs_hard": {
+  "value": 300,
+  "display": "300",
+  "source": "configs/cordex_v2.json",
+  "field": "members/max_epochs_hard"
+ },
+ "cfg.nz.wn_lr": {
+  "value": 5e-05,
+  "display": "5e-05",
+  "source": "configs/cordex_v2.json",
+  "field": "weight_network/learning_rate"
+ },
+ "cfg.nz.wn_patience": {
+  "value": 15,
+  "display": "15",
+  "source": "configs/cordex_v2.json",
+  "field": "weight_network/patience"
+ },
+ "cfg.nz.wn_dense": {
+  "value": 100,
+  "display": "100",
+  "source": "configs/cordex_v2.json",
+  "field": "weight_network/dense"
+ },
+ "cfg.nz.wn_dropout": {
+  "value": 0.2,
+  "display": "0.2",
+  "source": "configs/cordex_v2.json",
+  "field": "weight_network/dropout"
+ },
+ "cfg.nz.wn_loss": {
+  "value": "squared_emd",
+  "display": "squared_emd",
+  "source": "configs/cordex_v2.json",
+  "field": "weight_network/loss"
+ },
+ "cfg.nz.rain_threshold": {
+  "value": 0.1,
+  "display": "0.1",
+  "source": "configs/cordex_v2.json",
+  "field": "loss/rain_threshold"
+ },
+ "cfg.nz.channels": {
+  "value": [
+   64,
+   128,
+   256
+  ],
+  "display": "64 / 128 / 256",
+  "source": "configs/cordex_v2.json",
+  "field": "architecture/channels"
+ },
+ "cfg.nz.kernel": {
+  "value": 3,
+  "display": "3",
+  "source": "configs/cordex_v2.json",
+  "field": "architecture/kernel"
+ },
+ "cfg.nz.n_intervals": {
+  "value": 6,
+  "display": "6",
+  "source": "configs/cordex_v2.json",
+  "field": "n_intervals"
+ },
+ "cfg.nz.warm_lr": {
+  "value": 5e-05,
+  "display": "5e-05",
+  "source": "configs/cordex_v2.json",
+  "field": "member_study/warm_start/learning_rate"
+ },
+ "cfg.nz.ens_lr": {
+  "value": 5e-05,
+  "display": "5e-05",
+  "source": "configs/cordex_v2.json",
+  "field": "ensemble/learning_rate"
+ },
+ "cfg.nz.ens_patience": {
+  "value": 5,
+  "display": "5",
+  "source": "configs/cordex_v2.json",
+  "field": "ensemble/patience"
+ },
+ "cfg.nz.ens_max_epochs": {
+  "value": 50,
+  "display": "50",
+  "source": "configs/cordex_v2.json",
+  "field": "ensemble/max_epochs"
+ },
+ "cfg.nz.sanity_member_epochs": {
+  "value": 10,
+  "display": "10",
+  "source": "results/fixes_v2/nz_wn/sanity/run_info.json",
+  "field": "config/members/max_epochs"
+ },
+ "cfg.nz.sanity_wn_epochs": {
+  "value": 30,
+  "display": "30",
+  "source": "results/fixes_v2/nz_wn/sanity/run_info.json",
+  "field": "config/weight_network/max_epochs"
+ },
+ "cfg.in.member_lr": {
+  "value": 0.0001,
+  "display": "0.0001",
+  "source": "configs/india_v1.json",
+  "field": "members/learning_rate"
+ },
+ "cfg.in.warm_lr": {
+  "value": 5e-05,
+  "display": "5e-05",
+  "source": "configs/india_v1.json",
+  "field": "members/warm_start/learning_rate"
+ },
+ "cfg.in.patience": {
+  "value": 4,
+  "display": "4",
+  "source": "configs/india_v1.json",
+  "field": "members/patience"
+ },
+ "cfg.in.max_epochs": {
+  "value": 100,
+  "display": "100",
+  "source": "configs/india_v1.json",
+  "field": "members/max_epochs"
+ },
+ "cfg.in.bgnet_max_epochs": {
+  "value": 100,
+  "display": "100",
+  "source": "configs/india_v1.json",
+  "field": "bgnet/max_epochs"
+ },
+ "cfg.in.wn_lr": {
+  "value": 5e-05,
+  "display": "5e-05",
+  "source": "configs/india_v1.json",
+  "field": "weight_network/learning_rate"
+ },
+ "cfg.in.wn_patience": {
+  "value": 15,
+  "display": "15",
+  "source": "configs/india_v1.json",
+  "field": "weight_network/patience"
+ },
+ "cfg.in.channels": {
+  "value": [
+   64,
+   128,
+   256
+  ],
+  "display": "64 / 128 / 256",
+  "source": "configs/india_v1.json",
+  "field": "architecture/channels"
+ },
+ "cfg.in.dense": {
+  "value": [
+   512
+  ],
+  "display": "512",
+  "source": "configs/india_v1.json",
+  "field": "architecture/dense"
+ },
+ "cfg.in.batch": {
+  "value": 91,
+  "display": "91",
+  "source": "configs/india_v1.json",
+  "field": "members/batch_size"
+ },
+ "cfg.in.rain_threshold": {
+  "value": 0.0,
+  "display": "0",
+  "source": "configs/india_v1.json",
+  "field": "loss/rain_threshold"
+ },
+ "cfg.in.ens_lr": {
+  "value": 5e-05,
+  "display": "5e-05",
+  "source": "configs/india_v1.json",
+  "field": "ensemble/learning_rate"
+ },
+ "cfg.in.ens_patience": {
+  "value": 5,
+  "display": "5",
+  "source": "configs/india_v1.json",
+  "field": "ensemble/patience"
+ },
+ "cfg.in.ens_max_epochs": {
+  "value": 50,
+  "display": "50",
+  "source": "configs/india_v1.json",
+  "field": "ensemble/max_epochs"
+ },
+ "cfg.in.mass_mode": {
+  "value": "absolute",
+  "display": "absolute",
+  "source": "configs/india_v1.json",
+  "field": "mass/mode"
+ },
+ "cfg.in.scaling": {
+  "value": "initial_ratio",
+  "display": "initial_ratio",
+  "source": "configs/india_v1.json",
+  "field": "mass/lambda_scaling"
+ },
+ "run.gpu": {
+  "value": "NVIDIA RTX 4000 Ada Generation",
+  "display": "NVIDIA RTX 4000 Ada",
+  "source": "results/lab_runs/2026-11-24_rtx4000ada/logs/gpu_check.log",
+  "field": "text: \"NVIDIA RTX 4000 Ada Generation\""
+ },
+ "run.tf": {
+  "value": "TensorFlow 2.10.1",
+  "display": "TensorFlow 2.10.1",
+  "source": "results/lab_runs/2026-11-24_rtx4000ada/logs/gpu_check.log",
+  "field": "text: \"TensorFlow 2.10.1\""
+ },
+ "run.first": {
+  "value": "all 10 run_lab steps in about 25 min",
+  "display": "about 25 min (steps 0–9)",
+  "source": "docs/STATUS.md",
+  "field": "text: \"all 10 run_lab steps in about 25 min\""
+ },
+ "run.second": {
+  "value": "run_lab steps 10–14 in 1 h 31 min",
+  "display": "1 h 31 min (steps 10–14)",
+  "source": "docs/STATUS.md",
+  "field": "text: \"run_lab steps 10–14 in 1 h 31 min\""
+ },
+ "run.t13": {
+  "value": "13: 48 min 02 s",
+  "display": "48 min 02 s",
+  "source": "docs/STATUS.md",
+  "field": "text: \"13: 48 min 02 s\""
+ },
+ "run.t14": {
+  "value": "14: 22 min 32 s",
+  "display": "22 min 32 s",
+  "source": "docs/STATUS.md",
+  "field": "text: \"14: 22 min 32 s\""
+ },
+ "run.seeds": {
+  "value": "seed 42 + 1000 k",
+  "display": "42 + 1000 k",
+  "source": "docs/STATUS.md",
+  "field": "text: \"seed 42 + 1000 k\""
+ },
+ "run.p_min": {
+  "value": "p = 0.00195 = 2/1024 is the smallest possible with 10 pairs",
+  "display": "2/1024 = 0.00195",
+  "source": "docs/STATUS.md",
+  "field": "text: \"p = 0.00195 = 2/1024 is the smallest possible with 10 pairs\""
+ }
+}

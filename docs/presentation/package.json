@@ -1,0 +1,7 @@
+{
+  "name": "btp-endterm-presentation",
+  "private": true,
+  "description": "Builds docs/presentation/BTP_endterm.pptx (node build_deck.js) from figures/numbers.json",
+  "scripts": { "build": "node build_deck.js" },
+  "dependencies": { "pptxgenjs": "3.12.0", "jszip": "3.10.1" }
+}
