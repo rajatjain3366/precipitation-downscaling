@@ -118,7 +118,7 @@ function table(s, rows, opt) {
     border: { type: "solid", pt: 0.75, color: C.line }, margin: 0.06, rowH: opt.rowH || 0.42, autoPage: false,
     objectName: opt.name || "table" });
 }
-const A = "[Presenter A]", B = "[Presenter B]", AB = "[Presenters A and B]";
+const A = "[Raman Gupta]", B = "[Rajat Jain]", AB = "[Raman Gupta and Rajat Jain]";
 function notes(s, who, text) { s.addNotes(`${who} ${text.replace(/\s+/g, " ").trim()}`); }
 
 // ================================================================== 1. title
@@ -131,12 +131,12 @@ function notes(s, who, text) { s.addNotes(`${who} ${text.replace(/\s+/g, " ").tr
   s.addText("Replication, Fixes and an India Extension with Mass Conservation", { x: MX, y: 2.95, w: 7.9, h: 1.0,
     fontSize: 24, color: C.ice, fontFace: HEAD, margin: 0, valign: "top", isTextBox: true, objectName: "subtitle" });
   s.addText([
-    { text: "[Name 1] · [Roll no. 1]     [Name 2] · [Roll no. 2]", options: { breakLine: true } },
-    { text: "Guide: [Guide name]", options: { breakLine: true } },
-    { text: "[Institute]", options: { breakLine: true } },
-    { text: "[Date]" },
-  ], { x: MX, y: 4.6, w: 7.9, h: 1.8, fontSize: 18, color: C.white, fontFace: BODY, margin: 0, valign: "top",
-    paraSpaceAfter: 6, isTextBox: true, objectName: "team placeholders" });
+    { text: "Raman Gupta (S20240010200)", options: { bold: true, breakLine: true } },
+    { text: "Rajat Jain (S20240010197)", options: { bold: true, breakLine: true } },
+    { text: "Guide: Dr. Sumanta Chandra Mishra Sharma", options: { breakLine: true, paraSpaceBefore: 8 } },
+    { text: "Indian Institute of Information Technology, Sri City, Chittoor" },
+  ], { x: MX, y: 4.35, w: 7.9, h: 2.1, fontSize: 18, color: C.white, fontFace: BODY, margin: 0, valign: "top",
+    paraSpaceAfter: 4, isTextBox: true, objectName: "team" });
   s.addShape(pres.shapes.ROUNDED_RECTANGLE, { x: 8.95, y: 1.05, w: 3.8, h: 4.45, fill: { color: C.white },
     line: { color: C.white }, rectRadius: 0.12, objectName: "map frame" });
   image(s, "crop_india_observed_map.png", { x: 9.1, y: 1.2, w: 3.5, h: 4.15 }, "Observed IMD rainfall, 2011-08-16");
@@ -144,8 +144,8 @@ function notes(s, who, text) { s.addNotes(`${who} ${text.replace(/\s+/g, " ").tr
     fontSize: 11, color: C.ice, fontFace: BODY, margin: 0, isTextBox: true });
   notes(s, AB, `Good morning. We are presenting our B.Tech project: a replication of the Quantile-Regression-Ensemble
     paper from AAAI 2024 for downscaling extreme precipitation, the problems we found and fixed in our own first
-    implementation, and an extension to India with a mass-conservation loss. Presenter A covers the replication, the
-    mid-term diagnosis and the fixes on the New Zealand data. Presenter B covers the India extension, the
+    implementation, and an extension to India with a mass-conservation loss. Raman covers the replication, the
+    mid-term diagnosis and the fixes on the New Zealand data. Rajat covers the India extension, the
     mass-conservation loss and the final ten-repetition results. Every number on these slides comes from a committed
     result file in our repository; the speaker notes and a separate table list the file for each number.`);
 }
@@ -436,7 +436,7 @@ function notes(s, who, text) { s.addNotes(`${who} ${text.replace(/\s+/g, " ").tr
     ${n("mt.single_bgnet.0.0,1.0.mean_mse")}. After the fixes it is ${n("nz.rep.qre.mse_0_1.mean")} against
     ${n("nz.rep.bgnet.mse_0_1.mean")}, and the spread over repetitions is much smaller. On the driest days QRE is now on
     par with BGNet. So the fixes rescued QRE, but on this data it still does not beat a well-trained single BGNet;
-    we come back to that with the statistics. That ends the New Zealand replication; Presenter B continues with India.`);
+    we come back to that with the statistics. That ends the New Zealand replication; Rajat continues with India.`);
 }
 
 // ================================================================== 13. India data

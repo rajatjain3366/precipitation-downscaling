@@ -4,16 +4,15 @@
 
 Every number on the slides and in the notes comes from a committed file. [NUMBERS.md](NUMBERS.md) lists each one with its source file and field.
 
-## Before presenting
+## Presenters
 
-- Fill in the title-slide placeholders: names, roll numbers, guide, institute and date.
-- The speaker notes start with the suggested presenter:
+The speaker notes start with the presenter of each slide:
 
-  | Presenter | Slides | Part |
-  | --- | --- | --- |
-  | A | 2–12 | Motivation, paper, NZ replication, mid-term diagnosis, fixes |
-  | B | 13–21, 23–24 | India data, mass-conservation loss, protocol, final results, limitations, future work |
-  | Both | 1, 22, 25 and backup | Title, key findings, thank-you, backup slides |
+| Presenter | Slides | Part |
+| --- | --- | --- |
+| Raman Gupta | 2–12 | Motivation, paper, NZ replication, mid-term diagnosis, fixes |
+| Rajat Jain | 13–21, 23–24 | India data, mass-conservation loss, protocol, final results, limitations, future work |
+| Both | 1, 22, 25 and backup | Title, key findings, thank-you, backup slides |
 
 ## Rebuilding
 
