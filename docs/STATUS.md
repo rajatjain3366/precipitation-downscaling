@@ -103,12 +103,86 @@ The result files are committed: the results at their usual paths, and the logs i
   - mass placements `members` / `ensemble` / `both` with λ ∈ {0, 0.1, 1, 3, 10}, NZ on the member-study models;
   - 10 repetitions with mean ± std and paired Wilcoxon tests. See the RUNBOOK §10–14.
 
+## Second lab run (2026-11-24, RTX 4000 Ada, run_lab steps 10–14 in 1 h 31 min): final findings
+
+The result files are committed. Logs are in `results/lab_runs/2026-11-24_rtx4000ada/`. Step times: 10: 2 min 19 s; 11: 12 min 10 s; 12: 5 min 57 s; 13: 48 min 02 s; 14: 22 min 32 s. All numbers below are from `repetitions/summary.md`, `placements/selection.json` and `member_study/results.json`.
+
+### India member study (validation; `results/india/qre_mass_v1/member_study/`)
+
+| Member set | Perfect-Member val MSE [0,1] | Own-interval MSE / BGNet's | Best epochs |
+| --- | --- | --- | --- |
+| BGNet (reference) | 194.27 (BGNet itself) | – | – |
+| Warm start (**selected**) | **192.95** | 0.983–0.998 | 2–7 |
+| From scratch | 227.16 | 1.033–1.346 (worse than BGNet on every interval) | 29–100 |
+
+- **Scratch members:** each trains on only its own interval's days, 301–882 per member (648 / 882 / 851 / 789 / 433 / 301). Two of the six (intervals 2 and 4) were still improving at the 100-epoch cap.
+- **Warm-start members:** they stay within 2 % of BGNet.
+
+### Selected placement and λ (validation only; `placements/selection.json`)
+
+- **NZ: `ensemble`, λ = 10.**
+  - **λ = 10 against its control:** val MSE [0,1] 53.378 against 53.564 for its fine-tuned control (ratio 0.9965). Val daily-total MAE 1.0554 against 1.0780 mm/day.
+  - **Other ensemble λ:** all within 2 % of the control.
+  - **`members` and `both`:** they raised val MSE by 6–53 % (ratios 1.06–1.53), so the 2 % rule excluded them.
+  - **Repetition 0 check:** it reproduces the member study's QRE and converged-BGNet test MSEs exactly (`member_study_check`: relative difference 0.0).
+- **India: `members`, λ = 0.1.**
+  - **λ = 0.1 against its control:** val MSE [0,1] 196.497 against 193.754 for the QRE, its control (ratio 1.0142, within 2 %). Val daily-total MAE 0.8453 against 0.9051 mm/day.
+  - **`ensemble`:** it barely changed the MSE (ratios 0.998–1.000) and lowered the val daily-total MAE less (0.8885–0.9294 against 0.9375).
+  - **Excluded:** `members` with λ ≥ 1 and `both` with any λ (ratios 1.022–1.154).
+
+### 10 repetitions (test)
+
+| Model (NZ, test 1994–2000) | MSE [0,1] | MSE [0,0.2] | MSE [0.9,1] | Daily-total MAE (mm/day) | Abs. total rel. discrepancy |
+| --- | --- | --- | --- | --- | --- |
+| BGNet (converged) | 50.51 ± 1.05 | 2.24 ± 0.05 | 185.45 ± 4.02 | 1.132 ± 0.025 | 0.024 ± 0.020 |
+| QRE (warm-start members) | 53.51 ± 0.66 | 2.21 ± 0.05 | 195.81 ± 3.44 | 1.131 ± 0.015 | 0.023 ± 0.014 |
+| QRE (λ = 0 fine-tuned control) | 53.59 ± 0.71 | 2.23 ± 0.07 | 196.24 ± 4.60 | 1.136 ± 0.025 | 0.023 ± 0.023 |
+| QRE + mass (ensemble, λ = 10) | 53.19 ± 0.56 | 2.24 ± 0.05 | 195.10 ± 3.20 | 1.116 ± 0.013 | 0.027 ± 0.015 |
+
+| Wilcoxon p (NZ) | MSE [0,1] | MSE [0,0.2] | MSE [0.9,1] | Daily-total MAE | Abs. total rel. discrepancy |
+| --- | --- | --- | --- | --- | --- |
+| QRE vs BGNet | **0.00195** (QRE higher) | 0.695 | **0.00195** (QRE higher) | 0.922 | 0.922 |
+| QRE + mass vs QRE | **0.00195** (lower) | 0.232 | **0.0273** (lower) | **0.00195** (lower) | 0.557 |
+| QRE + mass vs control | **0.00195** (lower) | 0.625 | 0.275 | **0.00195** (lower) | 0.432 |
+
+| Model (India, test 2009–2016, JJAS) | MSE [0,1] | MSE [0,0.2] | MSE [0.9,1] | Daily-total MAE (mm/day) | Abs. total rel. discrepancy |
+| --- | --- | --- | --- | --- | --- |
+| BGNet | 179.51 ± 3.74 | 58.03 ± 0.72 | 387.11 ± 9.19 | 1.040 ± 0.016 | 0.029 ± 0.017 |
+| QRE (warm-start members) = λ = 0 control | 179.07 ± 3.36 | 57.52 ± 0.45 | 384.58 ± 8.13 | 1.026 ± 0.014 | 0.032 ± 0.010 |
+| QRE + mass (members, λ = 0.1) | 182.09 ± 3.41 | 57.79 ± 0.46 | 392.91 ± 8.60 | 1.027 ± 0.013 | 0.007 ± 0.005 |
+
+| Wilcoxon p (India) | MSE [0,1] | MSE [0,0.2] | MSE [0.9,1] | Daily-total MAE | Abs. total rel. discrepancy |
+| --- | --- | --- | --- | --- | --- |
+| QRE vs BGNet | **0.00195** (QRE lower) | **0.00977** (lower) | **0.00195** (lower) | **0.0371** (lower) | 0.846 |
+| QRE + mass vs QRE (= control) | **0.00195** (higher) | **0.0195** (higher) | **0.00195** (higher) | 0.77 | **0.00195** (lower) |
+
+Mean ± std over 10 repetitions (seed 42 + 1000 k; every model retrained per repetition), test split. p: paired two-sided Wilcoxon signed-rank test, bold = significant at 5 %; "higher" / "lower" is the direction of the median paired difference (first model minus second; lower is better for all columns). p = 0.00195 = 2/1024 is the smallest possible with 10 pairs, i.e. all 10 differences had the same sign.
+
+Signed total relative discrepancy (mean ± std over the ten `rep_<k>.json`):
+
+| Model | India | NZ |
+| --- | --- | --- |
+| BGNet | −0.029 ± 0.017 | +0.007 ± 0.031 |
+| QRE | −0.032 ± 0.010 | −0.022 ± 0.015 |
+| QRE + mass | −0.003 ± 0.008 | −0.022 ± 0.022 |
+
+### Findings
+
+1. **NZ, QRE vs BGNet: QRE is worse.** MSE [0,1] is 53.51 ± 0.66 against 50.51 ± 1.05, and [0.9,1] 195.81 ± 3.44 against 185.45 ± 4.02, both p = 0.00195. The other three metrics show no significant difference.
+2. **India, QRE vs BGNet: QRE is slightly but consistently better** on all three MSE regimes and on daily-total MAE. For example, MSE [0,1] is 179.07 ± 3.36 against 179.51 ± 3.74, p = 0.00195, median difference −0.345. The gain is small compared with the spread across repetitions.
+3. **NZ mass term (ensemble, λ = 10): small, significant gains.**
+   - Against its fine-tuned control: MSE [0,1] 53.19 ± 0.56 against 53.59 ± 0.71, and daily-total MAE 1.116 ± 0.013 against 1.136 ± 0.025, both p = 0.00195.
+   - No significant change in the absolute total discrepancy (p = 0.432).
+4. **India mass term (members, λ = 0.1): it removes the totals bias at some cost in MSE.**
+   - The absolute total relative discrepancy falls from 0.032 ± 0.010 to 0.007 ± 0.005 (p = 0.00195). Signed, the bias goes from −3.2 % to −0.3 %.
+   - MSE gets worse: [0,1] 182.09 ± 3.41 against 179.07 ± 3.36, and [0.9,1] 392.91 ± 8.60 against 384.58 ± 8.13, both p = 0.00195. That is +1.7 % and +2.2 %.
+   - Daily-total MAE is unchanged (p = 0.77).
+
 ## Next steps
 
 1. **Done (2026-11-23):** lab PC set up (Linux, RTX 4000 Ada, CUDA 11.2 / cuDNN 8.1), smoke tests passed, RUNBOOK steps 0–9 run in about 25 min; results committed (see above).
-2. **Kartik, lab PC:** the first run's result files are now in git, and the same files exist untracked on the lab PC, so a plain `git pull` would refuse to overwrite them. Run `git fetch origin && git checkout origin/main -- results && git pull` (the committed files are the lab's own, unchanged).
-3. **Kartik, lab PC:** `python -m pytest -m slow tests/test_mass_study.py`, then `python scripts/run_lab.py` (runs steps 10–14; 0–9 are skipped as done).
-4. **Kartik:** read the returned results; update the README results sections and this file.
+2. **Done (2026-11-24):** RUNBOOK steps 10–14 run on the lab PC in 1 h 31 min. Results committed and summarized above and in README §9.
+3. **Kartik:** discuss the final findings with the professor (open questions below). Before any further lab run, `git pull` on the lab PC needs the same `git fetch origin && git checkout origin/main -- results && git pull` as after the first run, because the second run's result files are now in git too.
 
 Cleanup is done (2026-11-23): `_to_delete/` (old ERA5 files, 1.22 GB), the empty `data/India/raw_temp/` and the scratchpad test folders were removed. Kept on purpose, not cleanup candidates: `data/CORDEX_NZ_sample` (the smoke suite regenerates it) and the unused NZ predictors `data/CORDEX_NZ/test/historical/predictors/imperfect` (226 MB) and `.../perfect/EC-Earth3_1981-2000.nc` (113 MB), which were slow to download.
 
